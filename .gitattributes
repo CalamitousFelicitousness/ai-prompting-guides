@@ -1,0 +1,6 @@
+# The lorebook is one long minified line. Diffing it produces noise rather than
+# signal; the build already reports what changed.
+lorebook/*.json -diff linguist-generated
+
+# Generated from CATALOG and guide frontmatter by build-lorebook.py --publish.
+docs/INDEX.md -diff linguist-generated
