@@ -179,3 +179,76 @@ per-kind numbering all live. Both sites need `--wait-for 10000` or more.
 
 The Chinese and English API references carry the same content. The Chinese model card was the faster route
 to the preview status, since 邀测 is unambiguous where an English "preview" could mean several things.
+
+## 13. Re-verification of 2026-08-26, and what it overturned
+
+The Chinese API reference was updated 2026-08-25 (`更新时间：2026-08-25 18:17:27`). Four claims written on
+2026-08-15 no longer hold, and one new mode appeared. Items 14 through 18 record each. The trigger was a
+question about provider naming, not a scheduled re-check, which is the argument for re-scraping a
+fast-moving owner surface before trusting a two-week-old reading of it.
+
+## 14. wan3.0-video-prime is an owner model, not a provider label
+
+The question was whether WaveSpeed's "Wan 3.0 Prime" was Alibaba's or WaveSpeed's. It is Alibaba's. The
+Chinese API reference lists both values for the `model` field:
+
+```text
+wan3.0-video-prime：高速版，能力对齐标准版，端到端速度显著提升。
+wan3.0-video：标准版。
+```
+
+There is an owner model card at `help.aliyun.com/zh/model-studio/wan3-0-video-prime`
+(万相视频生成优速版模型) and an English one at `alibabacloud.com/help/en/model-studio/wan3-0-video-prime`
+("the accelerated version of the Wan video generation model"). Recorded as `tier: "distilled"`, which is
+where the closed vocabulary puts a vendor speed tier.
+
+The owner's 能力对齐标准版 ("capabilities aligned with the standard version") is a vendor claim of no cost,
+which the authoring rules say not to restate as fact. The model row therefore reports it as the owner's
+statement and says any difference is unmeasured rather than absent. No steps, CFG or sampler are published
+for either model, so there is no numeric tell of the kind that exposed HiDream-O1 Dev.
+
+## 15. The Chinese and English references have diverged
+
+Item 12 recorded that the two carried the same content. That is no longer true, and the divergence is
+load-bearing rather than cosmetic. As of 2026-08-26 the Chinese reference carries the Prime model, the
+video extension mode and the `prompt_extend` switch; the English one still describes the model field as a
+fixed single value and has neither Prime nor extension, though it did gain `prompt_extend`.
+
+The guide cited only the English reference. Reading it alone today yields the conclusion that Prime is
+provider marketing, which is wrong. Both are now cited, and the guide states that the Chinese one governs
+where they differ. The general lesson: for a vendor documenting in two languages, "the API reference
+governs" is underspecified until you say which localization, and the vendor's home language leads.
+
+## 16. Editing on 3.0: the launch article was early, not wrong
+
+The 2026-08-15 pass found the launch article claiming 2.7's editing carries forward, found no editing mode
+in the API reference, applied the house rule that the reference governs, and documented editing as a 2.7
+job. The reference now lists 视频编辑 with a worked example, so the launch article was describing a
+destination the reference had not yet reached.
+
+The house rule still produced the right call at the time: on 2026-08-15 the guide would otherwise have
+promised a mode that could not be called. Keep the rule; the correction is to re-scrape, not to start
+trusting launch material. What changes is the note's tone, which now records the claim as premature rather
+than as marketing.
+
+## 17. Prompt extension exists on 3.0 after all
+
+The guide said "the owner documents no expansion control at all" on 3.0 and treated expansion as not the
+caller's to switch. `prompt_extend` is now documented in both references, defaulting to `true`. So 3.0 sits
+on the ordinary hosted side of the guide's access-inverted expansion rule rather than being a third case,
+and the frontmatter key and the prose both collapse back to it.
+
+Worth noting how the earlier error was shaped: absence of evidence read as evidence of absence, on a page
+that turned out to be incomplete. The same shape as the Grok `revised_prompt: ""` near-miss.
+
+## 18. Invitational testing has ended, and video extension is new
+
+The standard model card carried **该模型当前处于邀测阶段** on 2026-08-15 and no longer does, so the
+INVITATIONAL PREVIEW marking is gone from the model row, from the all-in-one bullet, and from the 2.7
+text-to-video row that called itself the default while 3.0 was invite-only.
+
+视频延长 (video extension) is a new mode with real prompt craft attached: the reference says it is driven
+by 含延长意图关键词的 prompt, a prompt carrying extension-intent keywords, so the mode is selected by the
+words rather than by attaching a video. The owner's example names the clip as 视频1 and leads with the
+intent verb. Extension is not new to the guide as a concept, since VACE has covered clip extension on the
+open-weights side all along, but it is new to the hosted line.

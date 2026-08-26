@@ -22,11 +22,12 @@ models:
   - { id: "wan-dancer-14b", access: "open-weights", caps: [music-to-dance], tier: "std", best_for: "long rhythm-locked dance video driven by a music track; the prompt's job is to name the dance style" }
   - { id: "unianimate-dit", access: "open-weights", caps: [character-animation], tier: "std", best_for: "human image animation from a pose sequence, shipped as a LoRA over Wan 2.1 image-to-video" }
   # hosted
-  - { id: "wan3.0-video", access: "closed-weights", caps: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, native-audio], tier: "flagship", best_for: "one All-in-One model covering text, first-frame, first-and-last-frame and reference modes at once, plus documents and web pages as input, over clips long enough to carry a whole story rather than a beat. Audio is ON by default and there is no negative field. INVITATIONAL PREVIEW, so 2.7 stays the reachable flagship for most work" }
-  - { id: "wan2.7-t2v", access: "closed-weights", caps: [text-to-video], tier: "std", best_for: "highest-fidelity cinematic text-to-video with advanced camera control; prompt-faithful motion and shot direction. The practical default while 3.0 is invite-only" }
+  - { id: "wan3.0-video", access: "closed-weights", caps: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, video-edit, video-extend, native-audio], tier: "flagship", best_for: "one All-in-One model covering text, first-frame, first-and-last-frame and reference modes at once, plus documents and web pages as input, plus editing and extending a clip you already have, over durations long enough to carry a whole story rather than a beat. Audio is ON by default and there is still no negative field" }
+  - { id: "wan3.0-video-prime", access: "closed-weights", caps: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, video-edit, video-extend, native-audio], tier: "distilled", best_for: "the speed tier of 3.0, taking the same prompt through the same modes and returning it sooner. The owner states its capabilities are aligned with the standard model and publishes no quality comparison, so write the prompt exactly as for wan3.0-video and treat any difference between them as unmeasured rather than absent" }
+  - { id: "wan2.7-t2v", access: "closed-weights", caps: [text-to-video], tier: "std", best_for: "highest-fidelity cinematic text-to-video with advanced camera control; prompt-faithful motion and shot direction" }
   - { id: "wan2.7-i2v", access: "closed-weights", caps: [image-to-video], tier: "std", best_for: "cinematic animation from a first frame; also covers first-and-last-frame and continuation in one model" }
   - { id: "wan2.7-r2v", access: "closed-weights", caps: [reference-to-video], tier: "std", best_for: "consistent multi-character scenes from mixed image and video references, with per-character voice timbre" }
-  - { id: "wan2.7-videoedit", access: "closed-weights", caps: [video-edit], tier: "std", best_for: "instruction-based editing of an existing video: add, change or remove elements, or restyle the environment. Wants an IMPERATIVE instruction, never a scene description. Still the editing path; 3.0 does not expose one" }
+  - { id: "wan2.7-videoedit", access: "closed-weights", caps: [video-edit], tier: "std", best_for: "instruction-based editing of an existing video: add, change or remove elements, or restyle the environment. Wants an IMPERATIVE instruction, never a scene description. Uses the @Video token form, which 3.0 does not" }
   - { id: "wan2.6-t2v", access: "closed-weights", caps: [text-to-video], tier: "std", best_for: "multi-shot storytelling with synchronized audio; the everyday narrative workhorse" }
   - { id: "wan2.6-i2v", access: "closed-weights", caps: [image-to-video], tier: "std", best_for: "multi-shot animation from a first-frame image with synchronized audio" }
   - { id: "wan2.6-r2v", access: "closed-weights", caps: [reference-to-video], tier: "std", best_for: "single or multi-role reference-to-video that keeps a character's identity across the clip" }
@@ -35,20 +36,20 @@ models:
   - { id: "wan2.2-kf2v", access: "closed-weights", caps: [first-last-frame], tier: "budget", best_for: "silent interpolation between a start and an end frame" }
   - { id: "wan2.2-animate-move", access: "closed-weights", caps: [character-animation], tier: "std", best_for: "driving a character image with the motion of a reference video; takes no text prompt" }
   - { id: "wan2.2-animate-mix", access: "closed-weights", caps: [character-animation], tier: "std", best_for: "replacing the character in a video with one from an image; takes no text prompt" }
-capabilities: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, video-edit, speech-to-video, character-animation, control-to-video, motion-control, music-to-dance, multi-shot, native-audio]
+capabilities: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, video-edit, video-extend, speech-to-video, character-animation, control-to-video, motion-control, music-to-dance, multi-shot, native-audio]
 prompt:
   languages: ["en", "zh", "mixed"]
   formula: "Subject + Scene + Motion + Aesthetic control + Stylization; add Sound (hosted 2.5+) and timed Shots (hosted 2.6+) as needed. Unchanged on 3.0, where a supplied document or web page carries the CONTENT and the prompt carries the TREATMENT"
   dialogue_and_text: "put spoken lines in quotes inside the sound description; on-screen written text renders only approximately, so do not rely on exact wording. The owner names on-screen text accuracy as a known weak point on 3.0, so this holds on the newest model too"
   length_strategy: "rewards complete, multi-dimension descriptions; terse prompts underperform"
   clip_length: "CHANGED ON 3.0. Earlier models take a duration you pick and the prompt has to fill it. On 3.0 a smart-duration mode reads the prompt and picks the length itself, so write the story you actually want and let the length follow. Do not pad a prompt to fill a slot there"
-  auto_expand_behavior: "INVERTED BY ACCESS, and changed again on 3.0. Hosted models rewrite a terse prompt by default. Open-weights models do not expand anything unless prompt extension is switched on, so a terse local prompt stays terse and underperforms. Locally: either turn extension on or write the fully expanded prompt yourself. On 3.0 the owner documents no expansion control at all, so treat expansion as not yours to switch; some hosts add their own enhancer and a deliberate deep-thinking mode for prompts that carry several references"
+  auto_expand_behavior: "INVERTED BY ACCESS. Hosted models rewrite a terse prompt by default, 3.0 included, where the owner documents the rewrite as on unless you turn it off. Open-weights models do not expand anything unless prompt extension is switched on, so a terse local prompt stays terse and underperforms. Locally: either turn extension on or write the fully expanded prompt yourself. Some hosts add their own enhancer on top, and a deliberate deep-thinking mode for prompts that carry several references"
   negatives: "open-weights models take a real negative prompt and ship a canonical default defect bank; much of the hosted line exposes no negative field, so fold exclusions into the positive prompt there. 3.0 has NO negative field, and the owner's own examples fold the exclusion into the positive text"
   references: "three different token conventions depending on mode (character1 / Image 1 / @Video). VACE uses no tokens at all. 3.0 keeps the Image 1 / Video 1 form and adds Audio 1 for referenced audio. See 'Naming references' and never mix them."
 sources:
   official: ["https://github.com/Wan-Video/Wan2.1", "https://github.com/Wan-Video/Wan2.2", "https://github.com/ali-vilab/VACE/blob/main/UserGuide.md", "https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myC99MelA2WgN7R35y", "https://github.com/aigc-apps/VideoX-Fun", "https://github.com/ali-vilab/Wan-Move", "https://github.com/ali-vilab/UniAnimate-DiT", "https://huggingface.co/Wan-AI/Wan-Dancer-14B", "https://www.alibabacloud.com/help/en/model-studio/text-to-video-prompt", "https://www.alibabacloud.com/blog/model-studio-wan-video-generation-prompts-recipe_602777", "https://www.alibabacloud.com/blog/602776", "https://www.alibabacloud.com/help/en/model-studio/use-video-generation", "https://www.alibabacloud.com/help/en/model-studio/image-to-video-first-and-last-frames-guide", "https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference", "https://help.aliyun.com/zh/model-studio/wan3-0-video", "https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452"]
   provider: ["https://fal.ai/learn/devs/wan-2-6-prompt-guide-mastering-all-three-generation-modes", "https://fal.ai/learn/devs/wan-26-developer-guide-mastering-next-generation-video-generation", "https://wavespeed.ai/models/alibaba/wan-3.0/reference-to-video"]
-last_verified: "2026-08-15"
+last_verified: "2026-08-26"
 ---
 
 # Wan video: prompting and usage guide
@@ -86,21 +87,21 @@ Open weights (Apache 2.0, run locally):
 
 Hosted:
 
-- All-in-one: `wan3.0-video` is a single model covering text-to-video, first-frame, first-and-last-frame and reference modes, and it is the only one that reads a document or a web page as input. It is in invitational preview, so treat it as the ceiling rather than the default.
+- All-in-one: `wan3.0-video` is a single model covering text-to-video, first-frame, first-and-last-frame and reference modes, and it is the only one that reads a document or a web page as input. `wan3.0-video-prime` is the same model on a speed tier and takes an identical prompt. Neither is gated.
 - Text-to-video: `wan2.7-t2v` is the practical default for prompt-faithful motion and camera control; `wan2.6-t2v` is the multi-shot plus audio workhorse; `wan2.5-t2v-preview` gives audio without multi-shot; `wan2.2-t2v-plus` is the silent budget option.
 - Image-to-video: `wan2.7-i2v` animates a first frame and also handles first-and-last-frame and continuation; `wan2.6-i2v` adds multi-shot and audio from a single image.
 - Reference-to-video: `wan2.7-r2v` carries subjects from several mixed image and video references with per-character voice; `wan2.6-r2v` keeps one or more characters consistent across a clip.
-- Video editing: `wan2.7-videoedit` takes an existing video and an instruction. This stays a 2.7 job; 3.0 does not expose an editing mode, whatever the launch material implies.
+- Video editing: `wan2.7-videoedit` and `wan3.0-video` both take an existing video and an instruction, but they address it differently, and only 3.0 also extends a clip forward.
 
-Capability gates run through the family. Native synchronized audio generated from your prompt arrives at hosted Wan 2.5 and is standard above it. Multi-shot narrative arrives at hosted Wan 2.6. Reference-to-video arrives at hosted Wan 2.6. Documents and web pages as input arrive at hosted Wan 3.0 and exist nowhere else. Everything on the open-weights line is silent and single-shot; the open models reach audio only through speech-to-video, where you hand the model an audio file rather than describe one.
+Capability gates run through the family. Native synchronized audio generated from your prompt arrives at hosted Wan 2.5 and is standard above it. Multi-shot narrative arrives at hosted Wan 2.6. Reference-to-video arrives at hosted Wan 2.6. Documents and web pages as input arrive at hosted Wan 3.0 and exist nowhere else. Instruction editing arrives at hosted Wan 2.7 and carries on to 3.0; extending a clip you already have is hosted 3.0 only, though VACE has always done it on the open-weights side. Everything on the open-weights line is silent and single-shot; the open models reach audio only through speech-to-video, where you hand the model an audio file rather than describe one.
 
-Wan 3.0 is not a superset. It gains the long single generation, the document input, referenced audio and smart duration, but it drops the negative-prompt field the rest of the family exposes, gives up the prompt-extension control, and has no editing mode. It also cannot combine a pinned first or last frame with references, a document or a link: those are alternatives, not layers. Check the mode you need before assuming the newest model covers it.
+Wan 3.0 is close to a superset, but it is not one. It gains the long single generation, the document input, referenced audio, smart duration, instruction editing and clip extension. What it still does not have is the negative-prompt field the rest of the family exposes. It also cannot combine a pinned first or last frame with references, a document or a link: those are alternatives, not layers. Check the mode you need before assuming the newest model covers it.
 
 ## How the model reads prompts
 
 - It is formula-driven. The model reads named components (subject, scene, motion, aesthetic control, stylization) better than a loose description. A weak prompt that skips aesthetic control and stylization tends to produce a static camera in an undefined space.
 - It rewards detail. Complete, multi-dimension prompts produce better results than short ones. Alibaba's own evaluation of the open models found that results from expanded prompts beat both open and closed competitors; the expansion is doing real work, not decoration.
-- Prompt expansion behaves in opposite ways on the two access lines, and this is the single most consequential difference between them. Hosted models rewrite a terse prompt by default, which adds variety but takes control away; write the full structured prompt yourself when the output must match your intent. Open-weights models expand nothing unless you switch extension on, so a terse local prompt is passed through as-is and underperforms. Locally you must either enable extension or supply the fully expanded prompt yourself. There is no default that saves you. Wan 3.0 changes the picture again: the owner documents no expansion control on it at all, so expansion is not a lever you hold there. Some hosts add their own enhancer, and at least one adds a deliberate deep-thinking mode worth switching on when a prompt carries several references at once.
+- Prompt expansion behaves in opposite ways on the two access lines, and this is the single most consequential difference between them. Hosted models rewrite a terse prompt by default, which adds variety but takes control away; write the full structured prompt yourself when the output must match your intent. Open-weights models expand nothing unless you switch extension on, so a terse local prompt is passed through as-is and underperforms. Locally you must either enable extension or supply the fully expanded prompt yourself. There is no default that saves you. Wan 3.0 sits on the hosted side of this: the rewrite is on unless you turn it off, so the warning above applies to it in full. Some hosts add their own enhancer, and at least one adds a deliberate deep-thinking mode worth switching on when a prompt carries several references at once.
 - Clip length is chosen differently on Wan 3.0. Everywhere else you pick a duration and the prompt has to fill it, which is why padding a thin prompt into a long slot produces a model rushing or stalling. Wan 3.0 adds a smart-duration mode that reads the prompt and picks the length itself, so a one-line beat stays short and a real narrative gets room. Write the story you want and let the length follow; do not pad to fill a slot there.
 - Camera moves carry meaning. Push-in reads as intimacy or tension, pull-out as scale or isolation, tracking as moving alongside the subject, orbit as the subject being central, a fixed camera as stillness and focus. Choose the move for the feeling, then state it.
 - One clip is one continuous shot. A single-shot prompt cannot cut between unrelated scenes; cuts only happen between shots in a multi-shot prompt. Keep a single shot to one continuous action.
@@ -373,11 +374,13 @@ A tense detective beat on a rainy night, cinematic and desaturated, the same coo
 
 ### Video editing, instruction style
 
-Hosted, `wan2.7-videoedit`. This mode takes an IMPERATIVE INSTRUCTION. Do not write a scene description here; that is VACE's grammar, and the two are not interchangeable.
+Hosted, `wan2.7-videoedit` and `wan3.0-video`. This mode takes an IMPERATIVE INSTRUCTION. Do not write a scene description here; that is VACE's grammar, and the two are not interchangeable.
+
+The two versions address the clip differently. 2.7 binds every element with the `@Video` and `@Image1` tokens. 3.0 takes the instruction bare when a single video is attached, and uses its own `Video 1` form only when another input has to be told apart, so the tokens below belong to 2.7 alone.
 
 <rules id="videoedit">
 
-- Write what to change, as a command. Bind every element to its input with the `@Video` and `@Image1` tokens.
+- Write what to change, as a command. On 2.7 bind every element to its input with the `@Video` and `@Image1` tokens; on 3.0 address the attached clip directly.
 - NAME WHAT MOVES, PIN WHAT STAYS. State the change, then state what must not change.
 - Use a preservation clause for global edits (color grade, weather, season, background swap) and for removals, because those touch the whole frame: "keep everything else unchanged".
 - Omit the preservation clause for a small local add or swap; "Change the cat to a dog" needs no pin.
@@ -421,6 +424,48 @@ Make the horse-man in @Video wear the striped sweater from @Image1.
 ```
 
 *Why: a global grade change, so it carries the full pin stack: a specific motion pin, both endpoints of the change named, an intent clause explaining why the pin exists, and the generic catch-all*
+
+</example>
+
+<example use_case="videoedit-restyle-30">
+
+```text
+Convert the entire frame to a clay style.
+```
+
+*Why: the owner's whole 3.0 edit prompt, and worth seeing at full length: one clip attached, one imperative, no token and no preservation clause, because a total restyle has nothing left to hold back*
+
+</example>
+
+### Video extension
+
+Hosted, Wan 3.0. Hand the model a clip and it carries the action on past the end. VACE has done clip extension on the open-weights side all along; this is the hosted line's version, and the prompt is what selects it.
+
+<rules id="videoextend">
+
+- Say that you are extending. The mode is chosen by the words, not by the attachment, so a prompt that only describes new action will read as an edit instead.
+- Name the source as `Video 1` and give the direction: "extend Video 1 onward".
+- Then direct the continuation like any other shot: what the subject does next, where the camera goes, what closes the beat.
+- Continue the action, do not restate it. The model already holds the clip; spend the prompt on what has not happened yet.
+- Let the framing come from the source. An extension inherits the clip's shape, so asking for a different one fights the input instead of reframing it.
+- Motivate the camera if you want it to leave the original frame. "The camera follows him to the oven behind" earns the move; a cut with no reason behind it tends to arrive as a jump.
+- The clip you attach spends part of the length budget, so plan the continuation against what is left rather than against a full-length clip.
+
+</rules>
+
+<template id="videoextend">
+
+Extend Video 1 onward, {what the subject does next}, {camera behaviour that motivates the move}, {closing beat}.
+
+</template>
+
+<example use_case="videoextend-directed">
+
+```text
+Extend Video 1 onward. The baker brings out the freshly brushed loaves and sets the brush aside, the camera follows the baker to the oven behind and to the right, where the loaves go in to bake.
+```
+
+*Why: the owner's own extension prompt. The intent verb leads and names the clip, the continuation then reads as ordinary shot direction, and the camera move is motivated by the baker's walk rather than asserted*
 
 </example>
 
@@ -669,7 +714,9 @@ Bright tones, overexposed, static, blurred details, subtitles, style, works, pai
 - Describing only the change in VACE repainting: the retained region must be described too, or the model loses the frame around your edit.
 - Mixing reference-token conventions: `character1`, `Image 1`, and `@Image1` belong to different modes, and VACE has none of them.
 - Numbering Wan 3.0 references across kinds: an image attached after a video is still `Image 1`. Counting the whole set in one sequence mislabels every token after the first.
-- Assuming Wan 3.0 is a superset: it has no negative field, no prompt-extension control and no editing mode, and it cannot combine a pinned first or last frame with references, a document or a link. Editing is still a 2.7 job.
+- Assuming Wan 3.0 is a superset: it still has no negative field, and it cannot combine a pinned first or last frame with references, a document or a link.
+- Carrying the 2.7 `@Video` token into a 3.0 edit: 3.0 addresses the attached clip directly and names it `Video 1` when it must, so the `@` form belongs to 2.7 alone.
+- Attaching a clip and describing new action without asking for an extension: that reads as an edit of the footage you gave it. Say "extend Video 1 onward" when you want the story continued.
 - Retyping a document's contents into a Wan 3.0 prompt: the file already carries the facts. Spend the prompt on treatment, and expect nothing from the prompt that the file states better.
 - Padding a Wan 3.0 prompt to fill a long clip: on smart duration the prompt sets the length, so padding buys a longer, thinner video rather than a fuller one.
 - Shipping Wan 3.0 audio unheard: it arrives by default and the owner calls its texture a work in progress. Listen before delivering, or switch it off.
@@ -694,9 +741,9 @@ Trust order: official beats provider beats community. Official wins on any confl
 - Official (Wan, Alibaba), open weights: [Wan2.1 repository](https://github.com/Wan-Video/Wan2.1), [Wan2.2 repository](https://github.com/Wan-Video/Wan2.2), [VACE user guide](https://github.com/ali-vilab/VACE/blob/main/UserGuide.md).
 - Official (Alibaba), offshoots: [VideoX-Fun, the Fun family pipeline from Alibaba Cloud PAI](https://github.com/aigc-apps/VideoX-Fun), [Wan-Move](https://github.com/ali-vilab/Wan-Move), [UniAnimate-DiT](https://github.com/ali-vilab/UniAnimate-DiT), [Wan-Dancer](https://huggingface.co/Wan-AI/Wan-Dancer-14B). The Fun prompt conventions are read from the shipped inference scripts under `examples/wan2.2_fun/`, because the model cards do not state them.
 - Official (Wan, Alibaba), hosted: [Wan 2.7 AI video creation guide](https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myC99MelA2WgN7R35y), [text-to-video prompt guide](https://www.alibabacloud.com/help/en/model-studio/text-to-video-prompt), [Wan video prompts recipe](https://www.alibabacloud.com/blog/model-studio-wan-video-generation-prompts-recipe_602777), [Wan 2.6 and 2.5 prompt guide](https://www.alibabacloud.com/blog/602776), [video model comparison](https://www.alibabacloud.com/help/en/model-studio/use-video-generation), [first-and-last-frame guide](https://www.alibabacloud.com/help/en/model-studio/image-to-video-first-and-last-frames-guide).
-- Official (Wan, Alibaba), Wan 3.0: [Wan3.0 video generation API reference](https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference), [wan3.0-video model card](https://help.aliyun.com/zh/model-studio/wan3-0-video), [Wan3.0 launch article](https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452).
+- Official (Wan, Alibaba), Wan 3.0: [Wan3.0 video generation API reference, Chinese](https://help.aliyun.com/zh/model-studio/wan3-video-generation-api-reference), [the same reference in English](https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference), [wan3.0-video model card](https://help.aliyun.com/zh/model-studio/wan3-0-video), [wan3.0-video-prime model card](https://help.aliyun.com/zh/model-studio/wan3-0-video-prime), [Wan3.0 launch article](https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452).
 - Provider: [fal Wan 2.6 prompt guide (three modes)](https://fal.ai/learn/devs/wan-2-6-prompt-guide-mastering-all-three-generation-modes), [fal Wan 2.6 developer guide](https://fal.ai/learn/devs/wan-26-developer-guide-mastering-next-generation-video-generation), [WaveSpeed Wan 3.0 reference-to-video](https://wavespeed.ai/models/alibaba/wan-3.0/reference-to-video).
 
-Coverage note: the Wan 2.7 creation guide is a single-page app whose Storyboard Control, Character Control and Prompt Recipe sections did not render when scraped. Storyboard control appears to be a multi-panel image input rather than a prompt-text construct, and remains a gap to close rather than a capability to assume. A video-side thinking mode now does exist, exposed by a provider on Wan 3.0 and recommended there for prompts carrying several references; the owner still documents none, on 3.0 or anywhere else in its video docs. Wan 3.0 itself is in invitational preview, so its model card and API reference are the citable surfaces while the launch article describes the product; where the two differ, the reference is what this guide follows. The launch article says the 2.7 editing capability carries forward, but no editing mode appears in the 3.0 API reference, so editing is documented here as a 2.7 job. Reference and asset counts, durations, resolutions, file size and page limits are provider surface and are deliberately absent.
+Coverage note: the Wan 2.7 creation guide is a single-page app whose Storyboard Control, Character Control and Prompt Recipe sections did not render when scraped. Storyboard control appears to be a multi-panel image input rather than a prompt-text construct, and remains a gap to close rather than a capability to assume. A video-side thinking mode now does exist, exposed by a provider on Wan 3.0 and recommended there for prompts carrying several references; the owner still documents none, on 3.0 or anywhere else in its video docs. Wan 3.0 has left invitational testing, and its reference now documents instruction editing and clip extension beside the original three modes. The launch article said the 2.7 editing capability would carry forward; the reference has since caught up with it, so the earlier reading of that claim as marketing was premature rather than wrong. The Chinese and English references are no longer in step: the Chinese one carries the Prime model, the extension mode and the prompt-rewrite switch, while the English one still calls the model field a fixed single value and has neither Prime nor extension. Where they diverge this guide follows the Chinese reference, and both are cited above. Reference and asset counts, durations, resolutions, file size and page limits are provider surface and are deliberately absent.
 
-Last verified: 2026-08-15.
+Last verified: 2026-08-26.

@@ -93,7 +93,9 @@ CATALOG = {
             "wan 2.1", "wan2.1", "wan-2.1",
             "wan t2v", "wan i2v", "wan r2v", "wan s2v", "wan ti2v", "wan kf2v",
             "wan flf2v", "flf2v", "wan vace", "vace", "unianimate",
-            "wan animate", "wan fun", "wan move", "wan dancer"]),
+            "wan animate", "wan fun", "wan move", "wan dancer",
+            "wan 3.0 prime", "wan3.0 prime", "wan-3.0-prime", "wan3.0-video-prime",
+            "wan prime", "wan video extend", "wan video extension"]),
 }
 
 MANIFEST_UID = "24"
@@ -243,13 +245,18 @@ def index_table(build, date, specs_date):
 def publish(blob, build, date, specs_date):
     """Refresh the tracked copies: guide bodies into docs/, the lorebook into lorebook/.
 
-    Only *.md is copied, because the vault also holds exported archives.
+    The file set comes from CATALOG plus the spec table, never from a glob of the
+    vault: that folder is a working Obsidian directory and holds notes and exported
+    archives that are not ours to publish.
     """
     DOCS.mkdir(exist_ok=True)
     REPO_LOREBOOK.parent.mkdir(exist_ok=True)
-    names = {p.name for p in GUIDES.glob("*.md")}
-    for src in sorted(GUIDES.glob("*.md")):
-        shutil.copyfile(src, DOCS / src.name)
+    names = {f"{scheme}.md" for scheme, *_ in CATALOG.values()} | {"model-specs.md"}
+    missing = sorted(n for n in names if not (GUIDES / n).exists())
+    if missing:
+        raise SystemExit(f"publish: guide file(s) missing from the vault: {', '.join(missing)}")
+    for name in sorted(names):
+        shutil.copyfile(GUIDES / name, DOCS / name)
     stale = sorted(p.name for p in DOCS.glob("*.md")
                    if p.name not in names and p.name != "INDEX.md")
     for name in stale:
