@@ -2,7 +2,7 @@
 doc: "Open-weights model specs"
 kind: reference
 scope: "models with published open weights"
-last_verified: "2026-08-09"
+last_verified: "2026-08-29"
 ---
 
 # Open-weights model specs
@@ -98,6 +98,20 @@ guide.
 | wan2.2-ti2v-5b | text-to-video, image-to-video | 720P | not published | 24 | not published | high-compression Wan2.2-VAE; the only 2.2 checkpoint with an owner-stated frame rate |
 | wan2.2-vace-fun-a14b | video-edit, reference-to-video | 480P and 720P, inherited from the base | not published | not published | not published | a finetune of Wan2.2-T2V-A14B, so it takes that checkpoint's grid |
 
+## Audio
+
+Audio models are measured on different axes from visual ones, so they get their own table. Sample
+rate and duration are properties of the weights in the same way a native resolution is.
+
+| Model | Capabilities | Sample rate | Duration | Steps | CFG | Notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| acestep-v15-base | text-to-music, lyrics-to-song, music-cover, music-repaint, stem-extract, track-add, accompaniment, reference-audio | 48 kHz stereo | 10 to 600 seconds | 50 in the model-zoo tables; the prompting tutorial says 32 to 100 | 7.0 default guidance scale | 2B decoder, about 4.7 GB for weights. The only tier with stem extraction, track addition and accompaniment. Rated highest diversity across seeds and lowest raw quality of the three |
+| acestep-v15-sft | text-to-music, lyrics-to-song, music-cover, music-repaint, reference-audio | 48 kHz stereo | 10 to 600 seconds | 50 | supported per the model-zoo tables; the prompting tutorial states guidance is effective on base only | 2B decoder. Owner describes better detail and semantic parsing than turbo at slightly lower audio clarity |
+| acestep-v15-turbo | text-to-music, lyrics-to-song, music-cover, music-repaint, reference-audio | 48 kHz stereo | 10 to 600 seconds | 8 | none; distilled without classifier-free guidance | 2B decoder, the owner's recommended default. Runs under 4 GB of VRAM with offload and quantization. Several distillation variants differ only in the shift schedule and take an identical prompt |
+| acestep-v15-xl-base | text-to-music, lyrics-to-song, music-cover, music-repaint, stem-extract, track-add, accompaniment, reference-audio | 48 kHz stereo | 10 to 600 seconds | 50 | 7.0 default guidance scale | 4B decoder, about 9 GB for weights; 12 GB VRAM with offload and quantization, 20 GB without. Owner states XL behaves identically to the 2B line and differs only in audio quality |
+| acestep-v15-xl-sft | text-to-music, lyrics-to-song, music-cover, music-repaint, reference-audio | 48 kHz stereo | 10 to 600 seconds | 50 | supported per the model-zoo tables; see the sft row | 4B decoder. The owner's top quality rating of the six |
+| acestep-v15-xl-turbo | text-to-music, lyrics-to-song, music-cover, music-repaint, reference-audio | 48 kHz stereo | 10 to 600 seconds | 8 | none; distilled without classifier-free guidance | 4B decoder |
+
 ## Sources
 
 Owner surfaces first. A provider value is carried only where the owner is silent, and is tagged in
@@ -149,6 +163,10 @@ the cell that uses it.
   [Wan-Move](https://github.com/ali-vilab/Wan-Move),
   [UniAnimate-DiT](https://github.com/ali-vilab/UniAnimate-DiT),
   [Wan-Dancer-14B](https://huggingface.co/Wan-AI/Wan-Dancer-14B)
+- Audio, official: [ACE-Step 1.5](https://github.com/ace-step/ACE-Step-1.5),
+  [ACE-Step 1.5 prompting tutorial](https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/Tutorial.md),
+  [ACE-Step 1.5 inference guide](https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/INFERENCE.md),
+  [Ace-Step1.5 model card](https://huggingface.co/ACE-Step/Ace-Step1.5)
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide)
 
-Last verified: 2026-08-09.
+Last verified: 2026-08-29.

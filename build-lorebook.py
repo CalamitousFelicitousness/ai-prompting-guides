@@ -35,7 +35,7 @@ ARCHIVE = LOREBOOK.parent / "archive"
 # to be a real directory that --publish refreshes.
 DOCS = Path(__file__).parent / "docs"
 REPO_LOREBOOK = Path(__file__).parent / "lorebook" / LOREBOOK.name
-MODALITY = {"IMG": "image", "VID": "video"}
+MODALITY = {"IMG": "image", "VID": "video", "AUD": "audio"}
 
 # uid -> (scheme, modality, display name, match keys). uids are identity and must
 # stay stable across rebuilds; displayIndex below is what controls list order.
@@ -96,6 +96,11 @@ CATALOG = {
             "wan animate", "wan fun", "wan move", "wan dancer",
             "wan 3.0 prime", "wan3.0 prime", "wan-3.0-prime", "wan3.0-video-prime",
             "wan prime", "wan video extend", "wan video extension"]),
+    "29": ("ace-step", "AUD", "ACE-Step",
+           ["ace-step", "ace step", "acestep", "ace-step 1.5", "ace step 1.5",
+            "acestep 1.5", "ace-step v1.5", "acestep-v15", "ace studio",
+            "acestep-v15-base", "acestep-v15-sft", "acestep-v15-turbo",
+            "acestep-v15-xl-base", "acestep-v15-xl-sft", "acestep-v15-xl-turbo"]),
 }
 
 MANIFEST_UID = "24"
@@ -124,17 +129,17 @@ SPECS_KEYS = ["resolution", "native resolution", "recommended resolution",
 # owner recommends Chinese). Hence the three carve-outs and the yields-to-guide line.
 FORMAT = """<prompt_generation_output>
 
-Whenever writing image or video generation prompts wrap them in code blocks and present individual prompts separately.
+Whenever writing image, video or audio generation prompts wrap them in code blocks and present individual prompts separately.
 
 The prompt inside the block is written in English, whatever language we are speaking. If the conversation is in Polish, the reply is Polish and the prompt is still English: the conversation language is yours, the prompt language is the model's. Narration, in-character dialogue and everything outside the block are unaffected.
 
 Three things inside a prompt are not description, and they keep their own language:
 
 - Literal text meant to appear in the image. The model draws the characters it is given and does not translate them, so words that should read as Polish are written in Polish inside the quotes.
-- Spoken or sung lines. The delivered language is the content: keep the line itself in that language and leave the direction around it in English.
+- Spoken or sung lines. The delivered language is the content: keep the line itself in that language and leave the direction around it in English. For a speech or music model this is the bulk of the prompt rather than an aside, because the script a voice model reads and the lyrics a music model sings are the deliverable itself.
 - A prompt for a model whose own guide prefers another language, the way wan2.1-flf2v-14b prefers Chinese.
 
-Everything else in the block, subject, scene, camera, lighting and style, stays English. A loaded guide overrides this entry.
+Everything else in the block, subject, scene, camera, lighting, style, genre and delivery direction, stays English. A loaded guide overrides this entry.
 
 </prompt_generation_output>"""
 
@@ -158,6 +163,7 @@ Prompting guides available here. Naming a model loads its full guide.
 
 IMAGE: Anima, FLUX.2, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, Qwen-Image, Seedream, Wan Image, Z-Image
 VIDEO: FLUX 3 Video, Gemini Omni, HappyHorse, Kling Video, LTX, MiniMax H3, Seedance, Wan Video
+AUDIO: ACE-Step
 
 Several vendors ship more than one guide, so name the model and the modality:
 - Alibaba has four. Qwen-Image and Wan Image are image; Wan Video and HappyHorse are video. Wan Video and HappyHorse are two separate video lines, not versions of each other, and they are prompted differently.
@@ -165,9 +171,13 @@ Several vendors ship more than one guide, so name the model and the modality:
 - Google has two: Gemini Image for image, Gemini Omni for video.
 - Kuaishou has two: Kling Image and Kling Video.
 
+Audio splits three ways and the three are not interchangeable. A speech model takes a script plus delivery direction, a music model takes a style description plus a SEPARATE lyrics field carrying its own structure tags, and a sound-effect model takes a short descriptive caption and nothing else. Ask which of the three is wanted whenever "audio" alone is named.
+
+That separate field is the part with no image or video equivalent. An audio prompt is frequently two inputs rather than one, and collapsing them loses the model's main control surface, so never merge a lyrics field into a style description or vice versa.
+
 Each guide is authoritative for its own model. These models are prompted in genuinely different ways, so never carry a convention from one model's guide to another: if the guide for the named model is not loaded, ask for it rather than guessing from a different model's rules.
 
-Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all.
+Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything.
 
 </promptgen_model_index>"""
 
@@ -196,11 +206,11 @@ def wrap(scheme):
 
 
 def manifest_rows():
-    rows = {"IMG": [], "VID": []}
+    rows = {code: [] for code in MODALITY}
     for scheme, modality, _, _ in CATALOG.values():
         rows[modality].append(f"{scheme} {verified(scheme)}")
-    return (f"IMAGE: {' | '.join(sorted(rows['IMG']))}\n"
-            f"VIDEO: {' | '.join(sorted(rows['VID']))}")
+    return "\n".join(f"{MODALITY[code].upper()}: {' | '.join(sorted(rows[code]))}"
+                     for code in MODALITY if rows[code])
 
 
 def manifest(build, date, rows, specs_date):
