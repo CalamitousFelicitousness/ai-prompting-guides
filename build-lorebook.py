@@ -108,6 +108,15 @@ CATALOG = {
             "stable-audio-3-medium", "stable-audio-3-small-music",
             "stable-audio-3-small-sfx", "stable-audio-open-1.0",
             "stable-audio-open-small", "harmonai"]),
+    "31": ("minimax-speech", "AUD", "MiniMax Speech",
+           ["minimax-speech", "minimax speech", "minimax tts", "minimax audio",
+            "minimax voice", "minimax voice design", "minimax voice clone",
+            "speech-2.8", "speech 2.8", "speech-2.6", "speech 2.6",
+            "speech-02", "speech-01", "minimax t2a"]),
+    "32": ("minimax-music", "AUD", "MiniMax Music",
+           ["minimax-music", "minimax music", "minimax audio", "music-3.0",
+            "music 3.0", "minimax music 3", "minimax-music3", "music-2.6",
+            "music-2.5", "music-1.5", "music-cover", "minimax cover"]),
 }
 
 MANIFEST_UID = "24"
@@ -170,13 +179,14 @@ Prompting guides available here. Naming a model loads its full guide.
 
 IMAGE: Anima, FLUX.2, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, Qwen-Image, Seedream, Wan Image, Z-Image
 VIDEO: FLUX 3 Video, Gemini Omni, HappyHorse, Kling Video, LTX, MiniMax H3, Seedance, Wan Video
-AUDIO: ACE-Step, Stable Audio
+AUDIO: ACE-Step, MiniMax Music, MiniMax Speech, Stable Audio
 
 Several vendors ship more than one guide, so name the model and the modality:
 - Alibaba has four. Qwen-Image and Wan Image are image; Wan Video and HappyHorse are video. Wan Video and HappyHorse are two separate video lines, not versions of each other, and they are prompted differently.
 - Black Forest Labs has two: FLUX.2 for image, FLUX 3 Video for video. FLUX.2 conventions do not transfer to FLUX 3.
 - Google has two: Gemini Image for image, Gemini Omni for video.
 - Kuaishou has two: Kling Image and Kling Video.
+- MiniMax has three, one per modality. MiniMax Speech is audio where the prompt IS the script to be spoken, MiniMax Music is audio where the prompt is a style description beside a separate lyrics field, and MiniMax H3 is video. Naming the vendor alone is never enough here.
 
 Audio splits three ways and the three are not interchangeable. A speech model takes a script plus delivery direction, a music model takes a style description plus a SEPARATE lyrics field carrying its own structure tags, and a sound-effect model takes a short descriptive caption and nothing else. Ask which of the three is wanted whenever "audio" alone is named.
 
@@ -184,7 +194,7 @@ That separate field is the part with no image or video equivalent. An audio prom
 
 Each guide is authoritative for its own model. These models are prompted in genuinely different ways, so never carry a convention from one model's guide to another: if the guide for the named model is not loaded, ask for it rather than guessing from a different model's rules.
 
-Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything. Stable Audio uses no brackets at all and instead takes Key: Value metadata tags inline, such as TrackType: Music, which come from its training labels rather than from any parser and do not transfer to any other model here.
+Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything. Stable Audio uses no brackets at all and instead takes Key: Value metadata tags inline, such as TrackType: Music, which come from its training labels rather than from any parser and do not transfer to any other model here. MiniMax Speech adds a third unrelated use of round brackets, where (laughs) is a non-verbal sound and (laIv) is a pronunciation override, alongside <#0.5#> for a timed pause; all three live inside the spoken script and anything unrecognised in brackets is read aloud instead.
 
 </promptgen_model_index>"""
 

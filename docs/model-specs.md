@@ -119,6 +119,7 @@ rate and duration are properties of the weights in the same way a native resolut
 | stable-audio-3-small-sfx-base | text-to-sfx, audio-to-audio, audio-inpaint, audio-continue | 44.1 kHz stereo | up to 120 seconds | about 50 | 7.0 | pre-trained checkpoint published for fine-tuning |
 | stable-audio-open-1.0 | text-to-music, text-to-sfx | 44.1 kHz stereo | up to 47 seconds | 100 in the card's stable-audio-tools snippet; 200 in the diffusers snippet on the same card | 7.0 | superseded 2024 line. T5-base text encoder, dpmpp-3m-sde sampler. Owner states it is better at sound effects and field recordings than at music |
 | stable-audio-open-small | text-to-music, text-to-sfx | 44.1 kHz stereo | up to 11 seconds | 8 | 1.0 | superseded. pingpong sampler, optimized for Arm CPU. Its diffusion transformer was trained on the Freesound corpus alone, without the music archive |
+| music-3.0 | text-to-music, lyrics-to-song, instrumental, structured-caption | 32 kHz stereo, 16-bit | up to 5 minutes | not published | not published | hierarchical autoregressive rather than a step-wise diffusion model, so neither steps nor CFG applies. An 8B global LLM initialized from Qwen3-8B plus a 0.6B local LLM, feeding flow-matching synthesis (2.4B) and a 123M Flow-VAE decoder at 25 audio frames per second. Full precision fits under 24 GB of VRAM, about 22 GB with CPU offload, and layer-by-layer streaming brings it into 8 GB |
 
 ## Sources
 
@@ -178,7 +179,8 @@ the cell that uses it.
   [stable-audio-3](https://github.com/Stability-AI/stable-audio-3),
   [Stable Audio 3 Medium](https://huggingface.co/stabilityai/stable-audio-3-medium),
   [Stable Audio Open 1.0](https://huggingface.co/stabilityai/stable-audio-open-1.0),
-  [Stable Audio Open Small](https://huggingface.co/stabilityai/stable-audio-open-small)
+  [Stable Audio Open Small](https://huggingface.co/stabilityai/stable-audio-open-small),
+  [MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3)
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide)
 
 Last verified: 2026-08-29.
