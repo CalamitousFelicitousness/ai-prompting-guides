@@ -65,7 +65,12 @@ are same-size specialists (both 433M), not a large and a small. This matters mor
 footnote usually would, because the natural assumption is that a smaller model does everything worse
 rather than that it does some things not at all.
 
-## Surfaces that could not be read this pass
+Corroborated on a second, independent owner surface. The Hugging Face card metadata carries `music` on
+small-music, `sound-effects` on small-sfx, and both on medium. That is a different surface from the
+prompt guide's compatibility table and it partitions the family the same way, which is the strongest
+form this claim can take short of measurement.
+
+## Surface access notes
 
 - `platform.stability.ai/docs/api-reference` renders client-side and returns about 1.6 KB of shell to
   both curl and WebFetch. Firecrawl would render it but was out of credits on the day. Nothing in the
@@ -75,7 +80,14 @@ rather than that it does some things not at all.
 - The gated cards (`stable-audio-3-medium`, `-small-music`, `-small-sfx`, and the two legacy Open
   models) each carry their own gate. Accepting the gate on one does not grant the others. The base
   checkpoints are ungated and carry the same model description, which is what made the family
-  documentable while the gated cards were still locked.
+  documentable before the gated cards were opened.
+
+  The gated cards were read afterwards and changed nothing. They repeat the same model description
+  verbatim, carry `base_model:` fields confirming each post-trained checkpoint's pairing with its base,
+  and show the expected split in their usage snippets: the base cards pass roughly 50 steps at guidance
+  7.0 explicitly, while the post-trained cards omit both and take the low-step, low-guidance defaults.
+  Recorded because a guide built from sibling checkpoints is a weaker claim than one built from the
+  cards themselves, and that weakness no longer applies.
 
 ## What the guide takes from where
 
