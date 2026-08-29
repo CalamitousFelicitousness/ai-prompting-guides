@@ -117,6 +117,23 @@ CATALOG = {
            ["minimax-music", "minimax music", "minimax audio", "music-3.0",
             "music 3.0", "minimax music 3", "minimax-music3", "music-2.6",
             "music-2.5", "music-1.5", "music-cover", "minimax cover"]),
+    "33": ("gemini-tts", "AUD", "Gemini TTS",
+           ["gemini-tts", "gemini tts", "gemini 3.1 flash tts", "gemini-3.1-flash-tts",
+            "gemini speech", "gemini text to speech", "gemini voice"]),
+    "34": ("omnivoice", "AUD", "OmniVoice",
+           ["omnivoice", "omni voice", "omni-voice", "k2-fsa", "k2 fsa"]),
+    "35": ("qwen-tts", "AUD", "Qwen TTS",
+           ["qwen-tts", "qwen tts", "qwen3-tts", "qwen3 tts", "qwen 3 tts",
+            "qwen-audio", "qwen audio", "qwen-audio-3.0", "qwen audio 3.0",
+            "qwen-audio-3.0-tts", "qwen voice", "qwen speech"]),
+    "36": ("elevenlabs-speech", "AUD", "ElevenLabs Speech",
+           ["elevenlabs", "eleven labs", "eleven-labs", "11labs", "elevenlabs speech",
+            "eleven v3", "eleven_v3", "eleven-v3", "elevenlabs tts", "eleven flash",
+            "eleven multilingual", "audio tags"]),
+    "37": ("elevenlabs-audio", "AUD", "ElevenLabs Music and Sound Effects",
+           ["elevenlabs", "eleven labs", "11labs", "eleven music", "elevenlabs music",
+            "eleven sound effects", "elevenlabs sfx", "eleven sfx",
+            "composition plan", "composition plans", "music_v2"]),
 }
 
 MANIFEST_UID = "24"
@@ -169,7 +186,7 @@ Write what should be true, not what should be absent. Text encoders tend to bind
 
 - Prefer the positive that displaces the problem. "Bare concrete walls" beats "no clutter", "hands at her sides" beats "no gesturing", "flat overcast light" beats "no harsh shadows".
 - Where an exclusion is genuinely needed, keep it short, concrete, and grouped in one place rather than scattered through the prompt.
-- This is a default, not a ban. Several models here do take real exclusions, and some expose a dedicated negative field or a canonical defect block. When a model's guide is loaded, its negatives section overrides this entry.
+- This is a default, not a ban. Several models here do take real exclusions, and some expose a dedicated negative field or a canonical defect block. ElevenLabs music is the strongest counterexample: composition plans carry a negative style list per section that the owner says to use liberally, and for a loop the owner treats exclusion as the primary technique, since "no melody, just drums" is what keeps a drum break from growing a tune. When a model's guide is loaded, its negatives section overrides this entry.
 
 </promptgen_phrasing>"""
 
@@ -179,12 +196,13 @@ Prompting guides available here. Naming a model loads its full guide.
 
 IMAGE: Anima, FLUX.2, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, Qwen-Image, Seedream, Wan Image, Z-Image
 VIDEO: FLUX 3 Video, Gemini Omni, HappyHorse, Kling Video, LTX, MiniMax H3, Seedance, Wan Video
-AUDIO: ACE-Step, MiniMax Music, MiniMax Speech, Stable Audio
+AUDIO: ACE-Step, ElevenLabs Music and Sound Effects, ElevenLabs Speech, Gemini TTS, MiniMax Music, MiniMax Speech, OmniVoice, Qwen TTS, Stable Audio
 
 Several vendors ship more than one guide, so name the model and the modality:
-- Alibaba has four. Qwen-Image and Wan Image are image; Wan Video and HappyHorse are video. Wan Video and HappyHorse are two separate video lines, not versions of each other, and they are prompted differently.
+- Alibaba has five. Qwen-Image and Wan Image are image; Wan Video and HappyHorse are video; Qwen TTS is speech. Wan Video and HappyHorse are two separate video lines, not versions of each other, and they are prompted differently.
 - Black Forest Labs has two: FLUX.2 for image, FLUX 3 Video for video. FLUX.2 conventions do not transfer to FLUX 3.
-- Google has two: Gemini Image for image, Gemini Omni for video.
+- Google has three: Gemini Image for image, Gemini Omni for video, Gemini TTS for speech.
+- ElevenLabs has two: ElevenLabs Speech, and ElevenLabs Music and Sound Effects. A speech audio tag and a music prompt are different schemes and the tags do not cross over.
 - Kuaishou has two: Kling Image and Kling Video.
 - MiniMax has three, one per modality. MiniMax Speech is audio where the prompt IS the script to be spoken, MiniMax Music is audio where the prompt is a style description beside a separate lyrics field, and MiniMax H3 is video. Naming the vendor alone is never enough here.
 
@@ -194,7 +212,7 @@ That separate field is the part with no image or video equivalent. An audio prom
 
 Each guide is authoritative for its own model. These models are prompted in genuinely different ways, so never carry a convention from one model's guide to another: if the guide for the named model is not loaded, ask for it rather than guessing from a different model's rules.
 
-Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything. Stable Audio uses no brackets at all and instead takes Key: Value metadata tags inline, such as TrackType: Music, which come from its training labels rather than from any parser and do not transfer to any other model here. MiniMax Speech adds a third unrelated use of round brackets, where (laughs) is a non-verbal sound and (laIv) is a pronunciation override, alongside <#0.5#> for a timed pause; all three live inside the spoken script and anything unrecognised in brackets is read aloud instead.
+Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything. Stable Audio uses no brackets at all and instead takes Key: Value metadata tags inline, such as TrackType: Music, which come from its training labels rather than from any parser and do not transfer to any other model here. MiniMax Speech adds a third unrelated use of round brackets, where (laughs) is a non-verbal sound and (laIv) is a pronunciation override, alongside <#0.5#> for a timed pause; all three live inside the spoken script and anything unrecognised in brackets is read aloud instead. Square brackets are the worst offender across the set: [Verse] is a song section in ACE-Step and MiniMax Music, [whispers] is a delivery tag in ElevenLabs and Gemini TTS, and [B EY1 S] is a phoneme string in OmniVoice. ElevenLabs composition plans then use all three families at once, where [Section] labels a part, (ooh) is a phonetic vocal sound and {guitar solo} is an inline direction. Never carry a bracket convention between models.
 
 </promptgen_model_index>"""
 

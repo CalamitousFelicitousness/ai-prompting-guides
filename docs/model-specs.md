@@ -121,6 +121,13 @@ rate and duration are properties of the weights in the same way a native resolut
 | stable-audio-open-small | text-to-music, text-to-sfx | 44.1 kHz stereo | up to 11 seconds | 8 | 1.0 | superseded. pingpong sampler, optimized for Arm CPU. Its diffusion transformer was trained on the Freesound corpus alone, without the music archive |
 | music-3.0 | text-to-music, lyrics-to-song, instrumental, structured-caption | 32 kHz stereo, 16-bit | up to 5 minutes | not published | not published | hierarchical autoregressive rather than a step-wise diffusion model, so neither steps nor CFG applies. An 8B global LLM initialized from Qwen3-8B plus a 0.6B local LLM, feeding flow-matching synthesis (2.4B) and a 123M Flow-VAE decoder at 25 audio frames per second. Full precision fits under 24 GB of VRAM, about 22 GB with CPU offload, and layer-by-layer streaming brings it into 8 GB |
 
+| Qwen3-TTS-12Hz-1.7B-CustomVoice | text-to-speech, instruction-control, built-in-voices, streaming | 24 kHz mono | not published | not published | not published | autoregressive with a 12.5 Hz speech tokenizer, so neither steps nor CFG applies. Nine built-in timbres. The 1.7B tier is the one with instruction control |
+| Qwen3-TTS-12Hz-1.7B-VoiceDesign | text-to-speech, instruction-control, voice-design, streaming | 24 kHz mono | not published | not published | not published | builds a voice from a prose description rather than selecting one |
+| Qwen3-TTS-12Hz-1.7B-Base | text-to-speech, voice-clone, streaming | 24 kHz mono | not published | not published | not published | clones from about three seconds of reference audio; the fine-tuning foundation. No instruction control |
+| Qwen3-TTS-12Hz-0.6B-CustomVoice | text-to-speech, built-in-voices, streaming | 24 kHz mono | not published | not published | not published | same nine timbres as the 1.7B, WITHOUT instruction control. That capability, not size alone, is what the 0.6B tier gives up |
+| Qwen3-TTS-12Hz-0.6B-Base | text-to-speech, voice-clone, streaming | 24 kHz mono | not published | not published | not published | small-tier cloning and fine-tuning foundation. No instruction control |
+| omnivoice | text-to-speech, voice-clone, voice-design, cross-lingual, pronunciation-override, non-verbal-tags | 24 kHz | not published | not published | not published | discrete non-autoregressive diffusion language model, so steps are not reported the usual way. Cloning spans 600-plus languages; voice design was trained on Chinese and English only |
+
 ## Sources
 
 Owner surfaces first. A provider value is carried only where the owner is silent, and is tagged in
@@ -180,7 +187,10 @@ the cell that uses it.
   [Stable Audio 3 Medium](https://huggingface.co/stabilityai/stable-audio-3-medium),
   [Stable Audio Open 1.0](https://huggingface.co/stabilityai/stable-audio-open-1.0),
   [Stable Audio Open Small](https://huggingface.co/stabilityai/stable-audio-open-small),
-  [MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3)
+  [MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3),
+  [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS),
+  [Qwen3-TTS-Tokenizer-12Hz config](https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz),
+  [OmniVoice](https://github.com/k2-fsa/OmniVoice)
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide)
 
 Last verified: 2026-08-29.
