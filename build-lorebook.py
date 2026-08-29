@@ -101,6 +101,13 @@ CATALOG = {
             "acestep 1.5", "ace-step v1.5", "acestep-v15", "ace studio",
             "acestep-v15-base", "acestep-v15-sft", "acestep-v15-turbo",
             "acestep-v15-xl-base", "acestep-v15-xl-sft", "acestep-v15-xl-turbo"]),
+    "30": ("stable-audio", "AUD", "Stable Audio",
+           ["stable-audio", "stable audio", "stableaudio", "stable audio 3",
+            "stable-audio-3", "stable audio 3.0", "stable audio 2.5",
+            "stable audio open", "stable-audio-open", "stable audio large",
+            "stable-audio-3-medium", "stable-audio-3-small-music",
+            "stable-audio-3-small-sfx", "stable-audio-open-1.0",
+            "stable-audio-open-small", "harmonai"]),
 }
 
 MANIFEST_UID = "24"
@@ -163,7 +170,7 @@ Prompting guides available here. Naming a model loads its full guide.
 
 IMAGE: Anima, FLUX.2, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, Qwen-Image, Seedream, Wan Image, Z-Image
 VIDEO: FLUX 3 Video, Gemini Omni, HappyHorse, Kling Video, LTX, MiniMax H3, Seedance, Wan Video
-AUDIO: ACE-Step
+AUDIO: ACE-Step, Stable Audio
 
 Several vendors ship more than one guide, so name the model and the modality:
 - Alibaba has four. Qwen-Image and Wan Image are image; Wan Video and HappyHorse are video. Wan Video and HappyHorse are two separate video lines, not versions of each other, and they are prompted differently.
@@ -177,7 +184,7 @@ That separate field is the part with no image or video equivalent. An audio prom
 
 Each guide is authoritative for its own model. These models are prompted in genuinely different ways, so never carry a convention from one model's guide to another: if the guide for the named model is not loaded, ask for it rather than guessing from a different model's rules.
 
-Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything.
+Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything. Stable Audio uses no brackets at all and instead takes Key: Value metadata tags inline, such as TrackType: Music, which come from its training labels rather than from any parser and do not transfer to any other model here.
 
 </promptgen_model_index>"""
 

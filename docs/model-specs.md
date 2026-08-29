@@ -111,6 +111,14 @@ rate and duration are properties of the weights in the same way a native resolut
 | acestep-v15-xl-base | text-to-music, lyrics-to-song, music-cover, music-repaint, stem-extract, track-add, accompaniment, reference-audio | 48 kHz stereo | 10 to 600 seconds | 50 | 7.0 default guidance scale | 4B decoder, about 9 GB for weights; 12 GB VRAM with offload and quantization, 20 GB without. Owner states XL behaves identically to the 2B line and differs only in audio quality |
 | acestep-v15-xl-sft | text-to-music, lyrics-to-song, music-cover, music-repaint, reference-audio | 48 kHz stereo | 10 to 600 seconds | 50 | supported per the model-zoo tables; see the sft row | 4B decoder. The owner's top quality rating of the six |
 | acestep-v15-xl-turbo | text-to-music, lyrics-to-song, music-cover, music-repaint, reference-audio | 48 kHz stereo | 10 to 600 seconds | 8 | none; distilled without classifier-free guidance | 4B decoder |
+| stable-audio-3-medium | text-to-music, text-to-sfx, stems, audio-to-audio, audio-inpaint, audio-continue | 44.1 kHz stereo | up to 380 seconds | 8 | 1.0 default; the owner suggests 7.0 for stronger prompt adherence | 1.4B, SAME-Large autoencoder, CUDA. Peak VRAM about 5.1 GB at 5 seconds rising to 6.5 GB at 380 seconds with unchunked decode. The only open checkpoint covering music, stems and sound effects together |
+| stable-audio-3-small-music | text-to-music, stems, audio-to-audio, audio-inpaint, audio-continue | 44.1 kHz stereo | up to 120 seconds | 8 | 1.0 default | 433M, SAME-Small autoencoder, runs on CPU. Peak VRAM 1.7 to 2.4 GB. The owner's compatibility table marks sound effects as not covered at all |
+| stable-audio-3-small-sfx | text-to-sfx, audio-to-audio, audio-inpaint, audio-continue | 44.1 kHz stereo | up to 120 seconds | 8 | 1.0 default | 433M, SAME-Small autoencoder, runs on CPU. The owner's compatibility table marks both music and stems as not covered |
+| stable-audio-3-medium-base | text-to-music, text-to-sfx, stems, audio-to-audio, audio-inpaint, audio-continue | 44.1 kHz stereo | up to 380 seconds | about 50; the owner states steps beyond 8 only help on a base checkpoint | 7.0 | pre-trained checkpoint published for fine-tuning, not for direct generation |
+| stable-audio-3-small-music-base | text-to-music, stems, audio-to-audio, audio-inpaint, audio-continue | 44.1 kHz stereo | up to 120 seconds | about 50 | 7.0 | pre-trained checkpoint published for fine-tuning |
+| stable-audio-3-small-sfx-base | text-to-sfx, audio-to-audio, audio-inpaint, audio-continue | 44.1 kHz stereo | up to 120 seconds | about 50 | 7.0 | pre-trained checkpoint published for fine-tuning |
+| stable-audio-open-1.0 | text-to-music, text-to-sfx | 44.1 kHz stereo | up to 47 seconds | 100 in the card's stable-audio-tools snippet; 200 in the diffusers snippet on the same card | 7.0 | superseded 2024 line. T5-base text encoder, dpmpp-3m-sde sampler. Owner states it is better at sound effects and field recordings than at music |
+| stable-audio-open-small | text-to-music, text-to-sfx | 44.1 kHz stereo | up to 11 seconds | 8 | 1.0 | superseded. pingpong sampler, optimized for Arm CPU. Its diffusion transformer was trained on the Freesound corpus alone, without the music archive |
 
 ## Sources
 
@@ -166,7 +174,11 @@ the cell that uses it.
 - Audio, official: [ACE-Step 1.5](https://github.com/ace-step/ACE-Step-1.5),
   [ACE-Step 1.5 prompting tutorial](https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/Tutorial.md),
   [ACE-Step 1.5 inference guide](https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/INFERENCE.md),
-  [Ace-Step1.5 model card](https://huggingface.co/ACE-Step/Ace-Step1.5)
+  [Ace-Step1.5 model card](https://huggingface.co/ACE-Step/Ace-Step1.5),
+  [stable-audio-3](https://github.com/Stability-AI/stable-audio-3),
+  [Stable Audio 3 Medium](https://huggingface.co/stabilityai/stable-audio-3-medium),
+  [Stable Audio Open 1.0](https://huggingface.co/stabilityai/stable-audio-open-1.0),
+  [Stable Audio Open Small](https://huggingface.co/stabilityai/stable-audio-open-small)
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide)
 
 Last verified: 2026-08-29.
