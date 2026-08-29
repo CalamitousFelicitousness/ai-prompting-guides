@@ -134,6 +134,9 @@ CATALOG = {
            ["elevenlabs", "eleven labs", "11labs", "eleven music", "elevenlabs music",
             "eleven sound effects", "elevenlabs sfx", "eleven sfx",
             "composition plan", "composition plans", "music_v2"]),
+    "38": ("vibevoice", "AUD", "VibeVoice",
+           ["vibevoice", "vibe voice", "vibe-voice", "vibevoice-1.5b",
+            "vibevoice large", "vibevoice realtime", "vibevoice-realtime-0.5b"]),
 }
 
 MANIFEST_UID = "24"
@@ -196,7 +199,7 @@ Prompting guides available here. Naming a model loads its full guide.
 
 IMAGE: Anima, FLUX.2, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, Qwen-Image, Seedream, Wan Image, Z-Image
 VIDEO: FLUX 3 Video, Gemini Omni, HappyHorse, Kling Video, LTX, MiniMax H3, Seedance, Wan Video
-AUDIO: ACE-Step, ElevenLabs Music and Sound Effects, ElevenLabs Speech, Gemini TTS, MiniMax Music, MiniMax Speech, OmniVoice, Qwen TTS, Stable Audio
+AUDIO: ACE-Step, ElevenLabs Music and Sound Effects, ElevenLabs Speech, Gemini TTS, MiniMax Music, MiniMax Speech, OmniVoice, Qwen TTS, Stable Audio, VibeVoice
 
 Several vendors ship more than one guide, so name the model and the modality:
 - Alibaba has five. Qwen-Image and Wan Image are image; Wan Video and HappyHorse are video; Qwen TTS is speech. Wan Video and HappyHorse are two separate video lines, not versions of each other, and they are prompted differently.

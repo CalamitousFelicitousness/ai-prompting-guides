@@ -128,6 +128,9 @@ rate and duration are properties of the weights in the same way a native resolut
 | Qwen3-TTS-12Hz-0.6B-Base | text-to-speech, voice-clone, streaming | 24 kHz mono | not published | not published | not published | small-tier cloning and fine-tuning foundation. No instruction control |
 | omnivoice | text-to-speech, voice-clone, voice-design, cross-lingual, pronunciation-override, non-verbal-tags | 24 kHz | not published | not published | not published | discrete non-autoregressive diffusion language model, so steps are not reported the usual way. Cloning spans 600-plus languages; voice design was trained on Chinese and English only |
 
+| VibeVoice-1.5B | text-to-speech, multi-speaker, long-form, voice-prompt | 24 kHz | about 90 minutes | 10 | 1.3 | 64K context on a Qwen2.5-1.5B backbone, with a causal speech tokenizer at 7.5 Hz and 3200x compression. The owner reports roughly two speech tokens per text token, which is the number to budget a long script against. Weights are published; the owner withdrew the inference code in September 2025 |
+| VibeVoice-Realtime-0.5B | text-to-speech, streaming, long-form | 24 kHz | not published | not published | not published | single speaker and English only, with fixed embedded voices rather than arbitrary voice prompts. Drops the semantic tokenizer and keeps the acoustic one. This is the supported checkpoint of the line |
+
 ## Sources
 
 Owner surfaces first. A provider value is carried only where the owner is silent, and is tagged in
@@ -190,7 +193,9 @@ the cell that uses it.
   [MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3),
   [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS),
   [Qwen3-TTS-Tokenizer-12Hz config](https://huggingface.co/Qwen/Qwen3-TTS-Tokenizer-12Hz),
-  [OmniVoice](https://github.com/k2-fsa/OmniVoice)
+  [OmniVoice](https://github.com/k2-fsa/OmniVoice),
+  [VibeVoice](https://github.com/microsoft/VibeVoice),
+  [VibeVoice technical report](https://arxiv.org/abs/2508.19205)
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide)
 
 Last verified: 2026-08-29.
