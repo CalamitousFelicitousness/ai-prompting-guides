@@ -14,6 +14,7 @@ models:
 capabilities: [text-to-speech, audio-tags, multi-speaker, ipa-pronunciation, break-tags, phoneme-tags, voice-design, speech-to-speech, emotion-by-context]
 prompt:
   languages: ["en", "multilingual"]
+  speech_languages: "SPLITS BY MODEL, and not along the same line the notation splits on. v3 and v3 Conversational cover 70-plus; Multilingual v2 covers 29; Flash v2.5 covers 32, being the v2 29 plus Hungarian, Norwegian and Vietnamese"
   script: "the prompt is the text to be spoken. Bracketed audio tags are performed rather than read, but ordinary narrative direction is NOT: a phrase like 'she said sadly' is part of the transcript and gets spoken"
   direction_syntax: "SPLIT BY MODEL GENERATION. v3 takes square-bracket audio tags such as [whispers] and inline IPA between forward slashes, and rejects break tags. The v2 family takes <break time=\"1.5s\" /> and, on one English tier only, SSML phoneme tags, and has no audio tags at all"
   audio_tags: "an OPEN vocabulary on v3, covering emotion, delivery and non-verbal sounds. Tags must describe something AUDIBLE and must apply to the voice only: the owner rules out [standing] or [grinning] as non-auditory and rules out music and sound-effect tags as out of scope for the voice"
@@ -25,7 +26,7 @@ sources:
   official: ["https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices", "https://elevenlabs.io/docs/overview/models", "https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-do-audio-tags-work-with-eleven-v3-alpha"]
   provider: []
   community: []
-last_verified: "2026-08-29"
+last_verified: "2026-08-30"
 ---
 
 # ElevenLabs Speech: prompting and usage guide
@@ -39,6 +40,9 @@ last_verified: "2026-08-29"
 - Narrative emotion cues are SPOKEN. Writing "she said, her voice trembling" does steer the delivery, and the model also reads the words aloud. The owner's advice is to remove them in post-production.
 - Audio tags must be audible and about the voice. Not gestures, not music, not sound effects.
 - Choose the voice for the job before writing tags. Pacing and character are inherited from the audio a voice was built on.
+- LANGUAGE COVERAGE ALSO SPLITS BY MODEL, and not along the same line the notation splits on. v3 and v3 Conversational cover 70-plus, Multilingual v2 covers 29, and Flash v2.5 covers 32. Settle the language before choosing a model on latency or cost.
+- Flash v2.5's 32 are the Multilingual v2 29 plus Hungarian, Norwegian and Vietnamese. The 29: English (USA, UK, Australia, Canada), Japanese, Chinese, German, Hindi, French (France, Canada), Korean, Portuguese (Brazil, Portugal), Italian, Spanish (Spain, Mexico), Indonesian, Dutch, Turkish, Filipino, Polish, Swedish, Bulgarian, Romanian, Arabic (Saudi Arabia, UAE), Czech, Greek, Finnish, Croatian, Malay, Slovak, Danish, Tamil, Ukrainian, Russian.
+- The v3 list reaches well past those, adding Afrikaans, Armenian, Assamese, Azerbaijani, Belarusian, Bengali, Bosnian, Catalan, Cebuano, Chichewa, Estonian, Galician, Georgian, Gujarati, Hausa, Hebrew, Icelandic, Irish, Javanese, Kannada, Kazakh, Kirghiz, Latvian, Lingala, Lithuanian, Luxembourgish, Macedonian, Malayalam, Marathi, Nepali, Pashto, Persian, Punjabi, Serbian, Sindhi, Slovenian, Somali, Swahili, Telugu, Thai, Urdu and Welsh.
 
 </rules>
 
@@ -191,8 +195,8 @@ Speaker 2: [overlapping] -know what you were thinking? Lucky guess!
 
 Trust order is official, then provider, then community. Official wins on any conflict.
 
-- Official (ElevenLabs): the [text-to-speech best practices guide](https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices), which is the source of the pause and pronunciation notation and its per-generation split, the emotion technique and the warning that its cues are spoken, the pacing and speed guidance, the text-normalisation material, and the v3 prompting section including the tag placement and content rules and the verbatim examples; the [models overview](https://elevenlabs.io/docs/overview/models) for the line-up and which capability each tier has; the [audio tags help-centre entry](https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-do-audio-tags-work-with-eleven-v3-alpha) for the three tag families.
+- Official (ElevenLabs): the [text-to-speech best practices guide](https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices), which is the source of the pause and pronunciation notation and its per-generation split, the emotion technique and the warning that its cues are spoken, the pacing and speed guidance, the text-normalisation material, and the v3 prompting section including the tag placement and content rules and the verbatim examples; the [models overview](https://elevenlabs.io/docs/overview/models) for the line-up, which capability each tier has and the per-model language lists; the [audio tags help-centre entry](https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-do-audio-tags-work-with-eleven-v3-alpha) for the three tag families.
 
 Coverage note: ElevenLabs' documentation site serves every page as markdown at the same path with a `.md` suffix, with a page index at `/docs/llms.txt` and a single-file dump at `/docs/llms-full.txt`. Everything here comes from those. Secondary coverage of Eleven v3 claims that inline sound-effect tags such as gunshots or explosions can be placed in a speech transcript; the owner's own tag specification rules that out explicitly, stating tags must not be used for anything other than the voice, so this guide follows the owner. The owner also publishes the full language-model prompt behind its Enhance button, which is the most precise statement of tag rules it makes anywhere, and several rules here are taken from it.
 
-Last verified: 2026-08-29.
+Last verified: 2026-08-30.

@@ -13,6 +13,7 @@ models:
 capabilities: [text-to-speech, interjections, voice-clone, voice-design, pronunciation-override, emotion-control]
 prompt:
   languages: ["en", "zh", "yue", "ja", "ko", "more"]
+  speech_languages: "40, published as a list. Cantonese and Nynorsk are listed in their own right rather than folded into Chinese and Norwegian, which is the case the disambiguation hint exists to settle. Persian, Filipino and Tamil are absent from the superseded 01 and 02 series"
   script: "the prompt IS the words to be spoken, verbatim. Everything else is either inline notation inside that text or a separate control, so there is no place to write stage directions in prose: an unrecognised instruction gets read aloud"
   direction_syntax: "three inline forms, all embedded in the script. Pauses are <#x#> with x in seconds. Pronunciation overrides go in half-width parentheses as Pinyin with a tone digit, IPA, or Jyutping with a tone digit. Interjections are bracketed words in half-width parentheses such as (laughs) or (sighs), and exist only on the 2.8 tiers"
   voices: "cast from three sources: a system voice, a voice cloned from a recording, or a voice designed from a text description of how it should sound. The voice carries identity and baseline delivery; the script carries the performance"
@@ -23,7 +24,7 @@ sources:
   official: ["https://platform.minimax.io/docs/guides/speech-t2a-websocket", "https://platform.minimax.io/docs/api-reference/speech-t2a-http", "https://platform.minimax.io/docs/guides/speech-voice-clone", "https://platform.minimax.io/docs/api-reference/voice-design-design", "https://platform.minimax.io/docs/release-notes/models"]
   provider: []
   community: []
-last_verified: "2026-08-29"
+last_verified: "2026-08-30"
 ---
 
 # MiniMax Speech: prompting and usage guide
@@ -37,6 +38,9 @@ last_verified: "2026-08-29"
 - Consequently there is nowhere to put a stage direction. Anything that is not recognised notation is read aloud, so "say this sadly" becomes four spoken words.
 - Direction lives in three places instead: inline notation inside the script, the choice of voice, and a separate emotion setting.
 - Write the script in the language it should be spoken. This is not a prompt to be translated into English.
+- 40 languages, published as a list: Chinese, Cantonese, English, Spanish, French, Russian, German, Portuguese, Arabic, Italian, Japanese, Korean, Indonesian, Vietnamese, Turkish, Dutch, Ukrainian, Thai, Polish, Romanian, Greek, Czech, Finnish, Hindi, Bulgarian, Danish, Hebrew, Malay, Persian, Slovak, Swedish, Croatian, Filipino, Hungarian, Norwegian, Slovenian, Catalan, Nynorsk, Tamil, Afrikaans.
+- Cantonese and Nynorsk are listed in their own right rather than folded into Chinese and Norwegian. That pairing is the case the disambiguation hint exists to settle.
+- Persian, Filipino and Tamil are absent from the superseded 01 and 02 series. The language is missing there rather than weaker, which is a reason to stay on 2.6 or 2.8 for those three.
 
 </rules>
 
@@ -187,8 +191,8 @@ Excited and enthusiastic male product reviewer (e.g., tech vlogger), fast-paced,
 
 Trust order is official, then provider, then community. Official wins on any conflict.
 
-- Official (MiniMax): the [synchronous text-to-speech guide](https://platform.minimax.io/docs/guides/speech-t2a-websocket) and the [text-to-speech API reference](https://platform.minimax.io/docs/api-reference/speech-t2a-http), whose script-field description is the source of the pause, pronunciation and interjection notation, the interjection vocabulary and the per-tier availability of each; the [emotion set and its per-model support](https://platform.minimax.io/docs/api-reference/speech-t2a-http); the [voice cloning guide](https://platform.minimax.io/docs/guides/speech-voice-clone); the [voice design reference](https://platform.minimax.io/docs/api-reference/voice-design-design) for the description-plus-preview pattern and its example; the [model release notes](https://platform.minimax.io/docs/release-notes/models) for the tier line-up.
+- Official (MiniMax): the [synchronous text-to-speech guide](https://platform.minimax.io/docs/guides/speech-t2a-websocket) and the [text-to-speech API reference](https://platform.minimax.io/docs/api-reference/speech-t2a-http), whose script-field description is the source of the pause, pronunciation and interjection notation, the interjection vocabulary and the per-tier availability of each; the [emotion set and its per-model support](https://platform.minimax.io/docs/api-reference/speech-t2a-http); the [voice cloning guide](https://platform.minimax.io/docs/guides/speech-voice-clone); the [voice design reference](https://platform.minimax.io/docs/api-reference/voice-design-design) for the description-plus-preview pattern and its example; the [model release notes](https://platform.minimax.io/docs/release-notes/models) for the tier line-up; the supported-languages table in the synchronous guide for the forty-language list, and the API reference's language-hint field for the three languages the 01 and 02 series lack.
 
 Coverage note: MiniMax's documentation site renders client-side and returns an empty shell to an ordinary fetch, but every page is also served as markdown at the same path with a `.md` suffix, and a complete page index is published at `/docs/llms.txt`. Everything here comes from those markdown twins. The capability regression between 2.6 and 2.8 is stated only in a single sentence at the end of the emotion field's description, and is recorded here because nothing in the release notes mentions it.
 
-Last verified: 2026-08-29.
+Last verified: 2026-08-30.

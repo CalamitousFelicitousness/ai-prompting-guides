@@ -6,6 +6,7 @@ models:
 capabilities: [text-to-speech, multi-speaker, audio-tags, style-control, accent-control]
 prompt:
   languages: ["en", "multilingual"]
+  speech_languages: "78, published as a list. The model DETECTS the language from the transcript, so there is no language setting and nothing to get wrong. Direction and tags stay English whatever the transcript is"
   script: "the transcript is one element of a larger prompt rather than the whole of it. Everything above it is direction and is never spoken, which is what makes this the most permissive speech scheme here"
   direction_syntax: "two layers. A structured context prompt in markdown headings carries the Audio Profile, Scene, Director's Notes and Sample Context; inline square-bracket audio tags such as [whispers] or [very slow] steer a specific span of the transcript"
   audio_tags: "an OPEN vocabulary, not a fixed list. Emotions, pace, and free inventions like [like dracula] all work, and the owner explicitly recommends experimenting. Write tags in English even when the transcript is not"
@@ -17,7 +18,7 @@ sources:
   official: ["https://ai.google.dev/gemini-api/docs/speech-generation", "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-tts-preview"]
   provider: []
   community: []
-last_verified: "2026-08-29"
+last_verified: "2026-08-30"
 ---
 
 # Gemini TTS: prompting and usage guide
@@ -32,6 +33,8 @@ last_verified: "2026-08-29"
 - Audio tags are an OPEN vocabulary. There is no fixed list, invented tags work, and the owner recommends experimenting.
 - Do not over-direct. The owner states explicitly that too many strict rules limit the model and can make the performance worse.
 - Write audio tags in English even when the transcript is in another language.
+- 78 languages, and the model works out which one from the transcript. A non-English performance needs nothing but a non-English script.
+- The set: Afrikaans, Albanian, Amharic, Arabic, Armenian, Azerbaijani, Bangla, Basque, Belarusian, Bulgarian, Burmese, Catalan, Cebuano, Chinese (Mandarin), Croatian, Czech, Danish, Dutch, English, Estonian, Filipino, Finnish, French, Galician, Georgian, German, Greek, Gujarati, Haitian Creole, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Javanese, Kannada, Konkani, Korean, Lao, Latin, Latvian, Lithuanian, Luxembourgish, Macedonian, Maithili, Malagasy, Malay, Malayalam, Marathi, Mongolian, Nepali, Norwegian Bokmal, Norwegian Nynorsk, Odia, Pashto, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Serbian, Sindhi, Sinhala, Slovak, Slovenian, Spanish, Swahili, Swedish, Tamil, Telugu, Thai, Turkish, Ukrainian, Urdu, Vietnamese.
 
 </rules>
 
@@ -231,8 +234,8 @@ Speaker2: You're never going to guess!
 
 Trust order is official, then provider, then community. Official wins on any conflict.
 
-- Official (Google): the [speech generation documentation](https://ai.google.dev/gemini-api/docs/speech-generation), whose prompting guide section is the source of the six prompt elements, the directorial framing, the over-specification warning, the audio tag behaviour and vocabulary, the English-tags recommendation, the multi-speaker form and every verbatim example here; the [model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-tts-preview).
+- Official (Google): the [speech generation documentation](https://ai.google.dev/gemini-api/docs/speech-generation), whose prompting guide section is the source of the six prompt elements, the directorial framing, the over-specification warning, the audio tag behaviour and vocabulary, the English-tags recommendation, the multi-speaker form, the supported-language table and every verbatim example here; the [model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-tts-preview).
 
 Coverage note: the model page itself renders client-side and returned only navigation, so nothing is sourced from it; the speech generation page is server-rendered and carries the full prompting guide. The Model names and aliases section is repeated across all Gemini guides in this set on purpose, because guides load independently and each has to stand alone.
 
-Last verified: 2026-08-29.
+Last verified: 2026-08-30.

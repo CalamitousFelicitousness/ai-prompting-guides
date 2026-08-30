@@ -66,6 +66,39 @@ Suno, describing the ideas as universal. It is a community source under this rep
 nothing in the guide comes from it. Recorded here only so a future pass does not mistake the owner's
 link for an owner statement and promote it.
 
+## Conflict: 19 languages or 50-plus. RESOLVED, they are different models.
+
+The `ace-step/ACE-Step` README and the project page at `ace-step.github.io` both advertise 19
+languages with a well-performing top ten of English, Chinese, Russian, Spanish, Japanese, German,
+French, Portuguese, Italian and Korean. The 1.5 README, the 1.5 project page and the 1.5 tech report
+all say 50-plus. The two numbers sit on surfaces that look interchangeable and are not.
+
+Checked by following what each surface points at. The root project page links to exactly three
+things: `ACE-Step-v1-3.5B`, `github.com/ace-step/ACE-Step`, and arXiv 2506.00045. The 1.5 line has
+its own page at `ace-step.github.io/ace-step-v1.5.github.io/`, its own paper at arXiv 2602.00744,
+and its own checkpoints. So the 19 is v1's and the 50-plus is 1.5's, and the guide covers 1.5.
+
+The owner also states the direction of travel. The 1.5 page carries a list of what v1 lacked, one
+entry of which is "Multilingual Lyrics Compliance: Improved support for lyrics in multiple
+languages, enhancing accuracy and naturalness." The jump is intended, not a stale number.
+
+Worth knowing how thin the 50-plus is, though. For the generator it rests on one sentence in the
+tech report abstract, reproduced verbatim on the 1.5 README and the 1.5 project page, plus one
+feature bullet. No generator surface enumerates it.
+
+The only enumeration the owner publishes anywhere in this family is on `acestep-transcriber`, the
+annotation model that labelled 1.5's training data. That card claims the same 50-plus and names 26
+by region, "including but not limited to": Chinese, Japanese, Korean, Vietnamese, Thai, Indonesian,
+Malay, Filipino, Hindi, Bengali, Tamil, Urdu, English, German, French, Spanish, Italian, Portuguese,
+Russian, Polish, Dutch, Greek, Turkish, Arabic, Hebrew and Persian. The guide carries those 26 as
+the well-covered core, attributed to the transcriber rather than to the generator, because the
+generator's lyric coverage is bounded by what its labeller could read. The matching 50-plus on both
+models is consistent with the generator's figure being inherited from the annotation pipeline; the
+owner never says so, so the guide does not either.
+
+The tutorial's vocal-language control is documented as usually auto-detected from the lyrics, which
+is the craft-relevant half and is what the guide carries.
+
 ## What the guide takes from where
 
 - Caption dimensions, the seven caption principles, the structure-tag vocabulary, the tag-combining
@@ -78,3 +111,6 @@ link for an owner statement and promote it.
   `docs/en/API.md`.
 - The two-stage planner-plus-diffusion architecture and default-on rewriting: from the abstract and
   the LM hyperparameter table, which agree.
+
+- The 50-plus language claim and the automatic vocal-language detection: the 1.5 repository README
+  and the prompting tutorial. The 26 named languages: the transcriber model card.

@@ -85,6 +85,18 @@ lorebook's always-on positive-phrasing default. Two owner statements drive it:
 The always-on phrasing entry already yields to a loaded guide, and it has been updated to name this
 as its counterexample rather than leaving the contradiction implicit.
 
+## Language coverage splits by model, on a different axis from the notation.
+
+The models overview publishes a per-model language list, and the split does not line up with the
+notation split the guide already carries. v3 and v3 Conversational cover 70-plus. Multilingual v2
+covers 29. Flash v2.5 covers 32, which the owner defines as the v2 29 plus Hungarian, Norwegian and
+Vietnamese. A v2-family model can therefore be the wrong choice for a language while being the right
+choice for the notation, and the reverse, so the two facts have to be checked separately.
+
+Eleven Music publishes no list at all. The overview says multilingual and names English, Spanish,
+German and Japanese as examples. The speech lists say nothing about the music model, so
+`elevenlabs-audio` records the absence instead of borrowing them.
+
 ## What the guides take from where
 
 - Pause notation, IPA and phoneme rules, the emotion warning, pacing and speed, text normalisation,
@@ -97,3 +109,5 @@ as its counterexample rather than leaving the contradiction implicit.
 - Section structure, the three bracket families and the corrected text example: the composition plans
   guide.
 - Simple, sequence and musical-element patterns plus the trade vocabulary: the sound effects page.
+
+- Per-model language lists, and the absence of one for music: the models overview.

@@ -8,6 +8,7 @@ models:
 capabilities: [text-to-music, lyrics-to-song, instrumental, composition-plan, music-inpaint, audio-reference, stems, text-to-sfx, ambience, one-shot, loop, musical-elements]
 prompt:
   languages: ["en", "multilingual"]
+  lyric_languages: "multilingual, but the owner publishes NO list for music. It names English, Spanish, German and Japanese as examples and stops there. Styles stay English whatever the lyrics are"
   description: "one natural-language field answering five questions: genre, mood, instrumentation, tempo and production era. Anything left open is filled with the most statistically average choice, which is the owner's own framing"
   lyrics: "optional and inline. Lyrics are written into the description or into a plan's text field; by default the model writes its own, and instrumental has to be asked for explicitly"
   composition_plan: "an ordered list of sections, each with its own text, duration, and separate positive and negative style lists. The first section's styles set the tone for the whole song, so they carry the most weight"
@@ -19,7 +20,7 @@ sources:
   official: ["https://elevenlabs.io/docs/overview/capabilities/music/best-practices", "https://elevenlabs.io/docs/overview/capabilities/music", "https://elevenlabs.io/docs/overview/capabilities/sound-effects", "https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans", "https://elevenlabs.io/docs/overview/models"]
   provider: []
   community: []
-last_verified: "2026-08-29"
+last_verified: "2026-08-30"
 ---
 
 # ElevenLabs Music and Sound Effects: prompting and usage guide
@@ -33,6 +34,7 @@ last_verified: "2026-08-29"
 - Studio vocabulary is functional, not decorative. Words like sidechained, close-mic'd, bone-dry and plate reverb move real levers.
 - Exclusions are a first-class technique here, unlike most models in this set. Say what must not be there.
 - Two registers exist: a plain description, and a structured composition plan for section-by-section control.
+- No language list is published for music. The owner says multilingual and names English, Spanish, German and Japanese, so anything further is untested rather than supported. The speech guide's per-model lists do not help here, because they describe different models.
 
 </rules>
 
@@ -203,8 +205,8 @@ boom bap drum break, 90 BPM, dusty and swung, four bars, no melody - just drums
 
 Trust order is official, then provider, then community. Official wins on any conflict.
 
-- Official (ElevenLabs): the [music best practices guide](https://elevenlabs.io/docs/overview/capabilities/music/best-practices), which is the source of the five questions, the production vocabulary material, the era and arrangement techniques, the loop-by-exclusion framing, the timing cues and the isolation prefixes, together with every verbatim music example here; the [composition plans guide](https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans) for the section structure, the three bracket families and the corrected text example; the [Eleven Music overview](https://elevenlabs.io/docs/overview/capabilities/music) for audio reference and finetunes; the [sound effects guide](https://elevenlabs.io/docs/overview/capabilities/sound-effects) for the simple, sequence and musical-element patterns and the trade vocabulary; the [models overview](https://elevenlabs.io/docs/overview/models) for the line-up.
+- Official (ElevenLabs): the [music best practices guide](https://elevenlabs.io/docs/overview/capabilities/music/best-practices), which is the source of the five questions, the production vocabulary material, the era and arrangement techniques, the loop-by-exclusion framing, the timing cues and the isolation prefixes, together with every verbatim music example here; the [composition plans guide](https://elevenlabs.io/docs/eleven-api/guides/how-to/music/composition-plans) for the section structure, the three bracket families and the corrected text example; the [Eleven Music overview](https://elevenlabs.io/docs/overview/capabilities/music) for audio reference and finetunes; the [sound effects guide](https://elevenlabs.io/docs/overview/capabilities/sound-effects) for the simple, sequence and musical-element patterns and the trade vocabulary; the [models overview](https://elevenlabs.io/docs/overview/models) for the line-up and the music model's language statement.
 
 Coverage note: music and sound effects are merged into one guide because both take a describe-the-sound prompt and the two models overlap in practice, with the effects model generating musical fragments and the music model doing sound design. This is the same reasoning that keeps Stable Audio's music and effects in one guide. The negatives section is deliberately at odds with the general positive-phrasing preference that applies elsewhere in this set: this owner documents a dedicated negative field per section and treats exclusion as the primary technique for loops, so the guide governs.
 
-Last verified: 2026-08-29.
+Last verified: 2026-08-30.

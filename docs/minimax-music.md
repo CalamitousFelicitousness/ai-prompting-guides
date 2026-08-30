@@ -10,6 +10,7 @@ models:
 capabilities: [text-to-music, lyrics-to-song, instrumental, structured-caption, music-cover, lyrics-extract]
 prompt:
   languages: ["en", "zh", "more"]
+  lyric_languages: "NOT PUBLISHED. The owner gives no language list for the music model, and the speech line's 40 carry no stated authority here"
   lyrics: "a SEPARATE field from the description, carrying the sung words with bracketed section tags on their own lines. Omit it for an instrumental, or leave it empty and let the model draft it from the description"
   description: "one field covering style, mood and scenario. It takes either a short comma-separated descriptor list or a three-section Structured Caption, and the owner recommends the structured form when precise control matters"
   structured_caption: "three labelled sections. Global Metadata carries genre, subgenre, tempo, key, scale, emotional progression, listening scenario and production profile; Vocal Details carries vocal gender, timbre, performance style, harmony, backing vocals and effects; Arrangement carries primary and secondary instruments, how instrumentation evolves by section, groove, bass, percussion, textures and spatial effects"
@@ -20,7 +21,7 @@ sources:
   official: ["https://platform.minimax.io/docs/guides/music-generation", "https://platform.minimax.io/docs/api-reference/music-generation", "https://huggingface.co/MiniMaxAI/MiniMax-Music3", "https://github.com/MiniMax-AI/MiniMax-Music3", "https://platform.minimax.io/docs/guides/local-deploy-music-3"]
   provider: []
   community: []
-last_verified: "2026-08-29"
+last_verified: "2026-08-30"
 ---
 
 # MiniMax Music: prompting and usage guide
@@ -34,6 +35,7 @@ last_verified: "2026-08-29"
 - The description has two registers: a short comma-separated descriptor list, or a three-section Structured Caption. Both work; the structured form is what the owner recommends for precise control.
 - Music 3.0 has published weights. The hosted paid API closed to new users in August 2026, so self-hosting or a third-party host is the route for anyone starting now, and the prompt is identical either way.
 - Write lyrics in the language they should be sung. The description stays in English.
+- No language list is published for music. The speech line's 40 languages belong to different models and carry no authority here, so treat anything outside English and Chinese as untested.
 
 </rules>
 
@@ -239,4 +241,4 @@ Trust order is official, then provider, then community. Official wins on any con
 
 Coverage note: MiniMax's documentation renders client-side, and everything here comes from the markdown twin served at each page's path with a `.md` suffix, indexed at `/docs/llms.txt`. Two owner surfaces spell the compound section tags differently, the API reference using a space and the model card a hyphen, and the guide records both rather than picking, because the two surfaces correspond to the two ways the model is actually reached. The hosted paid music API closed to new users on 2026-08-20 with existing subscribers unaffected, which is why this guide treats the published weights as the primary route rather than the API.
 
-Last verified: 2026-08-29.
+Last verified: 2026-08-30.

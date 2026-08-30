@@ -11,6 +11,7 @@ models:
 capabilities: [text-to-music, lyrics-to-song, music-cover, music-repaint, stem-extract, track-add, accompaniment, reference-audio]
 prompt:
   languages: ["en", "zh", "ja", "ko", "more"]
+  lyric_languages: "50-plus, stated but never enumerated for the generator itself. The nearest thing to a list is the transcriber card, which reports the same 50-plus and names 26. The planner detects the vocal language from the lyrics themselves. The 19-language figure in circulation belongs to ACE-Step v1 and does not describe this family"
   lyrics: "a SEPARATE field from the style description, carrying the sung words plus bracketed structure tags that mark each section and how it is performed; write [Instrumental] alone for music with no vocal"
   direction_syntax: "square-bracket tags inside the lyrics field, one per section, optionally qualified with a hyphen as [Chorus - anthemic]; UPPERCASE lyric lines for vocal intensity and (parentheses) for backing vocals"
   length_strategy: "the style description is format-agnostic, so bare style words, comma-separated tags and full natural-language description all work; combine several descriptive dimensions rather than lengthening one, because omitted dimensions are where the model improvises"
@@ -20,7 +21,7 @@ sources:
   official: ["https://github.com/ace-step/ACE-Step-1.5", "https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/Tutorial.md", "https://huggingface.co/ACE-Step/Ace-Step1.5", "https://ace-step.github.io/ace-step-v1.5.github.io/", "https://arxiv.org/abs/2602.00744"]
   provider: []
   community: []
-last_verified: "2026-08-29"
+last_verified: "2026-08-30"
 ---
 
 # ACE-Step: prompting and usage guide
@@ -74,7 +75,9 @@ All six take the identical prompt. Pick by the job, not by the wording.
 - The style description is format-agnostic. The owner trained it to accept bare style words, comma-separated tags and flowing natural language interchangeably, and states the format does not meaningfully change performance. Use whichever is easier to write; spend the effort on content, not on shape.
 - Detail buys control and costs surprise. The owner is explicit that what you leave out is where the model plays. A sparse description yields variety, a dense one yields obedience, and neither is the right answer by default.
 - Conflicting descriptors degrade rather than blend. Asking for classical strings and hardcore metal at once produces a bad fusion, not a choice. This gets worse with the planner engaged, because the planner generalises less well than the audio model.
-- Over fifty languages for lyrics. Write the sung words in the language they should be heard in; the model is not translating them.
+- Over fifty languages for lyrics. Write the sung words in the language they should be heard in; the model is not translating them, and the planner works out the vocal language from the lyrics rather than needing to be told.
+- The figure is stated and never enumerated for the generator. The nearest thing to a list sits on the transcriber, the annotation model that labelled this family's training data and that reports the same fifty-plus: Chinese, Japanese, Korean, Vietnamese, Thai, Indonesian, Malay, Filipino, Hindi, Bengali, Tamil, Urdu, English, German, French, Spanish, Italian, Portuguese, Russian, Polish, Dutch, Greek, Turkish, Arabic, Hebrew and Persian, marked as not exhaustive. Treat those as the well-covered core rather than the boundary.
+- The nineteen-language figure in circulation is ACE-Step v1's, from a different project page, paper and checkpoint. The owner lists multilingual lyric compliance among the things 1.5 improved over it.
 
 ## Prompt structure
 
@@ -289,8 +292,8 @@ same melody and lyrics, reimagined as a stripped acoustic folk arrangement, fing
 
 Trust order is official, then provider, then community. Official wins on any conflict.
 
-- Official (ACE Studio and StepFun): the [ACE-Step 1.5 repository](https://github.com/ace-step/ACE-Step-1.5) and its [prompting tutorial](https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/Tutorial.md), which is the owner's own prompt guide and the source of the caption dimensions, the structure-tag vocabulary, the syllable and consistency rules and the lyric red flags; the [Hugging Face model card](https://huggingface.co/ACE-Step/Ace-Step1.5) for the checkpoint line-up and the per-model capability and quality ratings; the [project page](https://ace-step.github.io/ace-step-v1.5.github.io/); the [technical report](https://arxiv.org/abs/2602.00744).
+- Official (ACE Studio and StepFun): the [ACE-Step 1.5 repository](https://github.com/ace-step/ACE-Step-1.5) and its [prompting tutorial](https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/Tutorial.md), which is the owner's own prompt guide and the source of the caption dimensions, the structure-tag vocabulary, the syllable and consistency rules, the lyric red flags and the automatic vocal-language detection; the repository README for the fifty-plus language claim; the [Hugging Face model card](https://huggingface.co/ACE-Step/Ace-Step1.5) for the checkpoint line-up and the per-model capability and quality ratings; the [transcriber model card](https://huggingface.co/ACE-Step/acestep-transcriber) for the only enumeration of languages the owner publishes anywhere in this family; the [project page](https://ace-step.github.io/ace-step-v1.5.github.io/); the [technical report](https://arxiv.org/abs/2602.00744).
 
 Coverage note: the owner's docs disagree with themselves about which checkpoints respond to guidance. The model-zoo tables in both the repository and the model card mark base and sft as supporting classifier-free guidance and turbo as not, while the tutorial's hyperparameter table states guidance is effective on base only. Turbo's exclusion from guidance is stated consistently everywhere and is the fact this guide relies on; the base-versus-sft question is recorded as unresolved rather than settled in either direction. The tutorial also names four distilled turbo variants where the model-zoo tables publish one per decoder size.
 
-Last verified: 2026-08-29.
+Last verified: 2026-08-30.

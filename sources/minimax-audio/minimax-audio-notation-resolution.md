@@ -91,6 +91,21 @@ pricing detail.
 separate open one. The docs point at the Hugging Face model as the replacement for the API, which
 makes them the same model on two delivery paths, and `access` records weight publication alone.
 
+## Speech publishes 40 languages, music publishes none. NOT INTERCHANGEABLE.
+
+The synchronous text-to-speech guide carries a supported-languages table of 40, and the API
+reference's language-hint field accepts the same 40, so the two surfaces agree. The hint's
+description adds one thing the table does not: the superseded 01 and 02 series do not support
+Persian, Filipino or Tamil. That is a missing language rather than a weaker one, which makes it a
+reason to pick a current tier rather than a quality trade-off.
+
+Cantonese and Nynorsk appear as entries in their own right rather than inside Chinese and Norwegian.
+That pairing is the case the hint exists to settle, and it matches the guide's existing account of
+what the hint is for.
+
+No equivalent list exists for the music model on any owner surface. The 40 belong to the speech
+models, so `minimax-music` records its coverage as unpublished rather than inheriting them.
+
 ## What the guides take from where
 
 - Pause, pronunciation and interjection notation, the interjection vocabulary, per-tier availability,
@@ -103,3 +118,6 @@ makes them the same model on two delivery paths, and `access` records weight pub
   generation API reference.
 - The two cover workflows: the music generation guide.
 - Sample rate, duration, architecture and VRAM for the spec table: the Music 3 model card.
+
+- The forty-language list: the synchronous text-to-speech guide. The three languages the 01 and 02
+  series lack: the API reference's language-hint field.
