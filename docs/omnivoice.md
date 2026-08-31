@@ -2,10 +2,11 @@
 guide: "OmniVoice"
 prompt_scheme: "omnivoice"
 models:
-  - { id: "omnivoice", access: "open-weights", tier: "std", caps: [text-to-speech, voice-clone, voice-design, cross-lingual, pronunciation-override, non-verbal-tags], best_for: "zero-shot speech in over 600 languages, which is the widest coverage of any model in this set. Cloning is the stable path; voice design works but was trained on Chinese and English only" }
+  - { id: "omnivoice", access: "open-weights", tier: "std", caps: [text-to-speech, voice-clone, voice-design, cross-lingual, pronunciation-override, non-verbal-tags], best_for: "zero-shot speech in 646 languages, which is the widest coverage of any model in this set. Cloning is the stable path; voice design works but was trained on Chinese and English only" }
 capabilities: [text-to-speech, voice-clone, voice-design, cross-lingual, pronunciation-override, non-verbal-tags]
 prompt:
-  languages: ["en", "zh", "yue", "600+"]
+  languages: ["en", "zh", "yue", "646"]
+  speech_languages: "646, published as a table with ISO codes and per-language training hours. Coverage is deeply uneven, so a language being listed is not the same as it being well covered; read its hours before committing to it. Voice DESIGN was trained on Chinese and English only, so anything else has to be cloned"
   script: "the prompt is the text to be spoken. Direction does not go in it; the voice comes from either a reference clip or an attribute string, and only three inline forms are parsed out of the script itself"
   direction_syntax: "voice design uses a CLOSED comma-separated attribute vocabulary in a separate field, one attribute per category, freely combined across categories. Inside the script, [laughter] marks a non-verbal, bracketed ARPAbet such as [B EY1 S] fixes a pronunciation, and pinyin tone markers do the same for Chinese"
   voices: "two routes and they behave differently. A reference clip clones a voice and is the mode the model was primarily trained on; an attribute string designs one from nothing and is less stable, especially outside Chinese and English"
@@ -16,7 +17,7 @@ sources:
   official: ["https://github.com/k2-fsa/OmniVoice", "https://github.com/k2-fsa/OmniVoice/blob/main/docs/voice-design.md", "https://huggingface.co/k2-fsa/OmniVoice", "https://arxiv.org/abs/2604.00688"]
   provider: []
   community: []
-last_verified: "2026-08-29"
+last_verified: "2026-08-31"
 ---
 
 # OmniVoice: prompting and usage guide
@@ -28,7 +29,8 @@ last_verified: "2026-08-29"
 - THE PROMPT IS THE SCRIPT. What you write is spoken. Direction is not written in prose anywhere; it lives in the voice you supply and in three inline notations.
 - Voice comes from one of two places: a reference recording to clone, or a closed set of attributes to design from. These are different modes with different reliability, not two ways of saying the same thing.
 - The design vocabulary is CLOSED and enumerable. This is unusual: most models here take free-form voice descriptions, and OmniVoice does not.
-- Over 600 languages for cloning, but voice design was trained on Chinese and English only. Coverage is not uniform across the two modes.
+- 646 languages for cloning, but voice design was trained on Chinese and English only. Coverage is not uniform across the two modes.
+- The owner publishes the full list, with per-language training hours beside each entry. The hours span orders of magnitude, so being on the list is not the same as being well covered. Read a language's row before committing to it, and expect a thinly resourced one to behave worse than the headline count suggests.
 - Write the script in the language it should be spoken. The instruct string may be written in English or Chinese either way.
 
 </rules>
@@ -165,7 +167,7 @@ The word is spelled bass but pronounced [B EY1 S] when you mean the guitar. [lau
 - Expecting an accent attribute to work on the wrong script language: English accents apply to English text and Chinese dialects to Chinese text.
 - Expecting a style beyond whisper: there is exactly one style value. Any other manner has to come from a reference clip.
 - Mismatching reference and script language by accident: the result speaks with the reference language's accent, which is a documented behaviour and surprises people who did not intend it.
-- Assuming design coverage matches cloning coverage: cloning spans over 600 languages, design was trained on two.
+- Assuming design coverage matches cloning coverage: cloning spans 646 languages, design was trained on two.
 - Treating design as the default: the owner states cloning is the mode the model was primarily trained on and the more stable one.
 - Writing ARPAbet as a spelling hint: it is space-separated phonemes with a stress digit on the vowel, and it replaces the word's reading.
 - Re-cloning the same character per line: encode the reference once and reuse it, or identity drifts across a long piece.
@@ -175,8 +177,8 @@ The word is spelled bass but pronounced [B EY1 S] when you mean the guitar. [lau
 
 Trust order is official, then provider, then community. Official wins on any conflict.
 
-- Official (k2-fsa): the [OmniVoice repository](https://github.com/k2-fsa/OmniVoice) for the two voice modes, the cloning workflow, cross-lingual accent behaviour, automatic text normalisation and the inline control syntax; the [voice design reference](https://github.com/k2-fsa/OmniVoice/blob/main/docs/voice-design.md) for the closed attribute vocabulary, its per-category exclusivity, the accent and dialect language conditions, and the example strings; the [model card](https://huggingface.co/k2-fsa/OmniVoice); the [technical report](https://arxiv.org/abs/2604.00688).
+- Official (k2-fsa): the [OmniVoice repository](https://github.com/k2-fsa/OmniVoice) for the two voice modes, the cloning workflow, cross-lingual accent behaviour, automatic text normalisation and the inline control syntax; the [language table](https://github.com/k2-fsa/OmniVoice/blob/main/docs/languages.md) for the 646 languages, their ISO codes and their per-language training hours; the [voice design reference](https://github.com/k2-fsa/OmniVoice/blob/main/docs/voice-design.md) for the closed attribute vocabulary, its per-category exclusivity, the accent and dialect language conditions, and the example strings; the [model card](https://huggingface.co/k2-fsa/OmniVoice); the [technical report](https://arxiv.org/abs/2604.00688).
 
-Coverage note: there is a naming collision worth knowing about. This guide covers the k2-fsa research model; a commercial product at omnivoice.app shares the name and is unrelated, and it dominates search results for the term. Nothing here comes from that product. The owner's statement that voice design was trained on Chinese and English only, while cloning spans the full language set, is recorded prominently because the headline figure of 600-plus languages is easily read as applying to both modes.
+Coverage note: there is a naming collision worth knowing about. This guide covers the k2-fsa research model; a commercial product at omnivoice.app shares the name and is unrelated, and it dominates search results for the term. Nothing here comes from that product. The owner's statement that voice design was trained on Chinese and English only, while cloning spans the full language set, is recorded prominently because the headline figure of 646 languages is easily read as applying to both modes. The same figure is easily read as uniform coverage, which the owner's own per-language hours contradict.
 
-Last verified: 2026-08-29.
+Last verified: 2026-08-31.
