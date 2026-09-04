@@ -2,19 +2,23 @@
 guide: "Anima"
 prompt_scheme: "anima"
 models:
-  - { id: "anima-base", access: "open-weights", tier: "base", caps: [text-to-image], best_for: "maximum flexibility, style diversity across seeds, and strong tag adherence; a true base model whose plain neutral default relies on quality and artist tags to set an aesthetic" }
+  - { id: "anima-base", access: "open-weights", tier: "base", caps: [text-to-image], best_for: "maximum flexibility, style diversity across seeds, and strong tag adherence; a true base model whose plain neutral default relies on quality and artist tags to set an aesthetic. The tier LoRAs are trained against" }
+  - { id: "anima-aesthetic", access: "open-weights", tier: "std", caps: [text-to-image], best_for: "a better default art style for less prompt work. Trained only on high-quality images with the quality tags STRIPPED from its captions, so it wants no score tags on either side of the prompt" }
+  - { id: "anima-turbo", access: "open-weights", tier: "distilled", caps: [text-to-image], best_for: "fast iteration: 8 to 12 steps at CFG 1, and the owner's own recommended starting point. Distillation buys stability and a strong default style and costs diversity; at CFG 1 the negative prompt stops doing work" }
+  - { id: "anima-2.9b", access: "open-weights", tier: "flagship", caps: [text-to-image], best_for: "the largest checkpoint on this scheme and the newest character knowledge, but a COMMUNITY layer expansion at preview stage rather than a CircleStone release. Take its card as authoritative for its own weights only, and fall back to the base rules wherever it is silent" }
 capabilities: [text-to-image]
 prompt:
   languages: ["en"]
   literal_text: "weak: it renders a single word and sometimes a short phrase, but not sentences; keep any in-image words to one short string welded to an object, and add longer text in an editor afterward"
   length_strategy: "native interface is a comma-separated Danbooru/Gelbooru tag list in a fixed section order; pure natural language also works (be descriptive, aim for at least two sentences, since very short prompts give unexpected results); tags and natural language mix in any order; trained with tag dropout, so you need not list every relevant tag"
-  negatives: "real and recommended (the model is CFG-guided): use a quality and score negative ('worst quality, low quality, score_1, score_2, score_3, artist name') plus the safety tags you want suppressed, paired with the recommended positive quality prefix"
+  quality_tags: "THE RULE THAT MOVES BY TIER, and it fails silently. anima-base trained on them, so the human words and score_9 down to score_1 both work. anima-aesthetic had them stripped from its captions and the owner says NOT to use score_* on either side, because they push it toward slop. The 2.9B derivative also has no scores in its captions, though its untouched base layers still carry them"
+  negatives: "SPLITS BY TIER. On anima-base they are real and recommended (it is CFG-guided): a quality and score negative plus the safety tags you want suppressed. On anima-aesthetic keep the shape but drop the score tags. On anima-turbo CFG is 1, so nothing is pushed away and the negative is decoration"
   auto_expand_behavior: "none built in; write the full tag list or description yourself"
 sources:
   official: ["https://huggingface.co/circlestone-labs/Anima", "https://docs.comfy.org/tutorials/image/anima/anima", "https://civitai.com/models/2458426/anima"]
   provider: []
-  community: []
-last_verified: "2026-06-21"
+  community: ["https://huggingface.co/Gazingstars123/Anima-2.9B"]
+last_verified: "2026-09-04"
 ---
 
 # Anima: prompting and usage guide
@@ -26,7 +30,8 @@ last_verified: "2026-06-21"
 - It also understands natural language (a Qwen-3 0.6B text encoder gives good prompt adherence) and tag-plus-language hybrids. Tags are primary; reach for natural language to describe scenes, relationships, and anything without a clean tag.
 - It is anime and illustration only, and is intentionally bad at realism. Do not prompt it for photographs.
 - It is text-to-image with no input image, so there is no editing or multi-image section; those are N/A and omitted.
-- It is CFG-guided, so negative prompts and quality tags are real, recommended levers (unlike the distilled and natural-language models elsewhere in this set).
+- It is CFG-guided, so negative prompts and quality tags are real, recommended levers (unlike the natural-language models elsewhere in this set). The Turbo tier is the exception and is covered below.
+- FOUR checkpoints share this scheme and they are NOT interchangeable at the prompt. Base takes quality and score tags, Aesthetic wants no score tags at all, Turbo runs at CFG 1 where the negative stops working, and the community 2.9B has no scores in its captions. Check which one you are on before reusing a prompt.
 
 </rules>
 
@@ -38,11 +43,29 @@ masterpiece, best quality, score_7, safe, {1girl/1boy/count}, {character}, {seri
 
 </template>
 
+That prefix is the anima-base default, and so is every example below. On anima-aesthetic drop the score tag; on anima-turbo drop the negative as well. See "Quality and score tags by tier".
+
 ## Models and when to use which
 
-- `anima-base` (Anima Base v1): the released model and the one to prompt for. It is a compact 2B model and a true base, with no aesthetic tuning, so its default style is plain and neutral; quality tags and an artist tag do most of the work of giving it a look. In exchange you get maximum flexibility, style diversity across seeds, and strong adherence to whatever tags you set.
-- An earlier `Anima Preview` line and a forthcoming `Anima-Turbo` (a fast, few-step variant, distributed for now as a Turbo LoRA) also exist. They prompt with the same tag grammar; only speed and stability differ. Everything in this guide applies unchanged.
-- Because the base default is plain, always set a quality system and usually an artist tag. An Anima prompt with no quality and no artist tags looks flat; that is the model working as designed, not a failure.
+- `anima-base`: a compact 2B true base with no aesthetic tuning, so its default style is plain and neutral and quality plus artist tags do most of the work of giving it a look. In exchange you get the most flexibility, the most style diversity across seeds, and the strongest adherence to whatever tags you set. This is the tier to train LoRAs against.
+- `anima-aesthetic`: the same model finetuned on high-quality images for a better default style and more consistency. It ships as v1.0, v1.0b and v1.1; the owner describes v1.0b as the aesthetics finetune alone, without the style-adjustment and stabilization LoRAs merged into v1.0, and prefers v1.0. Its captions had the quality tags stripped, which changes how you write the prompt.
+- `anima-turbo`: the distilled tier, and the one the owner recommends starting with, on the grounds that it is only slightly worse than Aesthetic while being far faster to iterate with. Distillation also buys stability and a strong default style, and costs diversity. It ships as v1.0 and v1.1.
+- `anima-2.9b`: a COMMUNITY derivative, not a CircleStone release. It expands anima-base from 28 transformer layers to 40 by deep-copying neighbouring blocks with their output projections zeroed, so it begins functionally identical to base and then continues training. Its knowledge cutoff is July 2026 against base's September 2025, so it knows newer characters and series. It is a preview, only its new layers are trained so far, and its card is authoritative for its own weights and nothing else.
+- The prompt grammar is shared across all four. What moves between them is the quality-tag rule and whether the negative prompt does anything, both covered next.
+- Because the base default is plain, always set a quality system and usually an artist tag on that tier. An anima-base prompt with no quality and no artist tags looks flat; that is the model working as designed, not a failure.
+- An earlier `anima-preview` line also exists and is superseded.
+
+## Quality and score tags by tier
+
+<rules id="quality-tiers">
+
+- ON `anima-base`: quality tags are trained and expected. Use the human words, the PonyV7 aesthetic scores (score_9 down to score_1), both, or neither; all combinations work.
+- ON `anima-aesthetic`: the captions had every quality tag stripped, so you do not need them at all. Leaving "masterpiece, best quality" in is safe, but the owner asks directly for NO score_* tags in the positive OR the negative, because the tier is already tuned high and the scores push it into slop.
+- ON `anima-turbo`: the quality question is secondary to the guidance one. At CFG 1 there is nothing to steer with, so treat both the quality prefix and the negative as far weaker levers than on base.
+- ON `anima-2.9b`: its captions carry no scores either. Its author says you may still use them, and the untouched base layers do still carry the conditioning, so they weaken rather than break. Prefer the human quality words there and treat scores as optional.
+- The mismatch fails SILENTLY in both directions. A base prompt carried onto Aesthetic brings score tags the owner warns against, and an Aesthetic prompt carried onto base drops a quality system that tier genuinely needs and comes out flat.
+
+</rules>
 
 ## How the model reads prompts
 
@@ -55,6 +78,8 @@ masterpiece, best quality, score_7, safe, {1girl/1boy/count}, {character}, {seri
 - It was trained with random tag dropout, so you do not need every relevant tag; a focused set is fine.
 - For pure natural language, be descriptive and aim for at least two sentences. Extremely short prompts give unexpected results and raise the chance of unwanted content.
 - Name a character, then describe their appearance, rather than relying on the name alone. This matters most with multiple characters: a bare list of names with no descriptions confuses the model about who is who.
+- Follow a character name with its series or copyright tag. The 2.9B author reports the model confusing characters without it, and the pairing is cheap insurance on every tier.
+- On `anima-2.9b`, detail matters more than it does on base. Its author reports that a short prompt produces a bland, simple background and often misses the intent outright, so write the full tag list or a full description on that tier.
 
 ## Prompt structure
 
@@ -158,7 +183,9 @@ masterpiece, best quality, score_8, safe, 1girl, holding a cardboard sign that s
 
 <rules id="negatives">
 
-- Negatives are real here and worth using; the model runs with classifier-free guidance. The documented default negative is "worst quality, low quality, score_1, score_2, score_3, artist name".
+- Negatives are real on `anima-base` and worth using; it runs with classifier-free guidance. The owner's default negative is "worst quality, low quality, score_1, score_2, score_3, artist name, blurry, jpeg artifacts, chromatic aberration".
+- ON `anima-turbo` they are not. The distilled tier runs at CFG 1, and with no guidance there is nothing for an exclusion to push against, so the field is decoration. State the positive that displaces the unwanted element, or generate that image on base.
+- ON `anima-aesthetic` keep the negative but drop the score tags out of it, the same as out of the positive.
 - Mirror your safety intent: if the positive prompt is "safe", put "sensitive, nsfw, explicit" in the negative to hold content down. Short or vague prompts are the main cause of unwanted content, so combine safety negatives with a detailed positive.
 - "artist name" in the negative suppresses signature and watermark text; keep it there for clean output.
 - Add the specific artifacts you actually see ("extra fingers, bad hands, jpeg artifacts") rather than piling on generic words.
@@ -177,13 +204,17 @@ masterpiece, best quality, score_8, safe, 1girl, holding a cardboard sign that s
 - Long in-image text: only a word or two renders; do not ask for sentences, add them in an editor.
 - Naming characters without describing them: list a character's hair, eyes, and outfit too, especially with multiple characters, or the model mixes them up.
 - Plain, flat output: that is the base model with no quality or artist tags; add a quality system and an artist to give it a look.
+- Carrying a base prompt onto Aesthetic unchanged: the score tags travel with it, and the owner warns they push that tier toward slop; strip score_* from both sides.
+- Writing a negative prompt for Turbo: at CFG 1 nothing is pushed away, so displace the unwanted element with a positive or switch to base for that image.
+- Treating the 2.9B as a CircleStone release: it is a community layer expansion at preview stage, and where its card is silent the base rules govern.
 
 </rules>
 
 ## Sources
 
-Trust order: official beats provider beats community, and official wins on any conflict. Anima has no approved-provider hosting (its license forbids paid API hosting), so the prompt rules come from the owner's own materials.
+Trust order: official beats provider beats community, and official wins on any conflict. Anima has no approved-provider hosting (its license forbids paid API hosting), so the rules come from the owner's own materials, plus one community derivative recorded as such.
 
-- Official (CircleStone Labs / Comfy Org): [Anima model card](https://huggingface.co/circlestone-labs/Anima), [ComfyUI Anima tutorial](https://docs.comfy.org/tutorials/image/anima/anima), [Anima on CivitAI](https://civitai.com/models/2458426/anima).
+- Official (CircleStone Labs / Comfy Org): the [Anima model card](https://huggingface.co/circlestone-labs/Anima), which is the source of the tag-section order, the quality and safety vocabularies, the per-tier line-up and the Aesthetic score-tag warning, the Turbo settings and the default negative; the [ComfyUI Anima tutorial](https://docs.comfy.org/tutorials/image/anima/anima); [Anima on CivitAI](https://civitai.com/models/2458426/anima).
+- Community: the [Anima-2.9B model card](https://huggingface.co/Gazingstars123/Anima-2.9B), the source of everything attributed to that derivative: the layer expansion, the absent score captions, the character-plus-series rule and the prompt-detail advice. It is authoritative for its own weights only and never overrides CircleStone on the rest of the line.
 
-Last verified: 2026-06-21.
+Last verified: 2026-09-04.
