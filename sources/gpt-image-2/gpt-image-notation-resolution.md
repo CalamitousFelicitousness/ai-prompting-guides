@@ -87,3 +87,46 @@ toward advertising polish by default, so believability is bought by naming what 
 **Date and place trigger world knowledge.** The owner's example generates "a realistic outdoor crowd scene
 in Bethel, New York on August 16, 1969" and notes the model infers Woodstock without being told. Naming a
 verifiable time and place is a documented way to hand the model the research.
+
+## 7. GPT Image 2.5 joins the family (2026-09-13)
+
+`gpt-image-2.5-sunburst` and `gpt-image-2.5-flare` shipped on 2026-09-08 and join this guide. The owner
+settles the merge the same way it settled the first one: its new image prompting guide
+(`/api/docs/guides/image-prompting`) covers "shared techniques for composition, text, reference images,
+and preserving details during edits" across models, and its migration workflow keeps "the prompt,
+references, dimensions, and output format unchanged for the first comparison".
+
+That page is now the owner's prompting surface. The cookbook this guide was built from survives as "the
+pinned GPT Image 2 notebook", linked from the GPT Image 2 reference tab. The two do not conflict: the
+new page restates the cookbook's fundamentals (labeled scene, subject, details and constraints; format
+freedom; explicit "photorealistic"; quoted text with position and count; change-plus-preserve; numbered
+reference roles; one change per turn) and adds a handful of techniques the guide now carries. Rules
+written against gpt-image-2 stay attributed to the cookbook.
+
+Tiers. Sunburst is `flagship`: the owner calls it "the base model, optimized for quality" and "our most
+capable model". Flare is `distilled`, under the skill's mapping of vendor fast tiers onto that value; the
+owner calls it "the small model, optimized for speed" and never says how it was made, so the guide
+describes it as the small, speed-optimized tier and does not claim a distillation process.
+`gpt-image-2` drops from `flagship` to `legacy`, because the owner's image generation guide now files it
+under "Earlier GPT Image models" and says "For new integrations, use one of the GPT Image 2.5 models".
+`gpt-image-1.5`, `gpt-image-1` and `gpt-image-1-mini` are all on the deprecations page with shutdown dates.
+The guide says deprecated and scheduled for shutdown without carrying the dates, which would go stale.
+
+Flare's quality: RESOLVED on the API guide. fal's GPT Image 2.5 page attributes to the launch "higher
+image quality than GPT Image 2 with 50% lower latency". The owner's API prompting guide says Flare has
+"image quality comparable to GPT Image 2". Under the owner-versus-owner rule the API documentation
+governs, so the guide says comparable. The launch framing is not repeated as fact.
+
+Scope. The new `xhigh` and `max` quality levels, the size table, the custom-resolution constraints and
+the transparency parameter are request settings and stay out, as the `quality_setting` treatment in
+section 5 already established. What is kept is the technique around them: set parameters separately
+from the prompt; compare models with the prompt, references, size and quality setting held fixed,
+because "the same quality label does not imply the same image quality or response time across models";
+ask for an isolated subject in the prompt as well as transparency on the request, since "a drawn
+checkerboard is not transparency"; and composite into the original when a region must stay
+pixel-identical, since "repeated edits can still change details you intended to preserve".
+
+Providers. WaveSpeed's GPT Image 2.5 guide and fal's GPT Image 2.5 page agree with the owner on every
+prompting point: quote exact copy, say what must not change, one change per edit round. Their workflow
+suggestion to draft on Flare and test the settled prompt on Sunburst is compatible with the owner's
+order and is not taught separately.

@@ -2,10 +2,12 @@
 guide: "GPT Image (family)"
 prompt_scheme: "gpt-image"
 models:
-  - { id: "gpt-image-2",      access: "closed-weights", tier: "flagship", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "the default for new work: highest-quality generation and editing, text-heavy images, photorealism, compositing, identity-sensitive edits" }
-  - { id: "gpt-image-1.5",    access: "closed-weights", tier: "legacy", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "existing validated workflows during migration; prefer the flagship for anything new" }
-  - { id: "gpt-image-1",      access: "closed-weights", tier: "legacy", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "backward compatibility only while an upgrade is being validated" }
-  - { id: "gpt-image-1-mini", access: "closed-weights", tier: "budget", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "cost and throughput on low-stakes work: large batch variants, rapid ideation, previews, draft assets" }
+  - { id: "gpt-image-2.5-sunburst", access: "closed-weights", tier: "flagship", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "the quality pick and the owner's base model: higher image quality than gpt-image-2, the most precise editing and subject preservation in the family, fine detail, dense text, and images viewed large. Slower per image than Flare" }
+  - { id: "gpt-image-2.5-flare",    access: "closed-weights", tier: "distilled", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "the speed pick and the owner's small model: image quality the owner calls comparable to gpt-image-2 at lower latency, for iteration, high volume and everyday assets. It buys latency, not a guaranteed lower price" }
+  - { id: "gpt-image-2",      access: "closed-weights", tier: "legacy", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "existing validated workflows; the owner now files it under earlier models, and it is the baseline to test the 2.5 models against" }
+  - { id: "gpt-image-1.5",    access: "closed-weights", tier: "legacy", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "existing workflows only; deprecated and scheduled for shutdown" }
+  - { id: "gpt-image-1",      access: "closed-weights", tier: "legacy", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "backward compatibility only; deprecated and scheduled for shutdown" }
+  - { id: "gpt-image-1-mini", access: "closed-weights", tier: "budget", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge], best_for: "cost and throughput on low-stakes work: large batch variants, rapid ideation, previews, draft assets. A mini of generation 1, deprecated and scheduled for shutdown" }
 capabilities: [text-to-image, image-edit, multi-image-reference, text-rendering, style-transfer, world-knowledge]
 prompt:
   languages: ["en", "multilingual"]
@@ -16,13 +18,14 @@ prompt:
   photorealism: "say 'photorealistic' explicitly, it engages a distinct mode; camera and lens language shapes the look but is not simulated exactly, and polish must be suppressed on purpose"
   negatives: "plain negatives work and go in the prompt ('no watermark', 'no extra text', 'no logos'); there is no separate negative field"
   references: "reference each input by index AND description ('Image 1: product photo, Image 2: style reference'), then state how they interact"
-  editing: "'change only X' plus 'keep everything else the same', and repeat the preserve list on every iteration or the edit drifts"
-  quality_setting: "hosts expose a quality or fidelity control; raise it for small or dense text, detailed infographics, close-up portraits, and identity-sensitive edits, and leave it low for high-volume work"
+  editing: "'change only X' plus 'keep everything else the same', and repeat the preserve list on every iteration or the edit drifts; a preserve list cannot promise pixel-identical regions, so composite the approved edit into the original when an area must not move at all"
+  quality_setting: "a request setting, never words in the prompt; the owner says to set parameters separately from the prompt. Raise it for small or dense text, detailed infographics, close-up portraits, and identity-sensitive edits, and leave it low for high-volume work. The same setting name does not give the same quality on different models"
+  transparency: "ask for an isolated subject in the prompt AND set transparency on the request; a checkerboard drawn into the image is not an alpha channel, and the owner's cutout prompt forbids a backdrop, checkerboard, scenery and shadow outright"
 sources:
-  official: ["https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide", "https://developers.openai.com/api/docs/models/gpt-image-2"]
-  provider: ["https://fal.ai/learn/tools/prompting-gpt-image-2"]
+  official: ["https://developers.openai.com/api/docs/guides/image-prompting", "https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst", "https://developers.openai.com/api/docs/models/gpt-image-2.5-flare", "https://developers.openai.com/api/docs/models/gpt-image-2", "https://developers.openai.com/api/docs/deprecations", "https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide"]
+  provider: ["https://fal.ai/learn/tools/prompting-gpt-image-2", "https://fal.ai/gpt-image-2.5", "https://wavespeed.ai/blog/ai-models/gpt-image-2-5-flare-and-sunburst-now-on-wavespeedai/"]
   community: []
-last_verified: "2026-08-07"
+last_verified: "2026-09-13"
 ---
 
 # GPT Image: prompting and usage guide
@@ -30,7 +33,8 @@ last_verified: "2026-08-07"
 <rules id="global">
 
 - This guide covers prompt craft only. For endpoints, parameters, quality and fidelity settings, resolution limits, reference counts, and code, consult the specific provider or proxy's API docs; they differ and are out of scope here.
-- It covers the whole GPT Image family. They share one prompt scheme; a prompt written for one transfers to the others, and the owner's own migration advice is to keep prompts unchanged at first and retune only after comparing real output.
+- It covers the whole GPT Image family, GPT Image 2.5 Sunburst and Flare included. They share one prompt scheme; a prompt written for one transfers to the others, and the owner's migration advice is to keep the prompt, references and output size unchanged for the first comparison and retune only after comparing real output. The same prompt still renders differently on each model.
+- Keep request settings out of the prompt. Quality, output size and background transparency are set on the request, not asked for in words; the owner says to set parameters separately from the prompt. Aspect ratio and placement still belong in the prompt text.
 - Write in a consistent order and label the segments. This model rewards a skimmable structure more than it rewards clever phrasing.
 - Name the artifact you want (ad, UI mock, infographic, editorial photo). Stating the intended use sets the mode and the level of polish.
 - Say what must not change. Constraints and preserve lists are load-bearing here, not decoration, and are where most weak prompts fail silently.
@@ -48,17 +52,25 @@ last_verified: "2026-08-07"
 
 ## Models and when to use which
 
-All four share one prompt scheme; pick by cost and stakes rather than by grammar.
+All six share one prompt scheme; pick by quality requirement, latency and migration state rather than by grammar.
 
-- `gpt-image-2`: the default for new work. Strongest generation and editing, best text rendering, best identity preservation. Reach for it whenever a better first pass saves a retry.
-- `gpt-image-1.5`: the previous generation. Keep it for workflows already validated against it while a migration is checked.
-- `gpt-image-1`: legacy compatibility only.
-- `gpt-image-1-mini`: the cost and throughput option for large batches, ideation, previews, and draft assets.
+- `gpt-image-2.5-sunburst`: the quality pick, and the owner's base model. Higher image quality than gpt-image-2, with the most precise editing and subject preservation in the family. Reach for it for fine detail, dense text, identity-sensitive edits, and images that will be viewed large.
+- `gpt-image-2.5-flare`: the speed pick, and the owner's small model. The owner puts its image quality level with gpt-image-2 at lower latency, and it shares Sunburst's gains in precise editing and subject preservation. Reach for it when iterating, at high volume, and for everyday assets.
+- `gpt-image-2`: the previous generation, now filed by the owner under earlier models. Keep it for workflows already validated against it, and use it as the baseline when testing the 2.5 models.
+- `gpt-image-1.5`: deprecated and scheduled for shutdown. Existing workflows only.
+- `gpt-image-1`: deprecated and scheduled for shutdown. Legacy compatibility only.
+- `gpt-image-1-mini`: the cost and throughput option for large batches, ideation, previews, and draft assets. Deprecated and scheduled for shutdown.
 
 <rules id="model-choice">
 
-- `gpt-image-1-mini` is a mini of generation 1, not of generation 2. Read as a list the four ids invite the opposite assumption, and it is wrong.
-- For cost-sensitive work, prefer the flagship at a low quality setting over dropping to mini. The owner reports the low setting performs comparably, and it keeps you on the better model.
+- For new work, start on Flare when speed is the priority and on Sunburst when the quality bar is demanding.
+- Moving a gpt-image-2 workflow that already meets its quality bar: test Flare first, to see whether quality holds at lower latency.
+- Moving a use case where gpt-image-2 falls short: start on Sunburst and confirm it clears the bar, then test Flare on the same prompts and inputs, and switch only if Flare also passes.
+- Compare models with the prompt, references, output size and quality setting held fixed. The same quality setting name does not produce the same image quality on different models, so a matched label is where a comparison starts rather than a guarantee.
+- Retune settings before rewriting the prompt. The owner's order is to compare quality levels first and to change one thing at a time.
+- Flare is the latency option, not a guaranteed cost saving. The owner says to confirm current pricing rather than assume the faster model costs less.
+- `gpt-image-1-mini` is a mini of generation 1, not of any later generation. Read as a list the ids invite the opposite assumption, and it is wrong.
+- For cost-sensitive work, prefer a current model at a low quality setting over dropping to mini. The owner reported the low setting performing comparably on gpt-image-2, and it keeps you on a supported model.
 - Raise the host's quality control for small or dense text, detailed infographics, close-up portraits, identity-sensitive edits, and large outputs. Leave it low for high-volume exploration.
 
 </rules>
@@ -216,7 +228,9 @@ Infographics, slides, diagrams, and interface mockups are a strength. Name the a
 - Give real values. Believable specifics (figures, labels, footnotes) render better than placeholders and stop the model inventing filler.
 - State the layout as constraints: background, typography family, spacing, where the logo or footnote sits.
 - Rule out decoration explicitly. "Avoid clip art, stock photography, gradients, shadows, decorative elements" is what separates a usable slide from a generic one.
-- For multi-panel work, label the panels and give each one its own line.
+- For multi-panel work, label the panels and give each one its own line. For a comic strip, make each panel one clear visual beat, concrete and action-focused.
+- Describe an interface as if the product already exists: layout, hierarchy, spacing and real interface elements. Concept-art language turns it back into a design sketch.
+- Write educational visuals like an instructional design brief: the audience, the lesson objective, the components that must appear, and what to leave out.
 
 </rules>
 
@@ -249,10 +263,14 @@ Create a simple biology diagram titled "Cellular Respiration at a Glance" for hi
 <example use_case="ui-mockup">
 
 ```text
-Create a realistic mobile app UI mockup for a local farmers market. Show today's market with a simple header, a short list of vendors with small photos and categories, a small "Today's specials" section, and basic information for location and hours. Design it to be practical and easy to use. White background, subtle natural accent colors, clear typography, and minimal decoration. Place the UI mockup in an iPhone frame.
+Create a realistic mobile app UI mockup for a local farmers market.
+Show today's market with a simple header, a short list of vendors with small photos and categories, a small "Today's specials" section, and basic information for location and hours.
+Design it to be practical, and easy to use. White background, subtle natural accent colors, clear typography, and minimal decoration.
+It should look like a real, well-designed, beautiful app for a small local market.
+Place the UI mockup in an iPhone frame.
 ```
 
-*Why: names each screen region in reading order, quotes the one literal section heading, and states the device frame, which is what turns a flat layout into a presentable mockup*
+*Why: names each screen region in reading order, quotes the one literal section heading, states the device frame, and asks for a real, shipped app rather than a concept, which keeps the result from reading as a design sketch*
 
 </example>
 
@@ -300,6 +318,8 @@ Place the woman from Image 1 on the street from Image 3, wearing the coat from I
 - Make one change per turn. A sequence of small edits outperforms one instruction carrying several.
 - Name the outcome plainly. "Remove the flower from the man's hand" is enough; describing the removal procedure is not needed.
 - For identity-sensitive work, list the identity attributes explicitly rather than saying "keep her the same".
+- A preserve list cannot promise pixel-identical regions. Repeated edits can still move details you asked to keep, so when an area must not change at all, composite the approved edit back into the original instead.
+- For a transparent cutout, ask for an isolated subject in the prompt and set transparency on the request as well. Forbid the fake versions outright (no backdrop, no checkerboard, no scenery, no shadow), and repeat the transparency requirement on every later edit.
 
 </rules>
 
@@ -364,6 +384,20 @@ Turn this drawing into a photorealistic image. Preserve the exact layout, propor
 
 </example>
 
+<example use_case="transparent-cutout">
+
+```text
+Extract the product from the input image and isolate it on a fully transparent background.
+Output: centered product, crisp silhouette, no halos/fringing.
+Preserve product geometry and label legibility exactly.
+Add only light polishing. Do not add a solid backdrop, checkerboard, scenery, or shadow.
+Do not restyle the product; remove the background and preserve clean alpha transparency.
+```
+
+*Why: the owner's cutout prompt. It asks for isolation and names every fake substitute for transparency as an exclusion, because a drawn checkerboard or backdrop is the failure; it works only alongside transparency set on the request*
+
+</example>
+
 ## Character consistency
 
 <rules id="consistency">
@@ -423,7 +457,11 @@ Original character, no text, no watermarks.
 - Forgetting to suppress polish: photoreal prompts need explicit anti-retouching, or the output drifts to advertising gloss.
 - Placeholder data in structured visuals: real, believable figures and labels render better than "Lorem" or "Value 1".
 - Unspecified text count: say the copy appears once, or it may be repeated across the layout.
-- Reaching for mini to save cost: prefer the flagship at a low quality setting, which the owner reports performs comparably.
+- Reaching for mini to save cost: it is a deprecated generation-1 model; prefer a current model at a low quality setting, which the owner reported performing comparably on gpt-image-2.
+- Asking for settings in words: output size, quality and transparency are request settings, and writing them into the prompt does not set them.
+- Painting transparency: a checkerboard in the image is not an alpha channel; ask for an isolated subject and set transparency on the request.
+- Trusting a preserve list for pixel-exact regions: repeated edits still drift; composite the approved edit into the original instead.
+- Judging models at a shared quality label: the same setting name is not the same quality on Flare, Sunburst and gpt-image-2; hold prompt, references and size fixed and compare the images.
 
 </rules>
 
@@ -431,9 +469,9 @@ Original character, no text, no watermarks.
 
 Trust order: official beats provider beats community. Official (OpenAI) wins on any conflict.
 
-- Official (OpenAI): [GPT Image Generation Models Prompting Guide](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide), [GPT Image 2 model page](https://developers.openai.com/api/docs/models/gpt-image-2).
-- Provider: [fal GPT Image 2 prompting guide](https://fal.ai/learn/tools/prompting-gpt-image-2).
+- Official (OpenAI): the [image prompting guide](https://developers.openai.com/api/docs/guides/image-prompting), the owner's current prompting surface for the family and the source of the Flare and Sunburst positioning, the model-selection and migration order, the settings-apart-from-the-prompt rule, the interface, comic and educational techniques, the transparent-cutout prompt and the compositing advice for pixel-identical regions; the model pages for [GPT Image 2.5 Sunburst](https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst), [GPT Image 2.5 Flare](https://developers.openai.com/api/docs/models/gpt-image-2.5-flare) and [GPT Image 2](https://developers.openai.com/api/docs/models/gpt-image-2); the [deprecations page](https://developers.openai.com/api/docs/deprecations) for the three models scheduled for shutdown; the [GPT Image Generation Models Prompting Guide](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide), which the owner now pins as the GPT Image 2 notebook and which remains the source of the rules written against that generation.
+- Provider: the [fal GPT Image 2 prompting guide](https://fal.ai/learn/tools/prompting-gpt-image-2), the [fal GPT Image 2.5 page](https://fal.ai/gpt-image-2.5), and the [WaveSpeed GPT Image 2.5 API guide](https://wavespeed.ai/blog/ai-models/gpt-image-2-5-flare-and-sunburst-now-on-wavespeedai/).
 
-Coverage note: the owner's guide is family-level and states that prompts transfer across the family, which is why this is one guide rather than four. The provider guide agrees with the owner at every point and contributes the five-slot template used here, which makes the owner's "name the intended use" instruction a named slot. One rule inverts the rest of this guide set: tag-based prompts are explicitly accepted by the owner for this family, subject to every style word having a visual target. Structure and scope decisions are recorded in `sources/gpt-image-2/gpt-image-notation-resolution.md`.
+Coverage note: the owner's prompting guide is family-level and says it covers techniques shared across models, which is why Sunburst and Flare join this guide rather than getting their own. The providers agree with the owner on every prompting point, and fal's GPT Image 2 guide contributes the five-slot template used here, which makes the owner's "name the intended use" instruction a named slot. One claim differs between surfaces: fal repeats a launch claim that Flare beats gpt-image-2 on image quality, while the owner's API prompting guide calls Flare's quality comparable to gpt-image-2, and this guide follows the API guide. One rule inverts the rest of this guide set: tag-based prompts are explicitly accepted by the owner for this family, subject to every style word having a visual target. Structure and scope decisions are recorded in `sources/gpt-image-2/gpt-image-notation-resolution.md`.
 
-Last verified: 2026-08-07.
+Last verified: 2026-09-13.
