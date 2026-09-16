@@ -252,3 +252,99 @@ by 含延长意图关键词的 prompt, a prompt carrying extension-intent keywor
 words rather than by attaching a video. The owner's example names the clip as 视频1 and leads with the
 intent verb. Extension is not new to the guide as a concept, since VACE has covered clip extension on the
 open-weights side all along, but it is new to the hosted line.
+
+## 19. Re-verification of 2026-09-16: the owner usage guide and its prompt skill
+
+Trigger: a third-party page (wan30ai.com, "Wan 3.0 Prompt Guide") brought for comparison. Checking its
+claims surfaced an owner page the guide had never cited, `wan3-video-generation-guide`, updated
+2026-09-16 in both Chinese and English. Scraped as `aliyun-zh-wan3-video-generation-guide.md` and
+`alibabacloud-en-wan3-video-generation-guide.md`. Its "Prompt tips" section links a downloadable skill,
+`wan3-pe.zip`, in two editions (Chinese page `...f32.zip`, English page `...f31.zip`); both unpacked under
+`wan3-pe/` and `wan3-pe-zh/`. Same 340-line SKILL.md, skill_version 0.2.0, one a translation of the other.
+
+Same lesson as GPT Image 2.5: a family's prompting guidance moved to a page the earlier pass never
+visited. The API reference and model cards were re-read on 2026-08-26 and still missed it.
+
+## 20. The third-party page: nothing admissible
+
+wan30ai.com states in its footer that it is "an independent AI tool website and is not affiliated with,
+endorsed by, or sponsored by any original model provider". The page is dated "Updated May 2026", before
+3.0 left invitational testing. Every claim beyond the guide either contradicts an owner surface or has
+none:
+
+- `@Image1` / `@Audio1` tokens. Owner forms are `Image 1`, `Img 1`, `Image1`, 图1; no `@`.
+- "Identity Lock" with `[Save as: name]` and `@name` recall. Absent from every owner and WaveSpeed page.
+- "Do not write 'cut to'". The owner's own 30-second sample writes "Quick cut to".
+- "1080P at the end activates native 1080P". Resolution is a request setting and 1080P is its default.
+- "12 assets: Image1-9, Video1-3, Audio1-3". Sums to 15; owner figures differ.
+- "Apache 2.0 open source". Closed weights.
+- 12-language lip sync, first-and-last-position weighting. No source.
+
+Recorded in the guide's coverage note and as one pitfall, because an agent may have ingested these pages.
+
+## 21. The wan3-pe request format is taught as owner practice
+
+The skill is a request formatter that sits upstream of the owner's prompt rewrite ("The output will be
+passed to a downstream prompt enhancement (PE) stage"). Its five sections, [Core Task], [Plot Summary],
+[Audio Style], [Camera & Core Constraints], [Negative Prompts], are therefore the owner's statement of how a
+3.0 request should be shaped before the rewrite sees it. Taught as a new subsection under Prompt
+structure with the owner's own short filled example plus a four-reference flagship.
+
+It is out of scope for edits by its own statement ("Direct editing of input video files ... passed as-is
+to the downstream stage"), so the guide keeps edits as bare commands and says so. It also excludes
+"storyline remaking" of an input video, pointing to a remaking workflow the docs do not otherwise
+describe; not taught.
+
+The owner's Example 2 has a defect: the user text says "Image3 is his timbre" and the output says Audio3.
+Not used as an example.
+
+## 22. Owner vs owner: length and frame shape in the prompt
+
+wan3-pe principle 7: "Aspect ratio, total duration, resolution, and frame rate are set by the page or API;
+they are used for event density planning and are not written into the request body. Event time segments
+originally written by the user are creative content and remain as-is."
+
+The usage guide's sample prompts do the opposite: "A 20-second 21:9 ultra-widescreen...", "15 seconds,
+vertical screen", "3D animated short film, 30 seconds", "Total duration 22 seconds, 4 segments", "8K
+resolution". One of those asks for 21:9, which the ratio setting does not offer.
+
+Resolved: the formatter is an explicit rule, the samples are demonstrations. The guide teaches the rule
+and records the inline form as tolerated in the coverage note and the `clip_length` key. Where a
+sample was quoted, the resolution and duration words were trimmed and the Why says so.
+
+## 23. Extension direction words mean the Chinese thing in English too
+
+Chinese guide: 向后延长 "以视频最后一帧为起点继续生成后续内容" (from the last frame, generate what follows);
+向前延长 "以视频第一帧为终点生成前序内容" (ending on the first frame, generate what precedes). The English guide
+translates these as "Backward extension" and "Forward extension" with the same definitions, and its code
+sample is "Extend Video 1 backward, the baker brings up the brushed bread...", a continuation.
+
+So English "forward" means BEFORE the clip. The guide previously taught only "extend Video 1 onward",
+which avoided the trap by not naming a direction and so never taught the other two. Now taught: all three
+directions, the trap stated plainly, and an anchoring clause ("continuing after its last frame") for
+English prompts. Examples are the owner's verbatim backward and bidirectional prompts.
+
+The English usage guide's table cell for backward extension omits the intent keyword the page says is
+required; the code sample carries it. The code sample is quoted.
+
+## 24. Claims in the guide that the new pages overturned
+
+- "First-and-last-frame: silent on every model that offers it" and "no first-and-last-frame model
+  generates audio". Wrong before this pass for `wan2.7-i2v` (the comparison page lists it as "Video with
+  audio" with first-and-last-frame), and wrong for 3.0, whose owner first-and-last sample carries a timed
+  voiceover. Now scoped to the open weights and `wan2.2-kf2v`.
+- Audio references attributed to WaveSpeed as "the only published answer". The owner now states the jobs
+  (guide: "Provide music or voice to generate dance or lip-sync animation"; skill: timbre and dialogue,
+  ambient sound, effects, music, or whole segments). Attribution moved to the owner.
+- "Attaching a clip and describing new action without asking for an extension: that reads as an edit."
+  The owner routes by media type plus prompt intent, and both edit and extension require their own
+  intent words, so a bare clip is a reference. Pitfall rewritten.
+- Editing evidence: style conversion, dialogue editing and multi-image reference editing now have owner
+  worked examples on 3.0. Lighting editing is listed without one; camera editing is not listed.
+- "Do not retype the document's facts." The owner's spreadsheet prompt restates cell values by
+  coordinate. Kept for prose documents, with data charts as the stated exception.
+- The coverage note's "English reference is behind" claim. The alibabacloud.com English reference
+  (updated 2026-09-14, re-scraped as `alibabacloud-en-wan3-api-reference-0916.md`) now carries Prime,
+  editing, extension and `prompt_extend`. It also adds that `prompt_extend` must be `true` when a file or
+  link is attached, which the guide now states as technique (the rewrite always runs in document mode)
+  without naming the field.

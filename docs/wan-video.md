@@ -40,16 +40,17 @@ capabilities: [text-to-video, image-to-video, first-last-frame, reference-to-vid
 prompt:
   languages: ["en", "zh", "mixed"]
   formula: "Subject + Scene + Motion + Aesthetic control + Stylization; add Sound (hosted 2.5+) and timed Shots (hosted 2.6+) as needed. Unchanged on 3.0, where a supplied document or web page carries the CONTENT and the prompt carries the TREATMENT"
-  dialogue_and_text: "put spoken lines in quotes inside the sound description; on-screen written text renders only approximately, so do not rely on exact wording. The owner names on-screen text accuracy as a known weak point on 3.0, so this holds on the newest model too"
+  structured_request: "WAN 3.0. The owner's own request formatter organizes a generation prompt into labelled sections: [Core Task], [Plot Summary], [Audio Style], [Camera & Core Constraints], [Negative Prompts]. Core Task and Plot Summary are always present; the rest appear only when there is something to say. Edit instructions stay bare and do not use it"
+  dialogue_and_text: "put spoken lines in quotes inside the sound description; on-screen written text renders only approximately, so do not rely on exact wording. The owner names on-screen text accuracy as a known weak point on 3.0, so this holds on the newest model too. On 3.0 name the speaker and the language of every line, and keep each quoted line in the language it is spoken in"
   length_strategy: "rewards complete, multi-dimension descriptions; terse prompts underperform"
-  clip_length: "CHANGED ON 3.0. Earlier models take a duration you pick and the prompt has to fill it. On 3.0 a smart-duration mode reads the prompt and picks the length itself, so write the story you actually want and let the length follow. Do not pad a prompt to fill a slot there"
+  clip_length: "CHANGED ON 3.0. Earlier models take a duration you pick and the prompt has to fill it. On 3.0 a smart-duration mode reads the prompt and picks the length itself, so write the story you actually want and let the length follow. Do not pad a prompt to fill a slot there. The owner's formatter treats total length and frame shape as settings kept out of the prompt, while its sample prompts state them inline; timestamps on beats are content either way"
   auto_expand_behavior: "INVERTED BY ACCESS. Hosted models rewrite a terse prompt by default, 3.0 included, where the owner documents the rewrite as on unless you turn it off. Open-weights models do not expand anything unless prompt extension is switched on, so a terse local prompt stays terse and underperforms. Locally: either turn extension on or write the fully expanded prompt yourself. Some hosts add their own enhancer on top, and a deliberate deep-thinking mode for prompts that carry several references"
-  negatives: "open-weights models take a real negative prompt and ship a canonical default defect bank; much of the hosted line exposes no negative field, so fold exclusions into the positive prompt there. 3.0 has NO negative field, and the owner's own examples fold the exclusion into the positive text"
-  references: "three different token conventions depending on mode (character1 / Image 1 / @Video). VACE uses no tokens at all. 3.0 keeps the Image 1 / Video 1 form and adds Audio 1 for referenced audio. See 'Naming references' and never mix them."
+  negatives: "open-weights models take a real negative prompt and ship a canonical default defect bank; much of the hosted line exposes no negative field, so fold exclusions into the positive prompt there. 3.0 has NO negative field. The owner's examples fold an exclusion into the positive text, and its request formatter closes the prompt with a labelled [Negative Prompts] list, but only of exclusions actually wanted, never a generic quality or defect pack"
+  references: "three different token conventions depending on mode (character1 / Image 1 / @Video). VACE uses no tokens at all. 3.0 keeps the Image 1 / Video 1 form, also accepts Img 1 and the closed-up Image1, and adds Audio 1 for referenced audio; Chinese prompts use 图1 / 视频1 / 音频1. See 'Naming references' and never mix them."
 sources:
-  official: ["https://github.com/Wan-Video/Wan2.1", "https://github.com/Wan-Video/Wan2.2", "https://github.com/ali-vilab/VACE/blob/main/UserGuide.md", "https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myC99MelA2WgN7R35y", "https://github.com/aigc-apps/VideoX-Fun", "https://github.com/ali-vilab/Wan-Move", "https://github.com/ali-vilab/UniAnimate-DiT", "https://huggingface.co/Wan-AI/Wan-Dancer-14B", "https://www.alibabacloud.com/help/en/model-studio/text-to-video-prompt", "https://www.alibabacloud.com/blog/model-studio-wan-video-generation-prompts-recipe_602777", "https://www.alibabacloud.com/blog/602776", "https://www.alibabacloud.com/help/en/model-studio/use-video-generation", "https://www.alibabacloud.com/help/en/model-studio/image-to-video-first-and-last-frames-guide", "https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference", "https://help.aliyun.com/zh/model-studio/wan3-0-video", "https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452"]
+  official: ["https://github.com/Wan-Video/Wan2.1", "https://github.com/Wan-Video/Wan2.2", "https://github.com/ali-vilab/VACE/blob/main/UserGuide.md", "https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myC99MelA2WgN7R35y", "https://github.com/aigc-apps/VideoX-Fun", "https://github.com/ali-vilab/Wan-Move", "https://github.com/ali-vilab/UniAnimate-DiT", "https://huggingface.co/Wan-AI/Wan-Dancer-14B", "https://www.alibabacloud.com/help/en/model-studio/text-to-video-prompt", "https://www.alibabacloud.com/blog/model-studio-wan-video-generation-prompts-recipe_602777", "https://www.alibabacloud.com/blog/602776", "https://www.alibabacloud.com/help/en/model-studio/use-video-generation", "https://www.alibabacloud.com/help/en/model-studio/image-to-video-first-and-last-frames-guide", "https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference", "https://help.aliyun.com/zh/model-studio/wan3-0-video", "https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452", "https://help.aliyun.com/zh/model-studio/wan3-video-generation-guide", "https://www.alibabacloud.com/help/en/model-studio/wan3-video-generation-guide"]
   provider: ["https://fal.ai/learn/devs/wan-2-6-prompt-guide-mastering-all-three-generation-modes", "https://fal.ai/learn/devs/wan-26-developer-guide-mastering-next-generation-video-generation", "https://wavespeed.ai/models/alibaba/wan-3.0/reference-to-video"]
-last_verified: "2026-08-26"
+last_verified: "2026-09-16"
 ---
 
 # Wan video: prompting and usage guide
@@ -91,11 +92,11 @@ Hosted:
 - Text-to-video: `wan2.7-t2v` is the practical default for prompt-faithful motion and camera control; `wan2.6-t2v` is the multi-shot plus audio workhorse; `wan2.5-t2v-preview` gives audio without multi-shot; `wan2.2-t2v-plus` is the silent budget option.
 - Image-to-video: `wan2.7-i2v` animates a first frame and also handles first-and-last-frame and continuation; `wan2.6-i2v` adds multi-shot and audio from a single image.
 - Reference-to-video: `wan2.7-r2v` carries subjects from several mixed image and video references with per-character voice; `wan2.6-r2v` keeps one or more characters consistent across a clip.
-- Video editing: `wan2.7-videoedit` and `wan3.0-video` both take an existing video and an instruction, but they address it differently, and only 3.0 also extends a clip forward.
+- Video editing: `wan2.7-videoedit` and `wan3.0-video` both take an existing video and an instruction, but they address it differently, and only 3.0 also extends a clip, before its start, after its end or both.
 
 Capability gates run through the family. Native synchronized audio generated from your prompt arrives at hosted Wan 2.5 and is standard above it. Multi-shot narrative arrives at hosted Wan 2.6. Reference-to-video arrives at hosted Wan 2.6. Documents and web pages as input arrive at hosted Wan 3.0 and exist nowhere else. Instruction editing arrives at hosted Wan 2.7 and carries on to 3.0; extending a clip you already have is hosted 3.0 only, though VACE has always done it on the open-weights side. Everything on the open-weights line is silent and single-shot; the open models reach audio only through speech-to-video, where you hand the model an audio file rather than describe one.
 
-Wan 3.0 is close to a superset, but it is not one. It gains the long single generation, the document input, referenced audio, smart duration, instruction editing and clip extension. What it still does not have is the negative-prompt field the rest of the family exposes. It also cannot combine a pinned first or last frame with references, a document or a link: those are alternatives, not layers. Check the mode you need before assuming the newest model covers it.
+Wan 3.0 is close to a superset, but it is not one. It gains the long single generation, the document input, referenced audio, smart duration, instruction editing and clip extension. What it still does not have is the negative-prompt field the rest of the family exposes. It also cannot combine a pinned first or last frame with references, a document or a link: those are alternatives, not layers. The nearest substitute inside reference mode is to ask for a reference image as the opening, a key moment or the closing frame in words, which places it without the pixel-exact hold a pinned frame gives. Check the mode you need before assuming the newest model covers it.
 
 ## How the model reads prompts
 
@@ -104,7 +105,8 @@ Wan 3.0 is close to a superset, but it is not one. It gains the long single gene
 - Prompt expansion behaves in opposite ways on the two access lines, and this is the single most consequential difference between them. Hosted models rewrite a terse prompt by default, which adds variety but takes control away; write the full structured prompt yourself when the output must match your intent. Open-weights models expand nothing unless you switch extension on, so a terse local prompt is passed through as-is and underperforms. Locally you must either enable extension or supply the fully expanded prompt yourself. There is no default that saves you. Wan 3.0 sits on the hosted side of this: the rewrite is on unless you turn it off, so the warning above applies to it in full. Some hosts add their own enhancer, and at least one adds a deliberate deep-thinking mode worth switching on when a prompt carries several references at once.
 - Clip length is chosen differently on Wan 3.0. Everywhere else you pick a duration and the prompt has to fill it, which is why padding a thin prompt into a long slot produces a model rushing or stalling. Wan 3.0 adds a smart-duration mode that reads the prompt and picks the length itself, so a one-line beat stays short and a real narrative gets room. Write the story you want and let the length follow; do not pad to fill a slot there.
 - Camera moves carry meaning. Push-in reads as intimacy or tension, pull-out as scale or isolation, tracking as moving alongside the subject, orbit as the subject being central, a fixed camera as stillness and focus. Choose the move for the feeling, then state it.
-- One clip is one continuous shot. A single-shot prompt cannot cut between unrelated scenes; cuts only happen between shots in a multi-shot prompt. Keep a single shot to one continuous action.
+- One clip is one continuous shot. A single-shot prompt cannot cut between unrelated scenes; cuts only happen between shots in a multi-shot prompt. Keep a single shot to one continuous action. Wan 3.0 stretches this: a take declared as continuous ("one continuous take, no cuts") can carry several timestamped beats, because the owner's own long takes are paced that way.
+- Wan 3.0 reads long, sectioned prompts. The owner's 30-second samples run to several hundred words and are laid out like a treatment: a synopsis, the visual style and palette, the characters, the camera style, then shot by shot. Short bracketed labels ("[Voice and dialogue]", "[Lighting and scene]") and field names inside a beat ("Camera:", "Scene:", "Action:") keep that length parseable. The owner's request formatter goes one step further, into fixed labelled sections; see "Structured requests on Wan 3.0".
 - It is bilingual, but not symmetrically. English, Chinese, and mixed-script prompts all work. Chinese is the stronger native language on the open-weights line: every official VACE example prompt is Chinese, Wan 2.1 first-and-last-frame explicitly recommends Chinese, and the VACE guide singles out English users as the ones who need prompt expansion to compensate. Where your pipeline can carry a Chinese prompt, prefer one for the open models.
 
 ## Prompt structure
@@ -136,6 +138,89 @@ Backlight, medium shot, sunset, soft light, silhouette, centered composition, or
 
 </example>
 
+### Structured requests on Wan 3.0
+
+Hosted, Wan 3.0 only. The owner publishes a prompt-formatting skill alongside its 3.0 guide, and it organizes every generation request into the same labelled sections before the owner's prompt rewrite sees it. That makes the layout the owner's own answer to how a 3.0 request should be shaped, and it is the most useful shape once references, dialogue and timed shots pile up in one prompt.
+
+<rules id="structured-request">
+
+- Use five labelled sections, in order: [Core Task], [Plot Summary], [Audio Style], [Camera & Core Constraints], [Negative Prompts]. The Chinese labels are 【核心任务】【情节概要】【音频风格】【运镜与核心约束】【负面提示词】.
+- [Core Task] is one or two sentences: what kind of video, what it shows, every reference with what it lends, and the global style. Voice references are declared here too ("the host's timbre references Audio 1").
+- [Plot Summary] is numbered beats, each saying who does what. Bind every quoted line to its speaker. When you have timestamps, open the beat with them ("Shot 1 0-5 sec:"); when you do not, number the beats and nothing more.
+- [Audio Style] covers the dialogue language and texture, live sound, and the mood and rhythm of the music. [Camera & Core Constraints] covers camera style, movement, cutting rhythm and any hard rules. Either one shrinks to a line or drops out when there is nothing to say.
+- [Negative Prompts] is a comma-separated list of things you actually want kept out, and it appears only when there are some. Never paste a generic quality or defect pack into it.
+- [Core Task] and [Plot Summary] are always present. A simple request can stop after them.
+- Keep total length, frame shape, resolution and frame rate out of the sections. The formatter treats them as settings and uses the length only to judge how many events fit. Timestamps on beats are content and stay.
+- Write only what you want. The formatter adds no plot, quality boosters, watermark or subtitle rules the request did not ask for, and its output goes on into the owner's prompt rewrite, which is on by default.
+- Keep the request in one language, the language of your main instruction. Quoted dialogue, lyrics and on-screen text stay in the language they are delivered in.
+- Do not use this layout for an edit. The formatter passes edit instructions through untouched, so write those as the bare commands in "Video editing".
+
+</rules>
+
+<template id="structured-request">
+
+[Core Task]
+Generate a {genre or type} {what the video shows}, referencing the {what is adopted} of {subject} in {Image N / Video N / Audio N}. The {character}'s timbre references Audio N. The entire film adopts {global style}.
+
+[Plot Summary]
+1. {Shot 1 0-N sec: if timed} {who does what}.
+2. {who does what}; using the timbre of Audio N, says: "{line}".
+
+[Audio Style]
+{dialogue language and texture}, {live sound}, {music mood and rhythm}.
+
+[Camera & Core Constraints]
+{camera style and movement}, {cutting rhythm}, {hard rules}.
+
+[Negative Prompts]
+{only exclusions you actually want}
+
+</template>
+
+<example use_case="structured-request-four-references">
+
+```text
+[Core Task]
+Generate a quiet late-night drama scene in a small radio station, referencing the host's face, hairstyle and clothing in Image 1, the structure and finish of the vintage ribbon microphone in Image 2, and the slow handheld drift of the camera in Video 1. The host's timbre references Audio 1. The entire film adopts a warm, low-key 1970s film look with soft grain.
+
+[Plot Summary]
+1. Shot 1 0-5 sec: Wide shot of the empty studio at night; the host sits alone at the desk, the microphone from Image 2 lit by a single desk lamp.
+2. Shot 2 5-11 sec: Medium close-up; the host leans toward the microphone and, using the timbre of Audio 1, says in English: "If you're still awake, this one's for you."
+3. Shot 3 11-16 sec: Close-up of the host's hand sliding a fader up as a record starts to turn.
+
+[Audio Style]
+Soft English speech close to the microphone, the hum of old equipment, and a record crackle leading into a mellow jazz ballad that rises under the last shot.
+
+[Camera & Core Constraints]
+Slow handheld drift throughout, following the movement in Video 1; gentle cuts between shots, no fast moves.
+
+[Negative Prompts]
+on-screen text, extra people in the studio, modern computer screens
+```
+
+*Why: the flagship for the layout. Four references, each lending one named thing; the voice declared once in Core Task and used at the line that needs it; timed beats sized to a few seconds each; the spoken language named; and a negative list holding three specific exclusions rather than a defect pack*
+
+</example>
+
+<example use_case="structured-request-owner-short">
+
+```text
+[Core Task]
+Generate a hands-on restoration video of an old wooden chair, referencing the woodworker's appearance in Image1 and the old wooden chair's look in Image2, and referencing the hand movements of applying glue and pressing in Video1. The entire film adopts a plain and natural lifestyle documentary style.
+
+[Plot Summary]
+1. The woodworker inspects the loose backrest joint.
+2. The woodworker applies wood glue following the technique in Video1 and presses the backrest back into position to secure it.
+3. The woodworker releases both hands; the backrest remains sturdy.
+
+[Audio Style]
+Only retain live sounds such as wood friction and light tool clicks; the person remains naturally silent.
+```
+
+*Why: the owner's own filled-in example, and the short end of the layout. No timestamps, so the beats are only numbered; camera and exclusions were never asked for, so those sections are gone; and silence is written as "remains naturally silent" plus the sounds that stay*
+
+</example>
+
 ## Cinematic vocabulary
 
 Reference terms the model recognizes. Mix freely; you do not need one from every group.
@@ -160,9 +245,11 @@ Wan has three different reference-token conventions plus one mode that has none.
 - Hosted reference-to-video on Wan 2.6: label roles `character1`, `character2`, matched to the ordinal of each reference input.
 - Hosted reference-to-video on Wan 2.7 and 3.0: label inputs `Image 1`, `Video 1`, numbered in upload order.
 - Hosted Wan 3.0 adds a third kind: `Audio 1`, `Audio 2` for referenced audio. Each kind is numbered independently, so `Image 1`, `Video 1` and `Audio 1` can all exist in one prompt and each points at a different asset. Count within the kind, never across the whole set.
+- Wan 3.0 accepts more than one spelling of the same token. The owner documents `Image 1` and the short `Img 1`, its request formatter writes them closed up (`Image1`, `Video1`, `Audio1`), and Chinese prompts use `图1` (or `图片1`), `视频1`, `音频1`. None of them takes an `@`. Pick one spelling and hold it for the whole prompt.
+- On Wan 3.0 a token can stand in the sentence as the subject or the object itself, with no noun around it: "Video 1 holds Image 3, sitting on the chair in Image 4".
 - Hosted video editing on Wan 2.7: label inputs `@Video` and `@Image1`, written with a space on both sides, and bind each token to the noun it owns ("the sweater in @Image1", "the rider in @Video"). A token can also stand in for the object itself ("a giant @Image1 floats on the sea").
 - Open-weights VACE: there are no tokens. Weld each reference to the scene by re-describing its attributes in prose and giving it its own clause and its own role. Do not write "image 1" at VACE; it has no such grammar.
-- Some providers expose their own form (for example `@Video1`). Where a host documents a convention, follow the host's.
+- Some providers expose their own form (for example `@Video1`). Where a host documents a convention, follow the host's. Unofficial Wan 3.0 pages also teach `@Image1` and `@Audio1`; the owner documents no `@` form for 3.0.
 - ONE ROLE PER INPUT. Whatever the convention, every reference gets exactly one job in the sentence, and every action, line, and borrowed object is bound to the input it came from. With three or more inputs an unattached action is ambiguous, so state the spatial relationship too.
 
 </rules>
@@ -177,6 +264,7 @@ Available on both access lines.
 
 - Build the prompt from the advanced formula: aesthetic stack first, then subject and motion in the scene.
 - Keep the action simple and short enough to read in one continuous shot. Long, multi-step choreography in a single shot fails.
+- Wan 3.0 is the exception for long takes. Its clips run long enough to hold a sequence of beats in one shot, and the owner's samples do it: declare the take ("single shot", "one continuous take, no cuts"), then give each beat its own timestamp or its own sentence so the model paces them rather than rushing them together.
 
 </rules>
 
@@ -200,6 +288,8 @@ Available on both access lines.
 - The source image already fixes the subject, scene, and style. Describe only what changes over time: motion and camera movement. Do not re-describe what is already in the frame.
 - Prefer motion that plausibly extends from the still (drifting clouds, flowing water, a gentle push toward a subject) over introducing brand-new elements.
 - Phrase camera moves as paced trajectories with a clear stopping point ("slowly zooms in and stops on", "starts at eye level and gradually rises until").
+- On Wan 3.0 a pinned first frame is reproduced exactly and is only the opening of a clip that can run far past it, so the describe-only-motion rule above is for short clips. The owner's 3.0 first-frame prompts are timed scripts: they name the frame as `Image 1`, set the opening scene from it once, direct every later beat in full, and tell the model to hold the frame's look throughout ("maintain the ink-wash painting style of Image 1").
+- Choose between a pinned frame and a reference on Wan 3.0 by what must be exact. A pinned first or last frame is held exactly; a reference image carries identity, product or style into shots of its own. The two cannot be combined in one request.
 
 </rules>
 
@@ -215,16 +305,17 @@ Gentle camera push toward the mountain peak as clouds drift overhead and the lig
 
 #### First-and-last-frame
 
-Available on both access lines. Silent on every model that offers it.
+Available on both access lines. Silent on the open-weights models and on `wan2.2-kf2v`; `wan2.7-i2v` and Wan 3.0 generate sound here.
 
 <rules id="first-last">
 
 - The two inputs are the first (start) frame and the last (end) frame. You do not tag them; you describe the motion and camera that carry the first into the last.
 - Both frames already carry all appearance. Do not re-describe the contents of either one. Describe the path between them: the prompt's only job is to control the transition.
+- Wan 3.0 changes the scale of that path, not the job. With seconds of footage between the frames, the owner's own first-and-last prompt opens with a bracketed statement of the take ("[One continuous take, slow aesthetic camera movement, no cuts]"), sets a global look and the subject once, writes the sound with its entry times, then paces the journey in timestamped beats that end on the last frame's composition.
 - Write the camera as a three-beat arc: where it starts, how it moves, where it lands on the final frame.
 - Name the subject once so identity holds across the interpolation, then spend the rest of the prompt on motion and camera.
 - On the open-weights `wan2.1-flf2v-14b`, prefer a Chinese prompt. The model was trained mainly on Chinese text-video pairs and the owner recommends Chinese for best results.
-- Drop the sound layer entirely here; no first-and-last-frame model generates audio.
+- Drop the sound layer on the silent models: the open weights and `wan2.2-kf2v`. On `wan2.7-i2v` and Wan 3.0, write it as in any other mode.
 
 </rules>
 
@@ -235,6 +326,19 @@ Realistic style. A curious black kitten looks up at the sky. The camera starts a
 ```
 
 *Why: leads with a style token, names the subject once, gives one motion beat, then a camera trajectory that resolves on the last frame's top-down composition*
+
+</example>
+
+<example use_case="first-last-frame-long-take-30">
+
+```text
+[One continuous take, no cuts, slow rising camera, soft watercolor texture throughout.] A lighthouse keeper in a yellow oilskin coat on a rocky island at dawn. Audio: waves breaking on the rocks and gulls throughout; at second 6 a foghorn sounds once, far off; no dialogue, the keeper remains naturally silent.
+[0-4s: The watch] The keeper stands at the foot of the lighthouse looking out to sea, coat flapping in the wind, the camera low behind him.
+[4-8s: The climb] He climbs the spiral stairs and the camera rises with him past salt-stained windows, the sky outside turning from grey to pale gold.
+[8-12s: The view] He steps out onto the gallery at the top and the camera lifts over his shoulder, settling on the wide sunrise over the water that the last frame holds.
+```
+
+*Why: Wan 3.0 only, in the shape of the owner's long-take sample: the take declared in brackets, the subject and look set once, sound written with an entry time and an explicit silence, and three timed beats whose camera path ends on the last frame*
 
 </example>
 
@@ -250,8 +354,14 @@ Hosted, Wan 2.6 and above. For the open-weights equivalent see VACE below, which
 - To place one input's subject inside another input's setting, cross-reference them in one clause: "the cat in Image 1 plays in the room from Image 2".
 - For dialogue, attach the quoted line to the named reference. Per-character voice timbre rides on a voice reference supplied alongside the input, not on words in the prompt; the prompt's job is only to say who speaks which line.
 - Use clean, well-lit references. Performance drops with occlusion, clutter, or low-resolution inputs.
-- On Wan 3.0 a third reference kind joins the set: audio. Choose the kind by the job it has to do. Images carry identity, product detail and visual style; video carries motion, pacing, gesture and camera behavior; audio carries ambience, rhythm, voice style and soundtrack direction. That split is WaveSpeed's guidance rather than the owner's, but it is the only published answer to what a referenced audio clip is for.
+- On Wan 3.0 a third reference kind joins the set: audio. Choose the kind by the job it has to do. The owner assigns images to a character's appearance and clothing, a product's structure and material, props, scene layout, lighting and style; video to action, camera movement, rhythm and timeline; audio to a speaker's timbre and lines, ambient sound, effects and music, including music or voice that a dance or lip-sync should follow.
 - Say in the prompt how each reference should shape the result. An attached asset with no stated job is a hint; an asset named in a clause is an instruction.
+- On Wan 3.0 state the adoption scope as well as the job, and what to leave behind: "Scene A references Image 4, adopting spatial layout, architecture and lighting; the person in the image is ignored." Without the exclusion, whatever else is in the picture is a candidate for the shot.
+- One entry per subject. Bind each character, prop and scene to its reference separately rather than listing several subjects against one image. A single character sheet defines one character.
+- When several references show the same subject, say which view or attribute each one supplies and that together they define ONE entity. Otherwise the model can put two of it in the frame.
+- A reference can also become part of the finished clip on Wan 3.0. State where it goes and how the new footage joins it: an image as the opening, a key moment or the closing frame; a video as the opening, middle or closing segment; an audio clip across the whole film or over one stretch. For a grid image, describe the panels in reading order and refer to the whole grid by its one number.
+- Write a swap as who does what. The owner's sample says "Seamlessly replace the male character from Image 1 into Video 1's female role", and its formatter restates any replace or substitute request as a performer and an action: "the character from Image 1 performs the action from Video 1".
+- To give a character a referenced voice on Wan 3.0, declare it once and use it at the line: "the host's timbre references Audio 1", then "using the timbre of Audio 1, says: ..." The owner's sample form is equally valid: "Extract the voice characteristics from Audio 1, and have the character say the following lines: ..."
 - Numbering runs within a kind, not across the set. The first image is Image 1 even when a video was attached before it, so count images among images and audio among audio.
 
 </rules>
@@ -306,6 +416,30 @@ Video 1 performs on a small club stage, matching the rhythm and mood of Audio 1,
 
 </example>
 
+<example use_case="r2v-tokens-as-subjects-30">
+
+```text
+Video 1 holds Image 3, sitting on the chair in Image 4, playing a soothing country folk song, and says: "The sunshine is so nice today." Image 1 holds Image 2 in hand, walks past Video 1, places Image 2 on the table next to Video 1, and says: "That sounds great, can you sing it again?"
+```
+
+*Why: the owner's own five-input prompt. The tokens are the nouns, so a person, an instrument, a chair and a handed-over prop each resolve to one input; the handoff of Image 2 is spelled out step by step, and each line belongs to one token*
+
+</example>
+
+<example use_case="r2v-swap-with-voice-30">
+
+```text
+Seamlessly replace the male character from Image 1 into Video 1's female role. The character sits by the window, holding a phone to the ear.
+[Voice and dialogue] Extract the voice characteristics from Audio 1, and have the character say the following lines: "Really? That sounds great! When are you coming back? I miss you so much."
+[Lip-sync and expressions] The generated voice must precisely drive the character's lip movements with natural opening and closing. While speaking, include natural blinking, slight head nodding, and a sense of breathing.
+[Lighting and scene] The character's face must naturally receive mixed lighting from warm indoor light and cool neon light from outside the window. Raindrops continuously slide slowly down the window in the background. The character blends naturally with the scene edges, with no cutout artifacts.
+[Camera and quality] Long take, camera pushes forward extremely slowly, extremely stable frame, cinematic lighting.
+```
+
+*Why: the owner's image-video-audio prompt, trimmed, with its resolution and duration words among the cuts. One kind each doing one job (identity, the role and its action, the voice), then bracketed sections that keep lip sync, lighting integration and camera from blurring into one paragraph*
+
+</example>
+
 ### Document and web-page to video
 
 Hosted, Wan 3.0 only. Hand the model a document, a deck, a spreadsheet or a public web page and it reads the contents and builds video from them. This is the one mode where the prompt is not carrying the facts.
@@ -313,9 +447,12 @@ Hosted, Wan 3.0 only. Hand the model a document, a deck, a spreadsheet or a publ
 <rules id="doc2v">
 
 - Split the labour: the file carries the CONTENT, the prompt carries the TREATMENT. Do not retype the document's facts into the prompt, and do not expect the file to imply a look.
+- Data is the exception. When the video must show exact figures from a spreadsheet, the owner's own prompt addresses the cells by coordinate, restates the values it wants plotted ("the B7 cell value $1,580 (January GMV)"), and says outright that labels must match the cells. Tie each chart to its rows, and state what the chart must NOT carry ("labels show only dollar values, no percentages").
+- A document can share the request with reference images, which carry the visual style the file cannot. The owner's spreadsheet prompt pairs each segment with its own style source ("visual reference: trend line chart style from reference image 2").
 - Name the artifact you want out. "Brand TVC", "video courseware", "narrated video briefing", "animated data chart" each set a different pace, voice and grade, and the model has no other way to know which one the deck is for.
 - Pitch the prompt at the level of control you actually want. The owner publishes both extremes: a one-line creative brief, and a full shot-by-shot direction naming the palette, the opening frame, the camera moves and the closing beat. Longer wins where the output matters, which is the same rule as everywhere else in this guide.
 - The aesthetic formula still applies. Stylization, light, shot size and camera movement work exactly as they do in text-to-video; you are directing footage whose script came from elsewhere.
+- The owner's prompt rewrite cannot be switched off in this mode, so whatever you write is rewritten before generation. Make the treatment explicit enough to survive that: name the artifact, the palette and the pacing rather than leaving them to be inferred.
 - One source per generation, and a link only works on a page that is public and needs no login. A file and a link cannot both be attached.
 - A document cannot be combined with a pinned first or last frame. If you need an exact opening image, that is a different mode.
 - Do not lean on the video to reproduce text from the document. On-screen text accuracy is a weakness the owner names on this model; state facts in the narration instead, where the audio carries them.
@@ -325,7 +462,7 @@ Hosted, Wan 3.0 only. Hand the model a document, a deck, a spreadsheet or a publ
 <example use_case="doc2v-directed">
 
 ```text
-A high-end smart glasses product advertisement with a minimalist, futuristic, and fashionable style. The color palette features black, silver-gray, and ice-blue tones with subtle white light accents and parameter UI graphics. Opening in pure black background, a pair of smart glasses slowly emerges from darkness with refined highlights on the temple edges. The camera captures ultra-close details of lenses, nose pads, hinges, temples, and material textures, showcasing metal and high-performance composite materials. The product then rotates slowly in mid-air with minimalist motion graphics displaying core parameters. Then the camera pulls back as all parts precisely reassemble into the complete product, transitioning to a young model wearing demonstration in minimalist spaces and urban lighting environments.
+A high-end smart glasses product advertisement, with an overall minimalist, futuristic, fashion-forward style, restrained lighting, a palette of black, silver-gray, and ice-blue as main tones, with localized soft white light accents and parameter UI graphics. Opening on a pure black background, a pair of smart glasses slowly emerges from the darkness, with refined highlights gliding along the temple edges, the frame silhouette outlined under cold edge lighting. The camera passes in extreme close-up over the lenses, nose pads, hinges, temples, and material details, showcasing the delicate texture of metal and high-performance composite materials. The product then slowly rotates in midair, with minimalist motion graphics displaying core parameter information in sync. The camera then quickly converges, all components precisely returning to assemble into the complete product. It transitions to a young model wearing the glasses, naturally turning their head, raising their hand, walking, and smiling in a minimalist space and urban lighting environment. The ending features the product floating and frozen against a solid-color background, with the camera slowly pushing in toward the brand logo and core slogan. The overall music is minimalist electronic ambiance with precise beats, clean and powerful rhythm.
 ```
 
 *Why: the owner's own deck-to-advert prompt, and note what it does NOT do: it never restates a spec from the slides, it only directs how the slides should look on screen*
@@ -353,6 +490,11 @@ Hosted, Wan 2.6 and above. Not available on the open-weights line.
 - State transitions explicitly inside the shot content ("hard cut", "fixed camera") and keep key elements consistent across shots.
 - To force a single shot instead, write "Generate single shot".
 - A terse prompt will be elaborated into a multi-shot structure on its own. If you want the shot breakdown to be yours, be specific rather than brief.
+- On Wan 3.0 size each shot at about four to six seconds, the owner's stated storyboard grain, and let a long clip have more shots rather than longer ones.
+- The owner's 3.0 samples use several timestamp spellings: `Shot 1 [0-3s]`, `(0:00 - 0:03) Camera: ... Scene: ... Action: ...`, `[0-3s: A water drop]`, `0s - 8s: Prologue`, and plain `Segment 1:`. Any of them works; pick one and hold it for the whole prompt.
+- Inside a long beat, name its parts. "Camera:", "Scene:", "Action:", "Detail:" and "Atmosphere:" keep a dense beat from reading as one run-on sentence.
+- For a 30-second story on Wan 3.0, write it the way the owner does: a short synopsis, the visual style and palette, the characters, the camera style, then the shot-by-shot. The shared sections are what keep grade and identity steady across a dozen cuts.
+- Timestamps do not have to mean cuts on Wan 3.0. Declare "one continuous take, no cuts" first and the same timed beats pace a single shot instead.
 
 </rules>
 
@@ -378,6 +520,8 @@ Hosted, `wan2.7-videoedit` and `wan3.0-video`. This mode takes an IMPERATIVE INS
 
 The two versions address the clip differently. 2.7 binds every element with the `@Video` and `@Image1` tokens. 3.0 takes the instruction bare when a single video is attached, and uses its own `Video 1` form only when another input has to be told apart, so the tokens below belong to 2.7 alone.
 
+On 3.0 the words also pick the mode. An attached video is a reference until the prompt says otherwise, so an edit must carry an editing verb: "edit the video", "remove", "replace", "change to", "convert". Leave the verb out and the clip is borrowed from rather than changed.
+
 <rules id="videoedit">
 
 - Write what to change, as a command. On 2.7 bind every element to its input with the `@Video` and `@Image1` tokens; on 3.0 address the attached clip directly.
@@ -387,7 +531,9 @@ The two versions address the clip differently. 2.7 binds every element with the 
 - Stack a specific pin on top of the generic one. On a global edit, pin the subject's motion explicitly ("the character's movements do not change") as well as adding the catch-all. The catch-all alone will not hold a moving subject still.
 - Name both endpoints of a change, not just the target: "from cool tones to warm yellow tones", not "make it warm".
 - Chain several operations in one instruction with a comma.
-- Evidenced edit types: add, change and remove elements; the same with a reference image supplying the new element; and changing the environment (season, weather, lighting) or the whole scene. The marketing material also claims style, camera and lip-sync editing, but the owner ships no worked examples for those, so treat them as untested.
+- Evidenced edit types: add, change and remove elements; the same with one or more reference images supplying the new elements; changing the environment (season, weather, lighting) or the whole scene; converting the whole clip to another style; and, on 3.0, rewriting what a character says. The owner also lists lighting editing on 3.0 with no worked example. Camera editing has no owner example on either version, so treat it as untested.
+- To change dialogue on 3.0, quote the new line in full and name who says it: "Edit the video, change the man's dialogue to: ...". The rest of the clip stays as it was.
+- With several reference images on 3.0, weld each borrowed item to the person in `Video 1` who receives it, one sentence per item, and say how it should sit ("naturally fitting her head shape").
 
 </rules>
 
@@ -430,42 +576,75 @@ Make the horse-man in @Video wear the striped sweater from @Image1.
 <example use_case="videoedit-restyle-30">
 
 ```text
-Convert the entire frame to a clay style.
+Convert the entire scene to clay style
 ```
 
 *Why: the owner's whole 3.0 edit prompt, and worth seeing at full length: one clip attached, one imperative, no token and no preservation clause, because a total restyle has nothing left to hold back*
 
 </example>
 
+<example use_case="videoedit-dialogue-30">
+
+```text
+Edit the video, change the man's dialogue to: "The deal is done. Now... we disappear."
+```
+
+*Why: the owner's 3.0 dialogue edit. The editing verb selects the mode, the speaker is named, and the replacement line is quoted whole rather than described*
+
+</example>
+
+<example use_case="videoedit-reference-multi-30">
+
+```text
+Edit the video: the woman in Video 1 puts on the hat from Image 1, naturally fitting her head shape. The man in Video 1 puts on the hat from Image 2, naturally fitting his head shape. The man's russet-brown shirt is replaced with the blue washed loose denim shirt from Image 3, with the collar open and sleeves rolled up to the forearms. The movements, other clothing, and the rest of the scene remain unchanged.
+```
+
+*Why: the owner's four-input 3.0 edit. Each borrowed item gets its own sentence welded to one person in Video 1, the shirt change names both endpoints, and the closing pin holds motion and everything else in place*
+
+</example>
+
 ### Video extension
 
-Hosted, Wan 3.0. Hand the model a clip and it carries the action on past the end. VACE has done clip extension on the open-weights side all along; this is the hosted line's version, and the prompt is what selects it.
+Hosted, Wan 3.0. Hand the model a clip and it generates new footage after its end, before its start, or on both sides at once. VACE has done clip extension on the open-weights side all along; this is the hosted line's version, and the prompt is what selects it.
 
 <rules id="videoextend">
 
-- Say that you are extending. The mode is chosen by the words, not by the attachment, so a prompt that only describes new action will read as an edit instead.
-- Name the source as `Video 1` and give the direction: "extend Video 1 onward".
-- Then direct the continuation like any other shot: what the subject does next, where the camera goes, what closes the beat.
+- Say that you are extending. The mode is chosen by the words, not by the attachment: without an extension word ("extend", "continue") the clip is read as a reference for a new video instead.
+- Name the source as `Video 1` and give the direction in the owner's words, knowing what they mean. "Extend backward" continues AFTER the last frame. "Extend forward" builds what comes BEFORE the first frame and ends on it. That is the owner's Chinese sense (向后延长, 向前延长) carried into its English docs, and it is the opposite of how an English reader takes "forward".
+- In an English prompt, add a clause that fixes the side so neither reading can win: "extend Video 1 backward, continuing after its last frame", or "extend Video 1 forward, leading up to its first frame". In a Chinese prompt the direction words are unambiguous on their own.
+- To extend both ways, treat the clip as the middle segment and write each side as its own clause with its own content: "Using the video as the middle segment, extend forward by two seconds: ...; using the video as the middle segment, extend backward by three seconds: ...".
+- Then direct the new footage like any other shot: what the subject does, where the camera goes, and how the stretch ends, or for a forward extension how it arrives at the clip's opening.
+- When several people carry across the join, define them once by label and appearance ("Character A is a male with short dark brown hair wearing a black tailcoat") and direct them by label after that. The owner's forward extension does exactly this.
 - Continue the action, do not restate it. The model already holds the clip; spend the prompt on what has not happened yet.
 - Let the framing come from the source. An extension inherits the clip's shape, so asking for a different one fights the input instead of reframing it.
 - Motivate the camera if you want it to leave the original frame. "The camera follows him to the oven behind" earns the move; a cut with no reason behind it tends to arrive as a jump.
-- The clip you attach spends part of the length budget, so plan the continuation against what is left rather than against a full-length clip.
+- The clip you attach spends part of the length budget, so plan the extension against what is left rather than against a full-length clip.
 
 </rules>
 
 <template id="videoextend">
 
-Extend Video 1 onward, {what the subject does next}, {camera behaviour that motivates the move}, {closing beat}.
+Extend Video 1 {backward, continuing after its last frame | forward, leading up to its first frame}, {what the subject does in the new stretch}, {camera behaviour that motivates the move}, {closing beat, or how it meets the clip}.
 
 </template>
 
-<example use_case="videoextend-directed">
+<example use_case="videoextend-backward">
 
 ```text
-Extend Video 1 onward. The baker brings out the freshly brushed loaves and sets the brush aside, the camera follows the baker to the oven behind and to the right, where the loaves go in to bake.
+Extend Video 1 backward, the baker brings up the brushed bread, puts the brush aside, the camera follows the baker to the oven behind for baking
 ```
 
-*Why: the owner's own extension prompt. The intent verb leads and names the clip, the continuation then reads as ordinary shot direction, and the camera move is motivated by the baker's walk rather than asserted*
+*Why: the owner's own extension prompt, verbatim, and the case the English trap bites: "backward" here means the footage that comes next. The intent verb leads and names the clip, the continuation reads as ordinary shot direction, and the camera move is motivated by the baker's walk*
+
+</example>
+
+<example use_case="videoextend-both-sides">
+
+```text
+Using the video as the middle segment, extend forward by two seconds: the camera smoothly follows as the girl slowly walks toward the camera, stops, gently lifts her head, takes a deep breath in the cold air with lips slightly parted; using the video as the middle segment, extend backward by three seconds: the girl finishes rubbing her hands, looks directly at the camera, and breaks into a warm, radiant smile. She slowly raises a gloved hand to catch a gently falling snowflake. The camera slowly pulls back to a medium-long shot, revealing a sunny snowy forest path, golden hour backlighting, lens flare, shallow depth of field, warm and healing atmosphere.
+```
+
+*Why: the owner's bidirectional prompt. Each side restates "middle segment" and carries its own length and action; the forward side walks the girl INTO the clip's opening, the backward side carries her on past its end and closes with the look of the whole piece*
 
 </example>
 
@@ -667,6 +846,17 @@ On Wan 3.0 audio is ON by default: a clip comes back with a soundtrack whether o
 
 </rules>
 
+<rules id="sound-30">
+
+- Wan 3.0. Name the language of every voice, not only its tone: "a young English-speaking villain voice throughout", "Voiceover: English male or female voice, bright and confident". Keep each quoted line in the language it is spoken in, even when the rest of the prompt is in another.
+- Time a voice to the second when its entry matters: "Starting at second 8, an ethereal, gentle female voice slowly recites: ...". Pace narration by rate when a voiceover has to fit its segment ("speaking at approximately 2.5 words per second").
+- Mix the layers in words. Say whether music runs the whole film and where it sits against the voice ("when voiceover appears, the music does not disappear, volume just slightly lower than the voice"), and tie each sound effect to the on-screen event that triggers it ("a crisp ding when key data pops up").
+- Write an ending silence in when you want one: "leaving 1 second of silence after speaking".
+- For a clip with people but no speech, say so and say what remains: "the person remains naturally silent", then the sound sources you want kept. That is the owner formatter's wording for a silent performer, and it names what stays as well as what goes.
+- A referenced voice is declared once and used at the line; see "Reference-to-video". A referenced music or voice track is also what the owner points to for a dance or lip sync that follows the beat or the speech.
+
+</rules>
+
 <rules id="multi-voice">
 
 - For two or more speakers in one clip, label each character uniquely and consistently; do not switch to pronouns or synonyms.
@@ -695,7 +885,8 @@ A dim interrogation room, cool light, medium two-shot. The agent slams a hand on
 - For video specifically, keep the motion-failure terms near the front. They suppress the frozen-frame result that ruins a clip, which is the failure a still-image defect bank will not catch.
 - The VACE guide never mentions negative prompts. Do not assume one is wired up there.
 - Wan 3.0 has no negative field at all, so every exclusion has to ride in the positive prompt. The owner's own example does exactly this for sound, closing a prompt by stating what the audio consists of entirely and naming what it therefore excludes. Copy that shape: describe the wanted state, then close the door on the alternative in the same clause.
-- Do not carry the default defect bank onto Wan 3.0. It has nowhere to go, and pasting it into the positive prompt spends the model's attention describing artifacts you are trying to avoid.
+- For a longer list of exclusions on Wan 3.0, close the prompt with a labelled section the way the owner's request formatter does: "[Negative Prompts]" followed by a comma-separated list. List only what this video must not contain ("slow motion, tripod shots, lyrical music"). Plain negatives inside a section also work there ("No slow motion, no unnecessary transition effects").
+- Do not carry the default defect bank onto Wan 3.0. It has nowhere to go, and pasting it into the positive prompt spends the model's attention describing artifacts you are trying to avoid. The owner's formatter says the same from the other side: it never adds a generic quality or negative pack that the request did not ask for.
 
 </rules>
 
@@ -712,12 +903,15 @@ Bright tones, overexposed, static, blurred details, subtitles, style, works, pai
 - Writing an instruction at VACE: it wants a caption of the finished video. Rewrite "remove the man and make it snowy" as a description of the scene as it should end up.
 - Writing a description at Wan 2.7 video editing: it wants a command. Rewrite "a cat sits on the sofa in a warm-toned room" as "change the dog to a cat, change the grade from cool to warm, keep everything else unchanged".
 - Describing only the change in VACE repainting: the retained region must be described too, or the model loses the frame around your edit.
-- Mixing reference-token conventions: `character1`, `Image 1`, and `@Image1` belong to different modes, and VACE has none of them.
+- Mixing reference-token conventions: `character1`, `Image 1`, and `@Image1` belong to different modes, and VACE has none of them. On Wan 3.0, `Image 1`, `Img 1` and `Image1` are spellings of one convention; choose one per prompt.
 - Numbering Wan 3.0 references across kinds: an image attached after a video is still `Image 1`. Counting the whole set in one sequence mislabels every token after the first.
-- Assuming Wan 3.0 is a superset: it still has no negative field, and it cannot combine a pinned first or last frame with references, a document or a link.
-- Carrying the 2.7 `@Video` token into a 3.0 edit: 3.0 addresses the attached clip directly and names it `Video 1` when it must, so the `@` form belongs to 2.7 alone.
-- Attaching a clip and describing new action without asking for an extension: that reads as an edit of the footage you gave it. Say "extend Video 1 onward" when you want the story continued.
-- Retyping a document's contents into a Wan 3.0 prompt: the file already carries the facts. Spend the prompt on treatment, and expect nothing from the prompt that the file states better.
+- Assuming Wan 3.0 is a superset: it still has no negative field, and it cannot combine a pinned first or last frame with references, a document or a link. Inside reference mode, ask for a reference image as the opening or closing frame in words instead.
+- Carrying the 2.7 `@Video` token into a 3.0 edit, or writing `@Image1` and `@Audio1` in any 3.0 prompt: 3.0 names inputs `Image 1`, `Video 1` and `Audio 1`, so the `@` form belongs to 2.7 editing alone.
+- Attaching a clip to Wan 3.0 without an intent word: with no editing verb and no extension word, the clip is read as a reference for a new video. Say "edit the video" to change it, or "extend Video 1 backward" to continue it.
+- Reading "extend forward" as English on Wan 3.0: it builds footage BEFORE the clip and ends on its first frame; "extend backward" continues after the last frame. Add a clause naming the side.
+- Retyping a prose document into a Wan 3.0 prompt: the file already carries the facts. Spend the prompt on treatment. Spreadsheet data headed for a chart is the exception; there, name the cells and the values to show.
+- Borrowing Wan 3.0 features from unofficial guides: saved character profiles called by name and "1080P" as a quality switch in the prompt appear on no owner surface. Carry identity with a reference image, and set resolution where the request sets it.
+- Using the 3.0 structured request for an edit: the owner's formatter passes edit instructions through untouched. Write edits as bare commands.
 - Padding a Wan 3.0 prompt to fill a long clip: on smart duration the prompt sets the length, so padding buys a longer, thinner video rather than a fuller one.
 - Shipping Wan 3.0 audio unheard: it arrives by default and the owner calls its texture a work in progress. Listen before delivering, or switch it off.
 - Writing a sound description for an open-weights model: they are silent. Sound only exists on hosted 2.5 and above, or through speech-to-video where you supply the file.
@@ -727,8 +921,9 @@ Bright tones, overexposed, static, blurred details, subtitles, style, works, pai
 - Re-describing the image in image-to-video: state only motion and camera, never the static content.
 - Rapid scene changes inside one shot: a single shot is one continuous take; use a multi-shot prompt for cuts, which means a hosted 2.6 model or above.
 - Counting on legible on-screen text: video text renders approximately; if exact words must appear, generate them as a still in Wan image or Qwen-Image and animate or composite separately.
-- Long, complex action choreography in one shot: break it into shorter shots or simpler motion.
-- Lip-syncing to exact words: precise lip sync to specific words is unreliable outside speech-to-video; write dialogue for tone and timing, not frame-accurate mouth shapes.
+- Long, complex action choreography in one shot: break it into shorter shots or simpler motion. On Wan 3.0 a declared continuous take with timestamped beats is the alternative.
+- Lip-syncing to exact words: precise lip sync to specific words is unreliable outside speech-to-video; write dialogue for tone and timing, not frame-accurate mouth shapes. Wan 3.0 adds one more route the owner demonstrates, a voice referenced as `Audio 1` driving the speaking character, with no published measure of how exact it is.
+- Leaving the spoken language implicit on Wan 3.0: name it for every voice, and keep quoted lines in the language they are delivered in.
 - Naming specific real people: usually rejected or inconsistent; describe the appearance instead.
 - Tag soup: rewrite disconnected keywords as a structured description with named components.
 
@@ -741,9 +936,9 @@ Trust order: official beats provider beats community. Official wins on any confl
 - Official (Wan, Alibaba), open weights: [Wan2.1 repository](https://github.com/Wan-Video/Wan2.1), [Wan2.2 repository](https://github.com/Wan-Video/Wan2.2), [VACE user guide](https://github.com/ali-vilab/VACE/blob/main/UserGuide.md).
 - Official (Alibaba), offshoots: [VideoX-Fun, the Fun family pipeline from Alibaba Cloud PAI](https://github.com/aigc-apps/VideoX-Fun), [Wan-Move](https://github.com/ali-vilab/Wan-Move), [UniAnimate-DiT](https://github.com/ali-vilab/UniAnimate-DiT), [Wan-Dancer](https://huggingface.co/Wan-AI/Wan-Dancer-14B). The Fun prompt conventions are read from the shipped inference scripts under `examples/wan2.2_fun/`, because the model cards do not state them.
 - Official (Wan, Alibaba), hosted: [Wan 2.7 AI video creation guide](https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myC99MelA2WgN7R35y), [text-to-video prompt guide](https://www.alibabacloud.com/help/en/model-studio/text-to-video-prompt), [Wan video prompts recipe](https://www.alibabacloud.com/blog/model-studio-wan-video-generation-prompts-recipe_602777), [Wan 2.6 and 2.5 prompt guide](https://www.alibabacloud.com/blog/602776), [video model comparison](https://www.alibabacloud.com/help/en/model-studio/use-video-generation), [first-and-last-frame guide](https://www.alibabacloud.com/help/en/model-studio/image-to-video-first-and-last-frames-guide).
-- Official (Wan, Alibaba), Wan 3.0: [Wan3.0 video generation API reference, Chinese](https://help.aliyun.com/zh/model-studio/wan3-video-generation-api-reference), [the same reference in English](https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference), [wan3.0-video model card](https://help.aliyun.com/zh/model-studio/wan3-0-video), [wan3.0-video-prime model card](https://help.aliyun.com/zh/model-studio/wan3-0-video-prime), [Wan3.0 launch article](https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452).
+- Official (Wan, Alibaba), Wan 3.0: [Wan3.0 video generation API reference, Chinese](https://help.aliyun.com/zh/model-studio/wan3-video-generation-api-reference), [the same reference in English](https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference), [wan3.0-video model card](https://help.aliyun.com/zh/model-studio/wan3-0-video), [wan3.0-video-prime model card](https://help.aliyun.com/zh/model-studio/wan3-0-video-prime), [Wan3.0 launch article](https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452), [Wan3.0 video generation guide, Chinese](https://help.aliyun.com/zh/model-studio/wan3-video-generation-guide), [the same guide in English](https://www.alibabacloud.com/help/en/model-studio/wan3-video-generation-guide). The guide links the owner's `wan3-pe` prompt-formatting skill as a download, in a Chinese and an English edition with the same content; the structured-request rules come from it.
 - Provider: [fal Wan 2.6 prompt guide (three modes)](https://fal.ai/learn/devs/wan-2-6-prompt-guide-mastering-all-three-generation-modes), [fal Wan 2.6 developer guide](https://fal.ai/learn/devs/wan-26-developer-guide-mastering-next-generation-video-generation), [WaveSpeed Wan 3.0 reference-to-video](https://wavespeed.ai/models/alibaba/wan-3.0/reference-to-video).
 
-Coverage note: the Wan 2.7 creation guide is a single-page app whose Storyboard Control, Character Control and Prompt Recipe sections did not render when scraped. Storyboard control appears to be a multi-panel image input rather than a prompt-text construct, and remains a gap to close rather than a capability to assume. A video-side thinking mode now does exist, exposed by a provider on Wan 3.0 and recommended there for prompts carrying several references; the owner still documents none, on 3.0 or anywhere else in its video docs. Wan 3.0 has left invitational testing, and its reference now documents instruction editing and clip extension beside the original three modes. The launch article said the 2.7 editing capability would carry forward; the reference has since caught up with it, so the earlier reading of that claim as marketing was premature rather than wrong. The Chinese and English references are no longer in step: the Chinese one carries the Prime model, the extension mode and the prompt-rewrite switch, while the English one still calls the model field a fixed single value and has neither Prime nor extension. Where they diverge this guide follows the Chinese reference, and both are cited above. Reference and asset counts, durations, resolutions, file size and page limits are provider surface and are deliberately absent.
+Coverage note: the Wan 2.7 creation guide is a single-page app whose Storyboard Control, Character Control and Prompt Recipe sections did not render when scraped. Storyboard control appears to be a multi-panel image input rather than a prompt-text construct, and remains a gap to close rather than a capability to assume. A video-side thinking mode now does exist, exposed by a provider on Wan 3.0 and recommended there for prompts carrying several references; the owner still documents none, on 3.0 or anywhere else in its video docs. Wan 3.0 has left invitational testing, and its reference now documents instruction editing and clip extension beside the original three modes. The launch article said the 2.7 editing capability would carry forward; the reference has since caught up with it, so the earlier reading of that claim as marketing was premature rather than wrong. The Chinese and English references drifted apart for a few weeks and are back in step: both now carry the Prime model, editing, extension and the prompt-rewrite switch. Where they diverge again this guide follows the Chinese one. Two owner surfaces disagree on one point: the `wan3-pe` formatter keeps total length and frame shape out of the prompt as settings, while the usage guide's sample prompts write both inline. The guide teaches the formatter's explicit rule and treats the inline form as tolerated. The extension direction words follow the Chinese meaning in both languages, so English "forward" means before the clip. Unofficial Wan 3.0 prompt guides circulate with invented syntax (an `@Image1` token form, saved character profiles, a "1080P" prompt switch); none of it appears on an owner surface. Reference and asset counts, durations, resolutions, file size and page limits are provider surface and are deliberately absent.
 
-Last verified: 2026-08-26.
+Last verified: 2026-09-16.
