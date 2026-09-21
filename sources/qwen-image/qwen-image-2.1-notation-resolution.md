@@ -64,20 +64,29 @@ Recorded as a model-scoped `aspect_ratio` key plus rules in both the observer an
 shape as the wan3-pe finding five days ago, and the second owner in a week to separate frame from
 description; worth watching as a trend rather than treating as a quirk.
 
-## 5. Notation: three forms in one guide, and one conflict left standing
+## 5. Notation: three forms in one guide, and a scope clash
 
 - Dedicated editors (Edit, Edit-2509, Edit-2511): `Image 1`, `Image 2`.
 - 2.1 with two or more inputs: `<image1>`, `<image2>`. The I2I spec calls this "mandatory and
   non-negotiable" and explicitly rules out "图1", "第一张图", "the first image" and "image A".
 - 2.1 with one input: no tag at all, "refer to the image naturally".
 
-CONFLICT: the GitHub README's multi-reference quick start passes three images with an untagged sentence,
-"These three characters are sitting around a campfire in a forest". The rewriter spec says tags are
-mandatory at N >= 2.
+SCOPE CLASH, not a strict contradiction, and the distinction matters. The I2I spec's sentence is aimed
+at the rewriter: "the rewritten instruction MUST use `<image1>`, `<image2>`" and "This tagging format is
+mandatory and non-negotiable." It says nothing about what the checkpoint accepts. The GitHub README's
+multi-reference quick start passes three images to the pipeline with the untagged prompt "These three
+characters are sitting around a campfire in a forest". Both can be true at once: the rewriter must emit
+tags, the pipeline takes prose.
 
-Resolved in favour of the spec, on the rule that an explicit instruction outranks a demonstration. The
-untagged form is taught as the same-role case the quick start actually shows: three inputs, one role
-each, nothing to tell apart. Both appear as examples so the difference is visible rather than asserted.
+What makes it read as a conflict is the strength of "mandatory and non-negotiable" sitting next to the
+owner's own untagged demo of the exact case it covers. A third data point: in the PE-I2I card the USER's
+instruction to the rewriter is itself tagged ("Place <image1>'s subject into <image2>'s scene"), so tags
+are both that model's input convention and its required output format.
+
+Taught as the form the owner trained its rewriter to produce: tag when the images do different jobs,
+expect a plain sentence to work when they all hold the same role. The guide bullet first read "THE OWNER
+CONTRADICTS ITSELF HERE" and was corrected the same day; an overstatement survives review more easily
+than a false claim, because nothing in the checks can catch it.
 
 ## 6. Two language decisions on an edit, and only one on generation
 
