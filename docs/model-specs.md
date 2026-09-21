@@ -66,10 +66,11 @@ guide.
 | noobai-xl-1.1 | text-to-image | SDXL 1024 set | 25 to 30 | 5 to 6 | Euler a | - |
 | noobai-xl-vpred-1.0 | text-to-image | SDXL 1024 set | 28 to 35 | 4 to 5 | Euler | v-prediction checkpoint; the card warns that other samplers will not work properly |
 | Qwen-Image | text-to-image | Qwen 1328 set | 50 in the reference snippet, 40 in a second one | true CFG 4.0 | not published | true CFG is a distinct knob from ordinary CFG; the reference pipeline appends ", Ultra HD, 4K, cinematic composition." to the prompt |
-| Qwen-Image-2512 | text-to-image | not published; the Qwen-Image card states the Qwen 1328 set for the original release | not published | not published | not published | current open text-to-image foundation |
+| Qwen-Image-2.1 | image-edit, multi-image-edit, text-rendering, text-to-image, transparency | 2048x2048 default; owner ratio set 2400x1792 (4:3), 1792x2400 (3:4), 2528x1696 (3:2), 1696x2528 (2:3), 2752x1536 (16:9), 1536x2752 (9:16) | 40 | not published | flow matching, Euler discrete with dynamic shifting | generation and editing in one checkpoint; 32-layer single-stream DiT with a 7B visual generation component, Qwen3-VL 8B text encoder, 64-channel RGBA VAE at 16x spatial compression. Qwen Research License, not Apache 2.0 |
+| Qwen-Image-2512 | text-to-image | not published; the Qwen-Image card states the Qwen 1328 set for the original release | not published | not published | not published | the previous open text-to-image foundation |
 | Qwen-Image-Edit | image-edit | not published | not published | not published | not published | first open editor; one reference image only |
 | Qwen-Image-Edit-2509 | image-edit, multi-image-edit | not published | not published | not published | not published | - |
-| Qwen-Image-Edit-2511 | image-edit, multi-image-edit | not published | not published | not published | not published | current open editor |
+| Qwen-Image-Edit-2511 | image-edit, multi-image-edit | not published | not published | not published | not published | the last of the dedicated open editors; Qwen-Image-2.1 folds editing into the generation checkpoint |
 | Qwen-Image-Layered | image-edit, layer-separation | not published | not published | not published | not published | a finetune of Qwen-Image that decomposes a scene into separately editable layers |
 | z-image | text-to-image, text-rendering, bilingual | 512x512 through 2048x2048 by total pixel area, any aspect ratio | 28 to 50 | supported | not published | undistilled base, so full classifier-free guidance applies |
 | z-image-turbo | text-to-image, text-rendering, bilingual | not published; the reference snippet uses 1024x1024 | 8 | none; distilled, so CFG is inert | not published | the snippet passes 9, which yields 8 DiT forward passes |
