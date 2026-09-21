@@ -83,10 +83,20 @@ owner's own untagged demo of the exact case it covers. A third data point: in th
 instruction to the rewriter is itself tagged ("Place <image1>'s subject into <image2>'s scene"), so tags
 are both that model's input convention and its required output format.
 
-Taught as the form the owner trained its rewriter to produce: tag when the images do different jobs,
-expect a plain sentence to work when they all hold the same role. The guide bullet first read "THE OWNER
-CONTRADICTS ITSELF HERE" and was corrected the same day; an overstatement survives review more easily
-than a false claim, because nothing in the checks can catch it.
+Taught as ALWAYS TAG from two inputs up, and every multi-image example in the guide was rewritten into
+the tag form, with a one-line note that the dedicated editors take `Image 1` in the same slots. The
+untagged campfire example was removed rather than shown: examples get copied, so an untagged one teaches
+the opposite of the rule. The fact that the owner publishes an untagged prompt stays in the rules, where
+it is read rather than imitated.
+
+The qualification was attempted and abandoned, which is why the recommendation is unconditional. The only
+candidate rule, "drop them when every image holds the same role", rests on one example and no owner
+statement, and a reader cannot tell in advance whether the model agrees about what counts as the same
+role. An unqualifiable exception is not an exception worth teaching.
+
+Wording history, since it is the kind of error the checks cannot catch: the guide bullet first read "THE
+OWNER CONTRADICTS ITSELF HERE", which overstated a scope clash as a contradiction. An overstatement
+survives review more easily than a false claim.
 
 ## 6. Two language decisions on an edit, and only one on generation
 

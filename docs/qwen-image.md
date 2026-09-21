@@ -15,7 +15,7 @@ models:
   # that scheme for a version number and is NOT a YYMM release; it is the September 2026 unified model.
   - { id: "Qwen-Image-2.1",       access: "open-weights", tier: "flagship", caps: [text-to-image, image-edit, multi-image-edit, text-rendering, transparency], best_for: "current open model, and the only one that generates and edits in a single checkpoint; native transparent (RGBA) output, several reference images in one edit, and region marks drawn on the input image. Ships with its own prompt-rewriting models, whose published spec is the owner's clearest statement of what a good Qwen prompt looks like" }
   - { id: "Qwen-Image-2512",      access: "open-weights", tier: "base",   caps: [text-to-image], best_for: "the previous open text-to-image foundation; text-to-image only, and still the reference point for the Qwen 1328 resolution set" }
-  - { id: "Qwen-Image-Edit-2511", access: "open-weights", tier: "std",    caps: [image-edit, multi-image-edit], best_for: "current open editor; its pipeline takes several reference images in one edit" }
+  - { id: "Qwen-Image-Edit-2511", access: "open-weights", tier: "std",    caps: [image-edit, multi-image-edit], best_for: "the last of the dedicated open editors, superseded for most work by Qwen-Image-2.1; takes several reference images in one edit and uses the older Image 1 token form" }
   - { id: "Qwen-Image-Layered",   access: "open-weights", tier: "std",    caps: [image-edit, layer-separation], best_for: "decomposes a scene into separately editable layers; a finetune of Qwen-Image" }
   - { id: "Qwen-Image",           access: "open-weights", tier: "legacy", caps: [text-to-image], best_for: "the original open release; superseded by Qwen-Image-2512" }
   - { id: "Qwen-Image-Edit-2509", access: "open-weights", tier: "legacy", caps: [image-edit, multi-image-edit], best_for: "previous open editor" }
@@ -29,7 +29,7 @@ prompt:
   transparency: "QWEN-IMAGE-2.1 ONLY. Transparency is chosen by the prompt, not by a setting. The owner's recommended form opens 'This is an RGBA image with transparency.' and closes 'The image has alpha channel and the background is transparent.', with the description in between"
   negatives: "SPLIT BY ACCESS. The open checkpoints expose a real negative prompt field, and the owner's reference pipeline passes an empty string by default, so reach for it only to remove a specific artifact you can see. On the hosted line, describe the artifact to exclude, and where a host exposes no negative field fold the exclusion into the positive prompt"
   quality_suffix: "THE PRE-2.1 OPEN CHECKPOINTS ONLY. Their reference pipeline appends ', Ultra HD, 4K, cinematic composition.' to an English prompt, and the Chinese equivalent to a Chinese one. It does NOT transfer to the hosted line, and it is reversed on 2.1, whose own rewriter bans boosters outright and treats 2K, 4K and 8K as words that never belong in the prompt"
-  references: "SPLITS BY MODEL. On the dedicated editors (Edit, Edit-2509, Edit-2511) name each input as Image 1, Image 2, Image 3 and phrase each as 'the X from Image N'. On 2.1 the owner's form is the angle-bracket tag <image1>, <image2>, mandatory once there are two or more inputs and left off entirely for a single one, where the image is referred to in plain words. Never mix the two"
+  references: "SPLITS BY MODEL. On the dedicated editors (Edit, Edit-2509, Edit-2511) name each input as Image 1, Image 2, Image 3 and phrase each as 'the X from Image N'. On 2.1 the form is the angle-bracket tag <image1>, <image2>: always write it once there are two or more inputs, and leave it off entirely for a single one, where the image is referred to in plain words. The owner's spec calls the tags mandatory and its one untagged example carries no rule for when that is safe, so tag by default. Never mix the two"
   aspect_ratio: "KEEP IT OUT OF THE PROMPT ON 2.1. Both of the owner's rewriters forbid a ratio, a resolution or a pixel count anywhere in the prompt text and carry it in a separate field instead, which also covers the words 2K, 4K and 8K"
   world_knowledge: "draws on built-in knowledge of interfaces, public figures, and domain conventions, but does not retrieve live facts; state any current or verifiable detail in the prompt text"
 sources:
@@ -388,9 +388,9 @@ This is an RGBA image with transparency. Extract the ceramic vase and the dried 
 <rules id="edit">
 
 - State the change as an instruction against the source image: what to add, remove, replace, or restyle, and what to keep unchanged.
-- Lead with an imperative verb and name its target in the same clause: "Replace the face in Image 1 with ...", "Redraw the photo in Image 1 in the style of Image 2 ...". The leading verb can be the change or the constraint; "Keep the insect from this photograph exactly as it is and build a research figure around it" opens on a pin and is still an instruction.
+- Lead with an imperative verb and name its target in the same clause: "Replace the face in <image1> with ...", "Redraw the photo in <image1> in the style of <image2> ...". The leading verb can be the change or the constraint; "Keep the insect from this photograph exactly as it is and build a research figure around it" opens on a pin and is still an instruction.
 - Pick a verb that IS the operation. Add, Remove, Replace, Restore, Redraw and Keep each tell the model what kind of change to make. A generic "Edit" only tells it that something changes, so it spends the strongest position in the prompt saying nothing.
-- Do not open by describing what each input contributes. "Image 1 provides the foundation, Image 2 provides only the face" states the plan instead of issuing it, and delays the real instruction by a sentence or two. Weld each element to its source inside the instruction instead, the way the examples below do.
+- Do not open by describing what each input contributes. "<image1> provides the foundation, <image2> provides only the face" states the plan instead of issuing it, and delays the real instruction by a sentence or two. Weld each element to its source inside the instruction instead, the way the examples below do.
 - Name what must stay constant (identity, pose, background, lighting) so the edit does not drift.
 - Abstract quality assertions do nothing. "With zero drift", "perfectly", "seamlessly" have no visual target; the pinning is done by the list of elements you name, not by insisting on the outcome.
 - For text edits, quote the exact new text and its placement, the same as in generation.
@@ -521,15 +521,19 @@ Keep the insect from this photograph exactly as it is and build a research figur
 
 Qwen-Image editing can take more than one reference image in a single request, which is how you transfer or combine elements across photos: a garment, a face, a product, a background, or a style.
 
+The examples here are written in the Qwen-Image-2.1 tag form, since that is the current open model. On the dedicated editors the same prompts work with `Image 1` in place of `<image1>`; nothing else about them changes.
+
 <rules id="multi-image">
 
 - Name each input by its position, in upload order, and refer to it exactly that way. The base subject you are editing is usually the first one.
-- THE TOKEN FORM SPLITS BY MODEL. The dedicated editors (Edit, Edit-2509, Edit-2511) use `Image 1`, `Image 2`, `Image 3`. Qwen-Image-2.1 uses `<image1>`, `<image2>`, and its owner calls the tags mandatory once two or more images are attached, ruling out "the first image", "image A" and their Chinese equivalents. With a single input, 2.1 takes no tag at all and wants the image referred to in plain words. Never mix the two conventions in one prompt.
+- THE TOKEN FORM SPLITS BY MODEL. The dedicated editors (Edit, Edit-2509, Edit-2511) use `Image 1`, `Image 2`, `Image 3`. Qwen-Image-2.1 uses `<image1>`, `<image2>`, ruling out "the first image", "image A" and their Chinese equivalents. With a single input, 2.1 takes no tag at all and wants the image referred to in plain words. Never mix the two conventions in one prompt.
+- ALWAYS WRITE THE TAGS ON 2.1 once there are two or more inputs. The owner's rewriting spec calls them "mandatory and non-negotiable" for that case, its rewriter emits them on every multi-image prompt, and a tagged prompt has never been the reason a generation failed.
+- They can be dropped, and the owner drops them once: the 2.1 repository's quick start passes three images with the plain sentence "These three characters are sitting around a campfire in a forest". No owner surface says when that is safe. The only visible common factor, every image holding the same role, is an inference from one example rather than a published rule, so treat it as evidence that untagged prompts are not rejected, not as permission. Write the tags.
 - On 2.1, give every image its role in the sentence: which one is the canvas whose composition and untargeted content survive, which ones supply material, and what is taken from each. A composite inherits the canvas image's framing, so which image is the canvas decides the shape of the result.
 - Describe each image individually. Never compress several into a range or a group ("the three portraits") to save writing them out, because each one needs its own role.
 - Some jobs have no canvas at all. In a group portrait built from separate headshots, every input is an identity source and the composition is yours to specify; the owner's own example prompt for that case is a plain sentence about what the characters are doing together.
-- The owner's two statements on this govern different things, so know what you are following. The rewriting spec calls the tags "mandatory and non-negotiable" from two inputs up, but it is telling that rewriter what to EMIT; the 2.1 repository's quick start passes three images to the pipeline in one untagged sentence. No owner surface says the checkpoint rejects an untagged prompt. Read the tags as the form the owner trained its own rewriter to produce: use them whenever the images do different jobs, and expect a plain sentence to work where they all hold the same role.
-- Weld every borrowed element to its source. With three or more inputs an unattached phrase like "the dress" is ambiguous, so always write "the dress from Image 2", "the pose from Image 3". Read the finished instruction as an assignment list: one role per input.
+- The two owner statements govern different things, which is worth knowing when a host or a tool passes your prompt through untouched. The spec binds what the REWRITER emits; the quick start shows what the PIPELINE accepts. Neither says the checkpoint rejects a plain sentence. That is why an untagged prompt is a risk rather than an error, and why the recommendation above is still to tag.
+- Weld every borrowed element to its source. With three or more inputs an unattached phrase like "the dress" is ambiguous, so always write "the dress from <image2>", "the pose from <image3>". Read the finished instruction as an assignment list: one role per input.
 - Name what moves, pin what stays. The model carries only what you name, so state each element you are changing and explicitly hold the rest constant ("keeping her face, hairstyle, and pose unchanged"); skipping the invariants lets a transfer drift the face or pose.
 - Anything you do not name is ignored, so be explicit about every element you want carried over. The same pattern places a graphic such as a logo onto a named surface.
 
@@ -538,27 +542,27 @@ Qwen-Image editing can take more than one reference image in a single request, w
 <example use_case="clothing-and-accessory-transfer">
 
 ```text
-The woman in Image 1 wears the red trench coat from Image 2 and carries the tan leather bag from Image 3, keeping her face, hairstyle, and pose unchanged
+The woman in <image1> wears the red trench coat from <image2> and carries the tan leather bag from <image3>, keeping her face, hairstyle, and pose unchanged
 ```
 
-*Why: pulls two separate wardrobe elements from two different images onto the base subject in Image 1, names each source, and pins identity so only the named items transfer*
+*Why: pulls two separate wardrobe elements from two different images onto the base subject in <image1>, names each source, and pins identity so only the named items transfer*
 
 </example>
 
 <example use_case="object-in-hand-and-pose">
 
 ```text
-The woman in Image 1 holds the bouquet from Image 2 in her hands and takes the standing pose of the person in Image 3, keeping her face, hairstyle, and outfit unchanged
+The woman in <image1> holds the bouquet from <image2> in her hands and takes the standing pose of the person in <image3>, keeping her face, hairstyle, and outfit unchanged
 ```
 
-*Why: combines placing an object from Image 2 into the subject's hands with adopting a pose from Image 3, while pinning the subject's identity and clothing so only those two things change*
+*Why: combines placing an object from <image2> into the subject's hands with adopting a pose from <image3>, while pinning the subject's identity and clothing so only those two things change*
 
 </example>
 
 <example use_case="base-plus-background-plus-product">
 
 ```text
-Keep the model from Image 1, place them against the studio background from Image 2, and add the wristwatch from Image 3 on their left wrist, matching lighting and perspective across all three
+Keep the model from <image1>, place them against the studio background from <image2>, and add the wristwatch from <image3> on their left wrist, matching lighting and perspective across all three
 ```
 
 *Why: edits one base subject by swapping in a background from a second image and adding a product from a third, naming each source and the lighting match so the composite holds together*
@@ -568,7 +572,7 @@ Keep the model from Image 1, place them against the studio background from Image
 <example use_case="two-person-composite">
 
 ```text
-Combine the man from Image 1 and the woman from Image 2 into one natural photo standing side by side, using the garden background from Image 3, shot on a 50mm lens with matched lighting on both
+Combine the man from <image1> and the woman from <image2> into one natural photo standing side by side, using the garden background from <image3>, shot on a 50mm lens with matched lighting on both
 ```
 
 *Why: merges two subjects from separate images and drops them into a background drawn from a third, with framing and lighting cues so it reads as a single photograph*
@@ -578,7 +582,7 @@ Combine the man from Image 1 and the woman from Image 2 into one natural photo s
 <example use_case="background-and-outfit-swap">
 
 ```text
-Keep the person from Image 1, place them in the city street at dusk from Image 2, and change their jacket to the one from Image 3, relighting the subject to match the new scene
+Keep the person from <image1>, place them in the city street at dusk from <image2>, and change their jacket to the one from <image3>, relighting the subject to match the new scene
 ```
 
 *Why: combines a background replacement from one image with a garment swap from another on the same base subject, with relighting so the edges blend*
@@ -588,17 +592,17 @@ Keep the person from Image 1, place them in the city street at dusk from Image 2
 <example use_case="style-transfer">
 
 ```text
-Redraw the photo in Image 1 in the watercolor painting style of Image 2, keeping Image 1's composition, subjects, and layout unchanged
+Redraw the photo in <image1> in the watercolor painting style of <image2>, keeping <image1>'s composition, subjects, and layout unchanged
 ```
 
-*Why: a pure style transfer, the look is taken only from Image 2 while the content and composition stay locked to Image 1*
+*Why: a pure style transfer, the look is taken only from <image2> while the content and composition stay locked to <image1>*
 
 </example>
 
 <example use_case="style-transfer-plus-added-element">
 
 ```text
-Redraw the scene from Image 1 in the brushstroke style of Image 2, and add the sailboat from Image 3 into the water rendered in that same style, keeping Image 1's composition
+Redraw the scene from <image1> in the brushstroke style of <image2>, and add the sailboat from <image3> into the water rendered in that same style, keeping <image1>'s composition
 ```
 
 *Why: applies a style from one image to content from another while folding in an object from a third, unifying all of it in the target style*
@@ -612,16 +616,6 @@ Place the woman from <image1> onto the velvet bench on the left of the hotel lob
 ```
 
 *Why: the 2.1 tag form, with one role per image and the canvas named outright so the result inherits that image's framing. Identity is pinned by pointing at the image rather than describing her face, which is what keeps the likeness, and the borrowed garment is scoped to the two properties that have to survive*
-
-</example>
-
-<example use_case="untagged-same-role-21">
-
-```text
-These three characters are sitting around a campfire in a forest
-```
-
-*Why: the owner's own quick-start prompt for several references, and the one case where the tags come off: every input holds the same role, one character each, and nothing needs telling apart. The moment the images take different jobs, the owner's rewriting spec makes the `<image1>` tags mandatory*
 
 </example>
 
@@ -646,6 +640,7 @@ These three characters are sitting around a campfire in a forest
 - Over-stacked quality tags: piling on "8K, ultra HD, masterpiece, best quality" adds little. Spend words on subject, material, and light. On 2.1 this hardens into a ban: the owner's rewriter forbids boosters outright, and the quality suffix the pre-2.1 reference pipeline appended does not belong there.
 - Writing the frame into a 2.1 prompt: a ratio, a resolution or a "4K" belongs to the request, not the description. Both of the owner's rewriters strip them out.
 - Mixing the two reference conventions: `Image 1` belongs to the dedicated editors, `<image1>` to 2.1, and a single image on 2.1 takes no tag at all.
+- Leaving the tags off a 2.1 multi-image prompt: the owner's own spec calls them mandatory there, and the single untagged example it publishes comes with no rule saying when that is safe. Tag every input.
 - Describing a face you meant to keep: on an edit, pointing at the reference image preserves a likeness and describing it regenerates one. The same holds for any identity you are carrying across.
 - Describing what stays in detail: a concrete description of untargeted content reads as an instruction to generate it, so name it by type and position and leave the appearance alone.
 - Asking for an edit faintly to protect the rest of the image: preservation is bought by naming what stays, not by weakening the change, and a change that lands faintly is the second way an edit fails.
