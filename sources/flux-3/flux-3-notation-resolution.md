@@ -104,3 +104,38 @@ words in a short prompt." fal's independent testing corroborates it. So this gui
 name the work or era and stop.
 
 Same question, different models, different answers, both taken from the owner's API-facing surface.
+
+## 7. Re-check of 2026-10-15: FLUX 3 Image shipped, and a video edit tool
+
+Triggered by the FLUX 3 Image Klein release. The image side now has its own scheme and guide
+(`sources/flux-3-image/flux-3-image-notation-resolution.md`); this section covers what changed for video.
+Current pages saved beside the August scrapes with a `-20261015` suffix.
+
+- The rule that FLUX 3 Image is announced but unreleased, and the coverage note saying image work stays
+  on FLUX.2, were false and are rewritten. FLUX 3 Dev is still unshipped; FLUX 3 Action has open weights
+  but takes no video prompt, so it stays out of scope.
+- FLUX Video Edit [fast] shipped. The video overview calls it "a separate FLUX Tool for editing an
+  existing clip", sold under FLUX Tools rather than FLUX 3. Merged into this guide anyway, as a model row
+  and an "Editing an existing clip" section: its prompts are video prompts, the owner's video prompting
+  guide documents it (`prompting_video_editing`), and a separate guide for one tool would split the video
+  craft an agent needs in one place. Tiered `distilled`, the closed vocabulary's home for a vendor
+  "[fast]" tier.
+- Its craft inverts generation in two places worth teaching loudly: the prompt names only the change
+  (everything unmentioned stays as filmed), and a replacement line must fit the time of the speech it
+  replaces, because the clip cannot grow. The dialogue rules gained a carve-out for that.
+- Restyle tension: the editing guide says to describe a new look "through fabric, seams, metal, and
+  reflections, rather than naming a style alone"; the product page shows "Make the whole clip a
+  hand-drawn watercolour animation." working as a bare style name. Read as scope: a stylization can be
+  named, a conversion to live action needs materials. Both examples are taught that way.
+- The "recast and continue" cookbook is filed under video editing but every call in it goes to FLUX 3
+  Video's own `reference_video` and `start_video` inputs on a preview endpoint. Its continuation rules
+  (name the final frames first, carry sounds through the seam) went into the continuation section. Its
+  reference-video recast is taught in a new "Reference video" section marked as preview, because the
+  video overview still lists omni reference as "Soon". Owner versus owner on availability; the guide
+  reports both rather than choosing.
+- The text-to-video, audio, image-to-video and camera pages carry no craft change; the camera page was
+  renamed "Examples & Cheatsheet" with all 119 terms and prompts unchanged. The product page dropped its
+  claim that text "stays stable through motion", so the typography rule no longer asserts it.
+- Owner long-prompt examples now visible on the overview use capitals for the one constraint that must
+  hold and a closing stack of guardrails. Added as one structure rule, scoped to constraints the model
+  keeps breaking.

@@ -43,6 +43,9 @@ CATALOG = {
     "2":  ("anima", "IMG", "Anima", ["anima"]),
     "3":  ("flux-2", "IMG", "FLUX.2",
            ["flux", "flux.2", "flux 2", "flux2", "bfl", "black forest labs"]),
+    "39": ("flux-3-image", "IMG", "FLUX 3 Image",
+           ["flux 3", "flux-3", "flux3", "flux 3 image", "flux-3-image", "flux3 image",
+            "flux 3 image klein", "flux-3-image-klein", "flux 3 klein", "image klein"]),
     "4":  ("gemini-image", "IMG", "Gemini Image (Nano Banana)",
            ["gemini-image", "gemini image", "nano banana", "nano-banana", "nanobanana",
             "nano banana pro", "gemini 3 pro image", "gemini 3.1 flash image"]),
@@ -74,7 +77,8 @@ CATALOG = {
             "wan 2.7", "wan2.7", "wan-2.7", "wan 2.6", "wan2.6", "wan-2.6"]),
     "13": ("z-image", "IMG", "Z-Image", ["z-image", "z image", "zimage", "z-image turbo"]),
     "21": ("flux-3-video", "VID", "FLUX 3 Video",
-           ["flux 3", "flux-3", "flux3", "flux 3 video", "flux-3-video"]),
+           ["flux 3 video", "flux-3-video", "flux3 video", "flux video",
+            "flux video edit", "video edit [fast]"]),
     "22": ("gemini-omni", "VID", "Gemini Omni",
            ["gemini-omni", "gemini omni", "gemini-omni-flash", "gemini omni flash"]),
     "23": ("happyhorse", "VID", "HappyHorse", ["happyhorse", "happy horse", "happy-horse"]),
@@ -199,13 +203,13 @@ ROUTER = """<promptgen_model_index>
 
 Prompting guides available here. Naming a model loads its full guide.
 
-IMAGE: Anima, FLUX.2, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, Qwen-Image, Seedream, Wan Image, Z-Image
+IMAGE: Anima, FLUX.2, FLUX 3 Image, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, Qwen-Image, Seedream, Wan Image, Z-Image
 VIDEO: FLUX 3 Video, Gemini Omni, HappyHorse, Kling Video, LTX, MiniMax H3, Seedance, Wan Video
 AUDIO: ACE-Step, ElevenLabs Music and Sound Effects, ElevenLabs Speech, Gemini TTS, MiniMax Music, MiniMax Speech, OmniVoice, Qwen TTS, Stable Audio, VibeVoice
 
 Several vendors ship more than one guide, so name the model and the modality:
 - Alibaba has five. Qwen-Image and Wan Image are image; Wan Video and HappyHorse are video; Qwen TTS is speech. Wan Video and HappyHorse are two separate video lines, not versions of each other, and they are prompted differently.
-- Black Forest Labs has two: FLUX.2 for image, FLUX 3 Video for video. FLUX.2 conventions do not transfer to FLUX 3.
+- Black Forest Labs has three: FLUX.2 and FLUX 3 Image for image, FLUX 3 Video for video. FLUX.2 conventions do not transfer to FLUX 3, and the two FLUX 3 guides are prompted differently from each other. "Klein" names a model in both FLUX.2 and FLUX 3 Image; they are unrelated, so resolve it by the family number.
 - Google has three: Gemini Image for image, Gemini Omni for video, Gemini TTS for speech.
 - ElevenLabs has two: ElevenLabs Speech, and ElevenLabs Music and Sound Effects. A speech audio tag and a music prompt are different schemes and the tags do not cross over.
 - Kuaishou has two: Kling Image and Kling Video.
@@ -217,7 +221,7 @@ That separate field is the part with no image or video equivalent. An audio prom
 
 Each guide is authoritative for its own model. These models are prompted in genuinely different ways, so never carry a convention from one model's guide to another: if the guide for the named model is not loaded, ask for it rather than guessing from a different model's rules.
 
-Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, Qwen-Image splits inside its own family (the dedicated editors take Image 1, while Qwen-Image-2.1 takes <image1> for two or more inputs and no tag at all for one), and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything. Stable Audio uses no brackets at all and instead takes Key: Value metadata tags inline, such as TrackType: Music, which come from its training labels rather than from any parser and do not transfer to any other model here. MiniMax Speech adds a third unrelated use of round brackets, where (laughs) is a non-verbal sound and (laIv) is a pronunciation override, alongside <#0.5#> for a timed pause; all three live inside the spoken script and anything unrecognised in brackets is read aloud instead. Square brackets are the worst offender across the set: [Verse] is a song section in ACE-Step and MiniMax Music, [whispers] is a delivery tag in ElevenLabs and Gemini TTS, [B EY1 S] is a phoneme string in OmniVoice, and [Core Task] is a request-section label in Wan 3.0. ElevenLabs composition plans then use all three families at once, where [Section] labels a part, (ooh) is a phonetic vocal sound and {guitar solo} is an inline direction. Never carry a bracket convention between models.
+Reference notation is the classic case, and it is NOT shared. Seedance writes @Image 1, HappyHorse writes [Image 1], Grok Imagine Image writes <IMAGE_0> and counts from ZERO, FLUX 3 Image writes image 1 in a plain prompt but <ref_image_0> in a bounding-box record, so the same first picture is numbered 1 in one form and 0 in the other, Gemini Omni uses its own angle-bracket tags, Wan uses one form for reference-to-video and a different one for video editing, Qwen-Image splits inside its own family (the dedicated editors take Image 1, while Qwen-Image-2.1 takes <image1> for two or more inputs and no tag at all for one), and several models write Image 1 with no sigil at all. Two models reaching for angle brackets does not make them the same notation, and one of them starts at 0 while nearly everything else starts at 1. Vendor and modality predict nothing here. Take the form from the loaded guide, and do not assume a model numbers its inputs at all. Music models bracket song STRUCTURE rather than inputs, so ACE-Step writes [Verse] and [Chorus - anthemic] inside its lyrics field; that is a third unrelated use of brackets and does not number anything. Stable Audio uses no brackets at all and instead takes Key: Value metadata tags inline, such as TrackType: Music, which come from its training labels rather than from any parser and do not transfer to any other model here. MiniMax Speech adds a third unrelated use of round brackets, where (laughs) is a non-verbal sound and (laIv) is a pronunciation override, alongside <#0.5#> for a timed pause; all three live inside the spoken script and anything unrecognised in brackets is read aloud instead. Square brackets are the worst offender across the set: [Verse] is a song section in ACE-Step and MiniMax Music, [whispers] is a delivery tag in ElevenLabs and Gemini TTS, [B EY1 S] is a phoneme string in OmniVoice, and [Core Task] is a request-section label in Wan 3.0. ElevenLabs composition plans then use all three families at once, where [Section] labels a part, (ooh) is a phonetic vocal sound and {guitar solo} is an inline direction. Never carry a bracket convention between models.
 
 </promptgen_model_index>"""
 

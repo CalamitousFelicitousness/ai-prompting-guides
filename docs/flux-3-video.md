@@ -3,23 +3,24 @@ guide: "FLUX 3 Video"
 prompt_scheme: "flux-3-video"
 models:
   - { id: "flux-3-video", access: "closed-weights", tier: "flagship", caps: [text-to-video, image-to-video, first-last-frame, keyframe-interpolation, video-continuation, native-audio, dialogue, multi-shot, text-rendering, grounding], best_for: "text, image, keyframe and continuation video with native synchronized audio; multi-shot sequences, multilingual on-camera dialogue, and in-scene typography in a single generation" }
-capabilities: [text-to-video, image-to-video, first-last-frame, keyframe-interpolation, video-continuation, native-audio, dialogue, multi-shot, text-rendering, grounding]
+  - { id: "flux-video-edit-fast", access: "closed-weights", tier: "distilled", caps: [video-edit], best_for: "instruction edits to a clip you already have: remove, add, replace, recolor, change text or dialogue, swap the setting, restyle, or turn a blockout into a finished shot. A separate FLUX Tools product, not a FLUX 3 mode; length, framing, camera, timing and audio all come from the source clip" }
+capabilities: [text-to-video, image-to-video, first-last-frame, keyframe-interpolation, video-continuation, native-audio, dialogue, multi-shot, text-rendering, grounding, video-edit]
 prompt:
   languages: ["en", "zh", "es", "fr", "de", "ja", "pt", "ru", "it", "id", "tr", "hi", "pa", "more"]
   formula: "Subject + Action, then Camera direction, then Scene and atmosphere, then Motion qualities, then Continuity constraints; direct a scene rather than describe a collection of objects"
-  formats: "four interchangeable shapes: natural-language one-liner (the default), labeled fields, a timestep timeline, and the six-element schema for multi-shot work"
+  formats: "four interchangeable shapes for generation: natural-language one-liner (the default), labeled fields, a timestep timeline, and the six-element schema for multi-shot work. The edit tool takes a fifth, an instruction that names only the change and never re-describes the shot"
   length_strategy: "short prompts hand the model freedom and produce fresher results; long prompts buy precision. Start short, then lengthen only where control matters. Length alone is not the goal, and over-stuffing degrades motion coherence"
   literal_text: "quote the exact words; typography renders as part of the scene and holds through motion. A quoted line with no visible speaker and no voiceover cue may be rendered as on-screen text instead of spoken"
   audio: "native and synchronized in the same pass, never a second prompt. Four layers: speech, ambience, effects, music. Name sound sources rather than asking for silence"
   dialogue: "put the exact words in quotes and name who delivers them; mark off-screen lines as voiceover or narration; direct the voice with person, register, recording, delivery, and a guardrail"
   negatives: "no negative field in the core scheme; write guardrails into the prompt as plain clauses ('no on-screen text, no subtitles', 'no announcer delivery', 'no other speech')"
-  references: "images enter as ordered frames: one pins the opening frame, two pin start and end, three or more become ordered waypoints the shot passes through; a video input is continued from its final frames"
+  references: "images enter as ordered frames: one pins the opening frame, two pin start and end, three or more become ordered waypoints the shot passes through; a video input is continued from its final frames. A clip sent to the edit tool is the thing being changed, and the owner demonstrates a reference-video input that carries a clip's cast into a new shot"
   world_knowledge: "combines pretraining knowledge with real-time grounding, so naming a real work, era, format, or event usually yields correct specifics without supplying them"
 sources:
-  official: ["https://docs.bfl.ai/guides/prompting_video_overview", "https://docs.bfl.ai/guides/prompting_video_text_to_video", "https://docs.bfl.ai/guides/prompting_video_audio", "https://docs.bfl.ai/guides/prompting_video_image_to_video", "https://docs.bfl.ai/guides/prompting_video_camera_terms", "https://docs.bfl.ai/flux_3/flux3_video", "https://bfl.ai/blog/flux-3-video", "https://bfl.ai/blog/flux-3"]
+  official: ["https://docs.bfl.ai/guides/prompting_video_overview", "https://docs.bfl.ai/guides/prompting_video_text_to_video", "https://docs.bfl.ai/guides/prompting_video_audio", "https://docs.bfl.ai/guides/prompting_video_image_to_video", "https://docs.bfl.ai/guides/prompting_video_camera_terms", "https://docs.bfl.ai/flux_3/flux3_video", "https://bfl.ai/blog/flux-3-video", "https://bfl.ai/blog/flux-3", "https://docs.bfl.ai/guides/prompting_video_editing", "https://docs.bfl.ai/flux_tools/flux_video_edit", "https://docs.bfl.ai/cookbook/video_edit_recast_continue"]
   provider: ["https://fal.ai/learn/tools/flux-3-video-examples-prompts"]
   community: []
-last_verified: "2026-08-07"
+last_verified: "2026-10-15"
 ---
 
 # FLUX 3 Video: prompting and usage guide
@@ -27,11 +28,33 @@ last_verified: "2026-08-07"
 <rules id="global">
 
 - This guide covers prompt craft only. For endpoints, parameters, resolution and duration limits, input counts, and code, consult the specific provider or proxy's API docs; they differ and are out of scope here.
-- FLUX 3 is a different model and a different prompt scheme from FLUX.2. Do not carry FLUX.2 image habits across: hex color pinning and JSON prompts belong to the image scheme and are not documented for video.
+- FLUX 3 Video is a different prompt scheme from both image schemes, FLUX.2 and FLUX 3 Image. Do not carry their habits across: FLUX.2's JSON prompts and hex pinning, and FLUX 3 Image's bounding-box table and edit-only hex codes, are not documented for video.
 - Picture and audio are generated together from one prompt. There is no second audio prompt, so the soundtrack is written into the same sentences as the shot.
 - Direct a scene, do not describe a collection of objects. Say what happens, how subjects move, how the camera behaves, and what it sounds like.
 - There is no negative field. Write exclusions into the prompt as plain clauses.
-- This guide covers FLUX 3 Video. FLUX 3 Image and the open-weight FLUX 3 Dev are announced but not released, and no prompt guidance exists for them yet; for image work use the FLUX.2 guide.
+- This guide covers FLUX 3 Video and the separate FLUX Video Edit [fast] tool. FLUX 3 Image and the open-weights FLUX 3 Image Klein have their own guide; route FLUX 3 image work there. The announced open-weights FLUX 3 Dev has not shipped, and FLUX 3 Action is a robotics model that takes no video prompt.
+
+</rules>
+
+## Model names and aliases
+
+| Name you may see | What it is | Guide |
+| --- | --- | --- |
+| FLUX 3 Image, `flux-3-image` | the full FLUX 3 image model, API only | FLUX 3 Image |
+| FLUX 3 Image Klein, `flux-3-image-klein` | the 5.6B open-weights FLUX 3 image model, step-distilled; also on the API | FLUX 3 Image |
+| FLUX 3 Image Klein Base, `flux-3-image-klein-base` | the undistilled Klein, open weights, for training and steering | FLUX 3 Image |
+| FLUX 3 Video, `flux-3-video` | the FLUX 3 video model | FLUX 3 Video |
+| FLUX Video Edit [fast] | a FLUX Tools video editor that takes a clip and an instruction | FLUX 3 Video |
+| FLUX.2 [klein] 4B and 9B, `flux-2-klein-*` | the small open FLUX.2 models | FLUX.2 |
+| FLUX.2 [pro], [flex], [max], [dev] | the other FLUX.2 models | FLUX.2 |
+| FLUX 3 Dev | an announced open multimodal model that has not shipped | none |
+
+<rules id="naming">
+
+- "Klein" names two unrelated model lines. FLUX.2 [klein] and FLUX 3 Image Klein share a word and nothing else: different prompt schemes, different reference notation, and opposite defaults on prompt expansion. Resolve "klein" by the family number before applying any rule.
+- FLUX 3 is not one prompt scheme. Its image models and its video model are documented and prompted separately; route by modality.
+- FLUX 3 Dev was announced as an open multimodal model and has not been released. The open FLUX 3 releases are FLUX 3 Action, a robotics model that takes no image or video prompt, and FLUX 3 Image Klein.
+- FLUX Video Edit [fast] is sold as a FLUX Tools product rather than under the FLUX 3 name. Its prompt rules sit in the FLUX 3 Video guide.
 
 </rules>
 
@@ -45,7 +68,7 @@ last_verified: "2026-08-07"
 
 ## Models and modes
 
-One model covers every workflow; what changes is which inputs you supply alongside the prompt.
+One model covers every generation workflow; what changes is which inputs you supply alongside the prompt. Editing a clip you already have is a separate tool, covered in its own section below.
 
 - Text-to-video: prompt only. The model fills in framing, motion, and mood wherever you leave them open.
 - Image-to-video: one image becomes the exact opening frame and the prompt drives the motion.
@@ -53,7 +76,7 @@ One model covers every workflow; what changes is which inputs you supply alongsi
 - Keyframes: three or more ordered stills become waypoints the shot passes through in turn, optionally pinned to times.
 - Video continuation: an existing clip is carried forward from its final frames without a cut.
 
-A draft workflow runs the same prompt as a fast cheap preview and then re-renders the approved take at full quality with the same subjects, composition, and motion. Iterate on drafts, not on full renders. Video editing and omni-reference modes are announced but not yet available.
+A draft workflow runs the same prompt as a fast cheap preview and then re-renders the approved take at full quality with the same subjects, composition, and motion. Iterate on drafts, not on full renders; the prompt is fixed at the draft stage, since the full render reproduces the approved take without re-reading it. Editing an existing clip has shipped as FLUX Video Edit [fast]. A reference-video input that carries a clip's cast into a new shot appears in the owner's cookbook, while the video overview still lists omni reference as coming; see "Reference video" below.
 
 ## How the model reads prompts
 
@@ -75,6 +98,7 @@ A draft workflow runs the same prompt as a fast cheap preview and then re-render
 - Lead with subject and action, then wrap framing, movement, and style around it.
 - State the aspect ratio in the prompt when the framing matters (16:9, vertical 9:16, 21:9), and say the clip length when pacing depends on it.
 - To prevent unwanted cuts, say the shot is continuous and unbroken. The model will otherwise cut when it thinks a cut serves the scene.
+- The owner's own long prompts put the one constraint that must hold in capitals ("ONE continuous unbroken real-time shot", "EXACTLY the same size") and close on a short stack of guardrails ("No on-screen text, no logos, no subtitles, no credits."). Reserve both for constraints the model keeps breaking.
 
 </rules>
 
@@ -295,6 +319,7 @@ Music: {style and role in the mix}.
 - Direct the voice with concrete anchors rather than praise words: person (age range and accent where they matter), register (low, bright, soft, rough), recording (close and dry, across a room, phone microphone, public address), delivery (hesitant, practical, lightly amused, talking to one friend), and a guardrail ("no announcer delivery", "no sales voice", "do not over-enunciate").
 - Write lines a person would actually say. Use contractions, cut setup the viewer can already see, avoid ending every line on a slogan, and keep punctuation simple, since heavy punctuation turns into a sing-song rhythm.
 - Leave room for the line. A short line in a longer clip is safer than copy written to fill every second; if the last word is clipped, shorten the line or give the shot more time.
+- In an edit the clip cannot get longer, so a replacement line must fit the time the original speech took. Write it to that length; a longer one keeps its opening and loses the rest.
 - Do not force several speakers, a long script, and multiple visual beats into one short clip. Split the scene when each part needs its own timing.
 
 </rules>
@@ -434,6 +459,8 @@ A wide long-exposure night sky over snowy northern mountains: the aurora boreali
 - The source clip sets the motion, subjects, and look. The prompt only says how the shot keeps unfolding.
 - Write the continuation as an unbroken extension, not a new scene, unless a cut is what you want.
 - Momentum carries across the seam, so name what the existing motion does next rather than restarting it.
+- Name what the final frames show before saying where the shot goes: "Continue this video from its final frames: {what is on screen at the end}, then {what happens next}".
+- Carry the established sounds through the seam unbroken before evolving them, then give each new event its own sound. Audio continuity is what makes an extension read as one shot rather than two clips joined.
 
 </rules>
 
@@ -447,11 +474,125 @@ A herd of African elephants walks steadily toward the camera across a dry savann
 
 </example>
 
+### Reference video
+
+Shown in the owner's cookbook on a preview surface; the video overview still lists omni reference as coming, so treat this as available where a host exposes it rather than as a guaranteed mode. A source clip supplies a cast and its motion, and the prompt decides how much of the source survives.
+
+<rules id="reference-video">
+
+- How much of the source you restate is the lever. Restate the staging and change only the medium, and you get the same shot recast. Re-list only the identity anchors and write a new scene around them, and you get the same character in a new shot.
+- Give a clip you plan to reference three or four fixed visual anchors and one unmistakable motion, described the same way every time.
+- Mechanical subjects drift toward smooth human movement unless the imperfection is written in: "stiff even steps, a faint mechanical tremor on each footfall", with the sound locked to the motion.
+- The medium includes the sound. When you swap a medium, name the audio swap too, or a modern soundtrack stays under an old-looking picture. Add the medium's own guardrails ("no intertitle cards").
+
+</rules>
+
+<example use_case="reference-video-recast">
+
+```text
+The same brass wind-up tin robot from the source video, same red wind-up key turning in its back, same single amber eye, marches in the same straight line across the same watchmaker's bench, same tracking camera alongside it. The whole scene is now a scratched 1928 silent film print: soft black-and-white, heavy grain, flickering exposure, gate weave, dust and hairline scratches, a slightly sped-up hand-cranked judder. The sound is recast to the medium: the clockwork ticking is gone, replaced by a lively solo upright-piano march that hits in time with the robot's steps, under the soft clatter of a film projector running in a quiet room. No on-screen text, no intertitle cards.
+```
+
+*Why: the owner's recast. It repeats the staging and anchors word for word so the shot survives, changes only the medium, and recasts the sound along with the picture*
+
+</example>
+
+## Editing an existing clip
+
+FLUX Video Edit [fast] takes a clip and an instruction. It is a separate FLUX Tools product rather than a FLUX 3 mode, and everything the prompt does not mention stays as filmed: length, framing, camera, timing and audio all come from the source.
+
+<rules id="video-edit">
+
+- Describe the change, not the shot. The shortest prompt that names the change is usually right; add detail only where the edit needs it. Never re-describe the whole scene.
+- Write it as an instruction: Remove, Add, Replace, Make, Change, Restyle, Render, Say. A sentence describing a new event also works ("A gull swoops down and steals a fish from the crate.").
+- Place what you add, and give it a size and a look, or the model chooses. "Add a lighthouse" lands small and far off; anchor it to things already in the shot ("on the end of the harbor wall to the right of the boats"). A pose works as a placement ("standing on the corner of the crate").
+- There are no masks, so locate the target in words: by what it is, its color, or what it is next to.
+- For a replaced person, say which wardrobe carries over ("wearing the same yellow apron and grey cap").
+- For a new setting, name the surfaces the subject touches as well as the surroundings, so hands and feet have something to hold: "Add narrow metal window ledges at the climber's hand and foot contact points."
+- For an effect such as weather, say where it lands on the scene's objects: "with flakes settling on the crate and the fish".
+- For a text change, name the text object and its medium, then the new words: "Change the stencil on the crate to read DAILY CATCH."
+- For dialogue, give the new line in quotes and write it to the length of the line it replaces; the clip cannot grow to fit more words. For a translation, ask for the same sentence and fence off the source language: "Say the same sentence entirely in German, with no English words."
+- Audio is kept unless you ask for a dialogue or sound change, and a silent source returns a silent result. You cannot add speech or sound to a clip that has none.
+- A stylization can be named in one line ("Make the whole clip a hand-drawn watercolour animation."). Converting an illustration to live action needs the new look described through materials and physical behaviour: fabric, seams, metal, reflections.
+- To turn a blockout or previz into a finished shot, say what each placeholder becomes, then what must stay ("Same weave lines, same speeds, same camera overtake"), then the sound.
+- Small local edits stack in one prompt as separate sentences. A global change (a new setting, a restyle, a time of day) goes in its own pass: feed the result back in and describe the next change, rather than combining both against the original.
+- Recolor with a plain color name. No hex code appears in any owner video-edit example.
+- Check the whole frame after an edit, not only the thing you changed. Untouched details can still drift.
+- The tool cannot extend a clip, take an image or a style or motion reference, or edit audio alone. Extend with video continuation instead.
+
+</rules>
+
+<template id="video-edit">
+
+{Operation} {the target, located in words} {into what, with placement, size and look}. {Any detail that must carry over}.
+
+</template>
+
+<example use_case="video-edit-add-with-placement">
+
+```text
+Add a tall white lighthouse with a red lantern room standing on the end of the harbor wall to the right of the boats.
+```
+
+*Why: the owner's placed addition. Appearance, size and an anchor to two things already in the shot, so it neither lands as a speck on the horizon nor drifts between frames*
+
+</example>
+
+<example use_case="video-edit-stacked-local">
+
+```text
+Remove the orange bucket. Make the apron red. Change the stencil on the crate to read DAILY CATCH. Add a seagull standing on the corner of the crate. Make it snow, with flakes settling on the crate and the fish.
+```
+
+*Why: the owner's stack of five small local edits, one sentence each, with the new object placed by pose and the weather told where to settle*
+
+</example>
+
+<example use_case="video-edit-dialogue">
+
+```text
+Make him say "Fresh mackerel, four for ten."
+```
+
+*Why: the owner's dialogue swap. The original line ran "Straight off the boat this morning, four for ten.", so the replacement is written to the same short length and nothing else is touched*
+
+</example>
+
+<example use_case="video-edit-setting">
+
+```text
+Replace the cliff with the reflective windows of a high-rise building. Add narrow metal window ledges at the climber's hand and foot contact points. Far below, traffic and illuminated buildings fill a dense city in blue-hour light.
+```
+
+*Why: the owner's setting swap. The new surroundings, the contact surfaces the climber's motion needs, and the light of the new place, with the climb itself left as filmed*
+
+</example>
+
+<example use_case="video-edit-restyle-to-live-action">
+
+```text
+Restyle this clip as live-action footage of a claw machine lifting a lavender octopus plush. Fine velour fibers and sewn seams replace the ink outlines. The plush compresses gently where the metal claw grips it. Soft arcade lights reflect in the glass.
+```
+
+*Why: the owner's illustration-to-live-action restyle, described through material, contact and reflection rather than a style name*
+
+</example>
+
+<example use_case="video-edit-blockout">
+
+```text
+Render this previz chase as a desert convoy pursuit at golden hour: the pillars become ruined highway columns in open dust, the lead car an armored pickup, the chaser a spiked buggy, both trailing dust plumes, heat shimmer. Same weave lines, same speeds, same camera overtake. V8 roar and wind.
+```
+
+*Why: the owner's blockout pass. Each placeholder is mapped to what it becomes, the motion that must survive is pinned in one line, and the sound is named. A second change, such as night, goes in a separate pass on this result*
+
+</example>
+
 ## On-screen text and typography
 
 <rules id="text">
 
-- Quote the exact words. Typography renders as part of the scene and holds through motion, which covers titles, signage, and lower thirds.
+- Quote the exact words and say where they sit. Typography renders as part of the scene, which covers titles, signage, and lower thirds.
 - Say where the text sits and what it is made of, the same way you would describe any other object in the shot.
 - Text can be the subject rather than an overlay: letters can assemble, stack, and move as scene elements.
 - When a quoted line is meant to be spoken and not seen, add "no on-screen text, no subtitles". Without it, the model may render the words in frame.
@@ -494,7 +635,12 @@ Bold kinetic title card, the word "FLUX" assembling from streaks of light on a d
 - Over-stuffing: past a point, more description degrades motion coherence rather than improving control.
 - Re-describing a pinned frame: in image-to-video, the still already carries the scene. Spend the prompt on what changes.
 - Unrequested cuts: if the shot must be one take, say it is continuous and unbroken.
-- Carrying FLUX.2 image habits over: hex color pinning and JSON-structured prompts are image-scheme features and are not documented for video.
+- Carrying image habits over: FLUX.2's JSON prompts and hex pinning, and FLUX 3 Image's bounding-box tables, are image-scheme features and are not documented for video.
+- Re-describing the shot in an edit: the edit tool keeps everything the prompt does not mention. A full scene description invites it to change things you meant to keep.
+- An unplaced addition in an edit: without a size and an anchor it lands small and far away.
+- A replacement line longer than the original: the clip cannot grow, so the end of the line is lost. Write to the original's length.
+- Asking for speech in a silent clip: the edit tool keeps the source's audio, and a silent source stays silent.
+- Stacking a global change with other edits: do the restyle, setting or time-of-day change as its own pass and edit the result.
 
 </rules>
 
@@ -502,9 +648,9 @@ Bold kinetic title card, the word "FLUX" assembling from streaks of light on a d
 
 Trust order: official beats provider beats community. Official wins on any conflict.
 
-- Official (Black Forest Labs): [video prompting overview](https://docs.bfl.ai/guides/prompting_video_overview), [text-to-video](https://docs.bfl.ai/guides/prompting_video_text_to_video), [audio and speech](https://docs.bfl.ai/guides/prompting_video_audio), [image-to-video](https://docs.bfl.ai/guides/prompting_video_image_to_video), [camera terms](https://docs.bfl.ai/guides/prompting_video_camera_terms), [FLUX 3 Video docs](https://docs.bfl.ai/flux_3/flux3_video), [FLUX 3 Video announcement](https://bfl.ai/blog/flux-3-video), [FLUX 3 announcement](https://bfl.ai/blog/flux-3).
+- Official (Black Forest Labs): [video prompting overview](https://docs.bfl.ai/guides/prompting_video_overview), [text-to-video](https://docs.bfl.ai/guides/prompting_video_text_to_video), [audio and speech](https://docs.bfl.ai/guides/prompting_video_audio), [image-to-video](https://docs.bfl.ai/guides/prompting_video_image_to_video), [examples and cheatsheet](https://docs.bfl.ai/guides/prompting_video_camera_terms), [video editing](https://docs.bfl.ai/guides/prompting_video_editing), [FLUX 3 Video docs](https://docs.bfl.ai/flux_3/flux3_video), [FLUX Video Edit](https://docs.bfl.ai/flux_tools/flux_video_edit), [recast and continue video](https://docs.bfl.ai/cookbook/video_edit_recast_continue), [FLUX 3 Video announcement](https://bfl.ai/blog/flux-3-video), [FLUX 3 announcement](https://bfl.ai/blog/flux-3).
 - Provider: [fal FLUX 3 examples and prompting notes](https://fal.ai/learn/tools/flux-3-video-examples-prompts).
 
-Coverage note: FLUX 3 is one multimodal model, but only its video capability has shipped with prompt documentation. FLUX 3 Image and the open-weight FLUX 3 Dev are announced without prompt guidance, and the owner's image prompting guide still scopes itself to FLUX.1, FLUX.1 Kontext, and FLUX.2, so image work stays on the FLUX.2 guide. The fal article predates general availability and its stated resolutions and clip lengths are out of date; only its prompt-craft observations are used here. Structure and notation decisions are recorded in `sources/flux-3/flux-3-notation-resolution.md`.
+Coverage note: re-checked 2026-10-15. FLUX 3 Image and FLUX 3 Image Klein have shipped with their own prompting docs and their own guide. FLUX Video Edit [fast] shipped as a separate FLUX Tools product and is covered here because its prompts are video prompts; its rules come from the owner's video editing guide and product page. The "recast and continue" cookbook, despite its address, runs on FLUX 3 Video's own reference-video and continuation inputs rather than on the edit tool, and its reference-video input is shown on a preview surface while the overview still lists omni reference as coming. The text-to-video, audio, image-to-video and camera pages carry no craft change since August. The fal article predates general availability and its stated resolutions and clip lengths are out of date; only its prompt-craft observations are used here. Structure and notation decisions are recorded in `sources/flux-3/flux-3-notation-resolution.md`.
 
-Last verified: 2026-08-07.
+Last verified: 2026-10-15.

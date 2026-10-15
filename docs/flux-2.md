@@ -26,7 +26,7 @@ prompt:
   color: "associate a hex code with a specific object ('the car is #FF0000'); for a gradient give start and end colors"
   json: "FLUX.2 reads structured JSON prompts (scene, subjects, style, color_palette, lighting, camera); paste JSON or flatten it to natural language, the model reads both"
 sources:
-  official: ["https://docs.bfl.ai/guides/prompting_guide_flux2", "https://docs.bfl.ai/guides/prompting_unified_building", "https://docs.bfl.ai/flux_2/flux2_image_editing", "https://bfl.ai/models/flux-2-max", "https://bfl.ai/blog/flux-2", "https://bfl.ai/blog/flux2-klein-towards-interactive-visual-intelligence", "https://huggingface.co/black-forest-labs/FLUX.2-dev", "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B", "https://huggingface.co/black-forest-labs/FLUX.2-klein-9B", "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-4B", "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9B"]
+  official: ["https://docs.bfl.ai/guides/prompting_guide_flux2", "https://docs.bfl.ai/guides/prompting_unified_reference", "https://docs.bfl.ai/flux_2/flux2_image_editing", "https://bfl.ai/models/flux-2-max", "https://bfl.ai/blog/flux-2", "https://bfl.ai/blog/flux2-klein-towards-interactive-visual-intelligence", "https://huggingface.co/black-forest-labs/FLUX.2-dev", "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B", "https://huggingface.co/black-forest-labs/FLUX.2-klein-9B", "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-4B", "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9B"]
   provider: ["https://fal.ai/learn/devs/flux-2-prompt-guide", "https://fal.ai/learn/devs/flux-2-klein-prompt-guide", "https://fal.ai/learn/devs/flux-2-max-prompt-guide"]
   community: []
 last_verified: "2026-08-09"
@@ -41,7 +41,29 @@ last_verified: "2026-08-09"
 - Generation, editing, and multi-reference are built into every main model. FLUX.2 has no separate Kontext or Fill/Canny/Depth/Redux tool models; one model does all of it.
 - Write natural language, not keyword lists, and front-load the subject. FLUX.2 weights earlier words more heavily.
 - There is no negative prompt in the core scheme. Describe what you want, not what you want to avoid.
-- FLUX 3 is a different model on a different prompt scheme, and only its video half has shipped. For video, use the FLUX 3 Video guide; do not carry the hex-pinning and JSON rules below across to it. FLUX 3 Image is announced but unreleased, so image work stays here.
+- FLUX 3 is a different family on different prompt schemes. FLUX 3 Image (the full model and the open-weights Klein) has its own guide, as does FLUX 3 Video. Do not carry the whole-prompt JSON and text-to-image hex rules below into either: FLUX 3 Image has no JSON prompt schema and uses hex codes only in edits.
+
+</rules>
+
+## Model names and aliases
+
+| Name you may see | What it is | Guide |
+| --- | --- | --- |
+| FLUX 3 Image, `flux-3-image` | the full FLUX 3 image model, API only | FLUX 3 Image |
+| FLUX 3 Image Klein, `flux-3-image-klein` | the 5.6B open-weights FLUX 3 image model, step-distilled; also on the API | FLUX 3 Image |
+| FLUX 3 Image Klein Base, `flux-3-image-klein-base` | the undistilled Klein, open weights, for training and steering | FLUX 3 Image |
+| FLUX 3 Video, `flux-3-video` | the FLUX 3 video model | FLUX 3 Video |
+| FLUX Video Edit [fast] | a FLUX Tools video editor that takes a clip and an instruction | FLUX 3 Video |
+| FLUX.2 [klein] 4B and 9B, `flux-2-klein-*` | the small open FLUX.2 models | FLUX.2 |
+| FLUX.2 [pro], [flex], [max], [dev] | the other FLUX.2 models | FLUX.2 |
+| FLUX 3 Dev | an announced open multimodal model that has not shipped | none |
+
+<rules id="naming">
+
+- "Klein" names two unrelated model lines. FLUX.2 [klein] and FLUX 3 Image Klein share a word and nothing else: different prompt schemes, different reference notation, and opposite defaults on prompt expansion. Resolve "klein" by the family number before applying any rule.
+- FLUX 3 is not one prompt scheme. Its image models and its video model are documented and prompted separately; route by modality.
+- FLUX 3 Dev was announced as an open multimodal model and has not been released. The open FLUX 3 releases are FLUX 3 Action, a robotics model that takes no image or video prompt, and FLUX 3 Image Klein.
+- FLUX Video Edit [fast] is sold as a FLUX Tools product rather than under the FLUX 3 name. Its prompt rules sit in the FLUX 3 Video guide.
 
 </rules>
 
@@ -302,6 +324,7 @@ The scheme is shared; these are the only prompting-relevant differences.
 - Expecting negatives to work: there is no core negative prompt; describe the desired state instead.
 - Re-describing the whole scene when editing: state only the change and what to keep.
 - Under-specifying klein: with no upsampler, a vague klein prompt underperforms; write the full stack.
+- Applying these rules to FLUX 3 Image Klein: it is a different model on a different scheme that shares only the word "klein". Route it to the FLUX 3 Image guide.
 - Floating hex codes: attach every hex to a named object.
 
 </rules>
@@ -310,9 +333,9 @@ The scheme is shared; these are the only prompting-relevant differences.
 
 Trust order: official beats provider beats community. Official wins on any conflict. Two notes from reconciling sources: [max]'s grounding search (live web information) is documented on BFL's own [max] model page, though provider guides do not all expose it; and FLUX.2 has no negative prompt in the core scheme per BFL, while some hosts add one for klein.
 
-- Official (Black Forest Labs): [FLUX.2 prompting guide](https://docs.bfl.ai/guides/prompting_guide_flux2), [building a good prompt](https://docs.bfl.ai/guides/prompting_unified_building), [FLUX.2 image editing](https://docs.bfl.ai/flux_2/flux2_image_editing), [FLUX.2 max model page](https://bfl.ai/models/flux-2-max), [FLUX.2 announcement](https://bfl.ai/blog/flux-2).
+- Official (Black Forest Labs): [FLUX.2 prompting guide](https://docs.bfl.ai/guides/prompting_guide_flux2), [prompt reference, FLUX.2 model sections](https://docs.bfl.ai/guides/prompting_unified_reference), [FLUX.2 image editing](https://docs.bfl.ai/flux_2/flux2_image_editing), [FLUX.2 max model page](https://bfl.ai/models/flux-2-max), [FLUX.2 announcement](https://bfl.ai/blog/flux-2).
 - Provider: [fal FLUX.2 prompt guide](https://fal.ai/learn/devs/flux-2-prompt-guide), [fal FLUX.2 klein prompt guide](https://fal.ai/learn/devs/flux-2-klein-prompt-guide), [fal FLUX.2 max prompt guide](https://fal.ai/learn/devs/flux-2-max-prompt-guide).
 
-Coverage note: re-checked 2026-08-07 against the FLUX 3 release. The owner's image prompting guide still scopes itself to FLUX.1, FLUX.1 Kontext, and FLUX.2, and FLUX 3 Image remains announced but unreleased, so nothing in this guide changed. Only the FLUX 3 Video cross-reference was added.
+Coverage note: FLUX 3 Image shipped in October 2026, and the owner's shared prompting pages ("building a good prompt", "style, aesthetics and text", "technical parameters") were rewritten for it. FLUX.2 material survives on the FLUX.2 prompting guide and in the model-specific sections of the prompt reference, which are cited instead; the rules here were read from the earlier FLUX.2 version of those shared pages. Several examples still shown on the rewritten pages are labelled as FLUX.2 output, and nothing in this guide changed because of them.
 
 Last verified: 2026-08-09.
