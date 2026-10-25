@@ -30,6 +30,7 @@ last_verified: "2026-07-16"
 <rules id="global">
 
 - This guide covers prompt craft only. For endpoints, parameters, resolution and duration limits, and code, consult the specific provider or proxy's API docs; they differ and are out of scope here.
+- This guide covers Kling 3.0 and older. Kling 4.0 (`kling-4.0`) is prompted with a different grammar (`@` reference tokens, time-ranged beats, prose dialogue attribution) and has its own guide, Kling 4.0. Do not carry rules between the two.
 - This guide is VIDEO only. Kling also has a full image line whose models reuse the same ids (`kling-v3` and `kling-v3-omni` each name both a video model and an image model, told apart only by endpoint). The image line is a separate scheme and is not covered here.
 - Write natural language. There is no JSON prompt form. The two inline conventions that ARE syntax, the multi-shot form and the referent token, are described in their own sections.
 - Kling is TWO MODEL LINES, not one ladder, and the version numbers hide it. The owner states: "the Kling VIDEO 2.6 model has been upgraded to VIDEO 3.0, and the Kling VIDEO O1 model has been upgraded to VIDEO 3.0 Omni". O1 is NOT older than 2.6; it is 3.0 Omni's predecessor on a parallel line. Do not read the numbers as a ranking.
@@ -47,6 +48,8 @@ last_verified: "2026-07-16"
 </template>
 
 ## Models and when to use which
+
+Kling 4.0 is not in this family's grammar and has its own guide; the owner's own steer is that "Kling 3.0 remains useful for shorter generations, prompt-led scenes, Multi-Shot content, native audio".
 
 The prompt grammar is shared across the family, so a prompt written once mostly transfers. What changes is which layers EXIST, and a layer that does not exist fails silently rather than erroring.
 

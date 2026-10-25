@@ -185,3 +185,113 @@ is bound to an element, "it's not recommended to set the tone again in the promp
 The API example is the better model for an agent (an explicit clause costs little and the UI guide's
 silence is not a claim that drift cannot happen), but the owner never states a rule either way. Ship
 the explicit clause as the recommended technique and mark the owner as silent on whether it is required.
+
+Note added 2026-10-25: for Kling 4.0 the owner now states the rule. The 4.0 API says "For video editing,
+explicitly specify what to change and what to preserve", and the 4.0 user guide says "If other elements
+must remain unchanged, add "Keep everything else unchanged." ... Without specifying what to preserve,
+other visual elements may also change." Conflict 4 stays open for the 3.x models only.
+
+# Kling 4.0: a separate scheme, and its own adjudications
+
+Added 2026-10-25. Kling 4.0 (`kling-4.0`) got its own guide, `kling-video-4`, because it conflicts with the
+3.x grammar on nearly every rule block rather than only on capability. Evidence: `kling-official-video-4-user-guide.md`
+(web-app user guide, Oct 14 2026), `kling-api-4-0-{text-to-video,image-to-video,video-omni}.md` (API reference,
+innerText captured in a browser because the docs render client-side and firecrawl returned only the title;
+the release note's link to `/4-0/image-to-video` loads empty unless reached from `/document-api/api/video/4-0`),
+`kling-dev-model-release-4.md`, the four `kling-blog-4-*.md` posts, and FAL's `fal-kling-v4-*-llms.txt`.
+
+What differs from 3.x, and why it forced the split:
+
+| Layer | 3.x (`kling-video`) | 4.0 (`kling-video-4`) |
+| --- | --- | --- |
+| Reference token | `<<<image_1>>>`, optional, disambiguation only | `@` + id, role stated in the same sentence |
+| Shot structure | `shot n, m, words;` | multi-shot on by default, time-ranged beats |
+| Dialogue | `[Speaker, voice]: "line"` + temporal connectives | prose attribution, timed pauses, one-speaker rule |
+| Voice | bound to an element out of band, do not restate | voice input welded at the line (`using @1:`) |
+| Negatives | owner silent | minimize; "no subtitles" and "no background music" necessary |
+| Expansion | none documented | stated: short prompts expanded, clear ones followed |
+| Edit switch | imperative verb first | literal "Edit @Video1" |
+| Audio | one core theme | four layers with stated mix priority |
+
+## 4.0 conflict A: which id follows the @. RESOLVED.
+
+| Surface | Form |
+| --- | --- |
+| 4.0 API (all three pages) | `@image_1`, `@video_1`, `@element_1`, voice `@1`: "assign it an id and use @id to reference it in the prompt" |
+| 4.0 web-app user guide | `@Image1`, `@Video1`, `@Element1`: "Assets are automatically numbered in upload order"; examples drift to `@Video 1`, `@image1`, "Image Node_23" |
+| FAL v4 | `@Image1`, `@Video1`, `@Element1`, positional per type |
+
+One mechanism: `@` followed by whatever id the input carries on that host. The owner API's ids are
+caller-assigned strings (the voice example uses `"id": "1"`), so assigning `Image1` there reproduces the
+web-app numbering; that follows from the stated rule and is how the guide reconciles its verbatim web-app
+examples with the API. The space in `@Video 1` is web-app drift and is not taught. "Image Node_NN" is canvas
+naming and is not taught.
+
+## 4.0 conflict B: is the role optional? RESOLVED: no.
+
+3.x taught the token as an optional disambiguator. Both 4.0 surfaces state the opposite: "If a material is
+referenced without an explicit purpose, the model will infer how to use it" (API) and "If you provide only
+asset IDs without specifying their roles, the model will infer their intended use" (user guide). Taught:
+every input gets its role in the same sentence.
+
+## 4.0 conflict C: shot notation. RESOLVED.
+
+The 4.0 API has no multi-shot setting and no shot syntax; it says prompts describe "event sequences" and
+defers to the user guide: "For more details, see the Kling 4.0 User Guide." The user guide's stated template
+uses time ranges (`0-X s`, `X-Y s`, `Y s-end`) and says "Multi-shot is enabled by default". Its examples use
+nine timestamp notations; none uses `shot n, m, words;`. Taught: the template's time ranges, plus the shot
+regime declared in prose. The 3.x semicolon form is not asserted to work on 4.0.
+
+## 4.0 conflict D: negatives. RESOLVED.
+
+- API text-to-video and image-to-video: "The prompt can include positive and negative descriptions." The omni
+  page omits the sentence. The API's own keyframe example ends "Avoid abrupt cuts, distorted anatomy, and
+  unnatural motion."
+- User guide: "minimize abstract terms and negative instructions", "Negative prompts can increase the likelihood
+  of errors", "Only two types of negative instructions are truly necessary: no subtitles and no background
+  music. The model may add these by default". It also asks for exclusions for animation style, for style edits
+  and for references.
+- User guide examples: heavy negatives, a "Negative Constraints:" section, "= failed shot" closers.
+
+The API permits negatives; the user guide is the only surface with STRATEGY, and the API defers to it. Taught:
+minimize, the two necessary ones, scoped exclusions. The constraint-section style is recorded as demonstrated.
+
+## 4.0 conflict E: prompt expansion. RESOLVED.
+
+Release note, launch post and three blogs: "Kling 4.0 can expand and refine your instructions with a director's
+eye". User guide: "the model will automatically expand simple prompts by filling in the storyline, scene
+blocking, and camera movements. When the description is already sufficiently clear, the model follows it
+faithfully without adding its own interpretation." The API is silent and exposes no switch. Taught as model
+behavior with no documented switch. The web-app canvas "Agent" is a separate feature and is not this.
+
+## 4.0 conflict F: voice binding. RESOLVED on one example.
+
+The API's omni page has a `voice` input with a required id and one example: `politely says in English using @1:
+"Excuse me."` The user guide lists voice profiles as an asset type but never shows one named in a prompt. FAL
+puts `voice_id` on elements, so on FAL the voice rides an element as in 3.0. Taught: weld a voice input's token
+at the line; where a host binds voice to an element, write delivery rather than timbre. The 3.0 do-not-restate
+rule appears on no 4.0 surface and is not carried.
+
+## 4.0 conflict G: the edit switch. RESOLVED.
+
+User guide: "explicitly include "Edit @Video1" in the prompt ... Simply writing "Reference @Video1" may be
+interpreted as reference-based generation instead of editing." API edit example: "Edit @video_1. ..." Two
+user-guide examples drop the prefix ("Remove the person in the foreground from @Video1."). Taught: the stated
+prefix. The API's first omni example ("Change the color of the parrot's feathers...") is sent with a first_frame
+and a refer_image pointing at the same URL and no base_video, so it is not an edit example and is not used.
+
+## 4.0 conflict H: speech languages. RESOLVED.
+
+User guide 1.2 and section 7, launch post and blogs: "Chinese, English, Japanese, Korean, Spanish, Portuguese,
+German, French, Hindi". Release-note capability table: "... French, Indonesian, and more". Taught: the nine with
+Hindi, and the Indonesian variant noted. The 3.x silent-translation behavior is not restated for 4.0 by any
+surface and is not asserted.
+
+## 4.0 source errors left out of the guide
+
+- User guide first-and-last example: the last frame is "a finished knife" but the prompt generates "a large
+  iron sword". The guide aligns it to the knife and says so in the Why line.
+- User guide trilingual sample: "(do not use a close-up of the map)" in the 3-7 s beat against "include a
+  close-up of the map route" in CAMERA. The parenthetical is removed and the Why line says so.
+- User guide voice example: "the voice of a 15-year-old adult woman". Not used.
+- Release note: HDR and 4K listed as available in a table and "coming soon" in the body; outside prompt scope.
