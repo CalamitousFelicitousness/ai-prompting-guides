@@ -2,7 +2,7 @@
 doc: "Open-weights model specs"
 kind: reference
 scope: "models with published open weights"
-last_verified: "2026-08-29"
+last_verified: "2026-10-25"
 ---
 
 # Open-weights model specs
@@ -65,6 +65,8 @@ guide.
 | illustrious-xl-v2.0 | text-to-image | not published | not published | not published | not published | the card carries no generation settings |
 | Krea-2-Raw | text-to-image | 1024x1024 in the reference command | 52 | 3.5 | not published | 12B diffusion transformer. CFG is live here, so guidance responds and seeds vary. The owner calls Raw a finetuning base and says it is not recommended for inference; read that as a steer toward Turbo, not as a defect. Train LoRAs on Raw and run them on Turbo |
 | Krea-2-Turbo | text-to-image | 2048x2048 in the official codebase command; the SGLang example uses 1024x1024 | 8 | 0.0 | not published | 12B diffusion transformer distilled from Krea-2-Raw; the reference command also sets mu 1.15. CFG 0.0 means no classifier-free guidance, so exclusions must be phrased positively and output is more deterministic across seeds |
+| MOSS-Image-Base | text-to-image, text-rendering, layout-control, json-prompts | 1M, 1.5M or 2M total pixels at any aspect ratio, sides in multiples of 16; extrapolates from 0.25M (512x512) to 4M | 50 or more | 3 by default, 3 to 6; raise it for short prompts | flow-matching Euler, shift 5. Skip-layer guidance in two variants: standard (scale 3, from 0.01 to 1.0) or two-pass with unconditional-branch skipping at layer 22, zero-based (22, 24 and 26 all help); with it off the output looks more realistic but some details collapse | the pretrained checkpoint with no post-training or guidance distillation, kept for LoRA training with the text encoder frozen. 5B single-stream DiT, Qwen3.5-9B text encoder, FLUX.2 small VAE decoder. Text conditioning is capped at 4096 tokens. Owner negative tags: nsfw, worst quality, bad anatomy, watermark, jpeg artifact. The owner's showcase runs it at CFG 3 to 5. Apache 2.0 |
+| MOSS-Image-SFT | text-to-image, text-rendering, layout-control, json-prompts | as MOSS-Image-Base, from the user guide the SFT card defers to; the card's example renders 1024x1024 | 50 | 3 | flow-matching Euler, shift 5, unconditional-branch layer skipping at layer 22 (zero-based) | supervised fine-tune of MOSS-Image-Base on the same architecture and pipeline. Default negative prompt empty. Text conditioning is capped at 4096 tokens. Apache 2.0 |
 | noobai-xl-1.1 | text-to-image | SDXL 1024 set | 25 to 30 | 5 to 6 | Euler a | - |
 | noobai-xl-vpred-1.0 | text-to-image | SDXL 1024 set | 28 to 35 | 4 to 5 | Euler | v-prediction checkpoint; the card warns that other samplers will not work properly |
 | Qwen-Image | text-to-image | Qwen 1328 set | 50 in the reference snippet, 40 in a second one | true CFG 4.0 | not published | true CFG is a distinct knob from ordinary CFG; the reference pipeline appends ", Ultra HD, 4K, cinematic composition." to the prompt |
@@ -159,6 +161,9 @@ the cell that uses it.
   [Illustrious XL v0.1](https://huggingface.co/OnomaAIResearch/Illustrious-xl-early-release-v0),
   [Krea-2-Raw](https://huggingface.co/krea/Krea-2-Raw),
   [Krea-2-Turbo](https://huggingface.co/krea/Krea-2-Turbo),
+  [MOSS-Image-Base](https://huggingface.co/OpenMOSS-Team/MOSS-Image-Base),
+  [MOSS-Image-SFT](https://huggingface.co/OpenMOSS-Team/MOSS-Image-SFT),
+  [MOSS-Image user guide](https://github.com/OpenMOSS/MOSS-Image/blob/main/USERGUIDE.md),
   [Illustrious XL v1.0](https://huggingface.co/OnomaAIResearch/Illustrious-XL-v1.0),
   [Illustrious XL v2.0](https://huggingface.co/OnomaAIResearch/Illustrious-XL-v2.0),
   [NoobAI-XL 1.1](https://huggingface.co/Laxhar/noobai-XL-1.1),
@@ -204,4 +209,4 @@ the cell that uses it.
   [VibeVoice technical report](https://arxiv.org/abs/2508.19205)
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide)
 
-Last verified: 2026-08-29.
+Last verified: 2026-10-25.
