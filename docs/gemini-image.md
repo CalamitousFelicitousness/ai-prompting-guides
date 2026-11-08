@@ -47,7 +47,7 @@ Google ships every generative-media model under two names, and the nickname carr
 | Gemini 3.1 Flash Image | `gemini-3.1-flash-image` | Nano Banana 2 | Flash | Generalist default; best multi-reference handling and consistency |
 | Gemini 3.1 Flash Lite Image | `gemini-3.1-flash-lite-image` | Nano Banana 2 Lite | Flash Lite | Speed and scale; not built for many references or long edit chains |
 | Gemini 2.5 Flash Image | `gemini-2.5-flash-image` | Nano Banana | Flash (legacy) | Superseded; Google recommends moving to Gemini 3.1 Flash Lite Image |
-| Gemini Omni Flash | `gemini-omni-flash-preview` | none | Omni | Video output with native audio; a different prompt scheme with its own guide |
+| Gemini Omni 1.2 Flash | `gemini-omni-1.2-flash` | none | Omni | Video output with native audio; a different prompt scheme with its own guide |
 
 <rules id="naming">
 
