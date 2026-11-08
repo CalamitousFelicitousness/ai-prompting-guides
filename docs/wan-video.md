@@ -20,6 +20,8 @@ models:
   - { id: "wan2.2-fun-a14b-inp", access: "open-weights", caps: [image-to-video, first-last-frame], tier: "std", best_for: "start-and-end frame prediction on the Fun pipeline" }
   - { id: "wan-move-14b", access: "open-weights", caps: [motion-control], tier: "std", best_for: "point-level object motion drawn as trajectories on the first frame; the prompt keeps appearance and camera but never the motion" }
   - { id: "wan-dancer-14b", access: "open-weights", caps: [music-to-dance], tier: "std", best_for: "long rhythm-locked dance video driven by a music track; the prompt's job is to name the dance style" }
+  # third-party distillation (Krea, Apache 2.0); prompted with the Wan 2.1 text-to-video grammar
+  - { id: "krea-realtime-video", access: "open-weights", caps: [text-to-video, video-edit, streaming], tier: "distilled", best_for: "Krea Realtime 14B, Krea's realtime autoregressive distillation of wan2.1-t2v-14b: streams frames as they generate, takes prompt changes mid-stream, and restyles a live or recorded video. Distillation costs motion range: complex camera moves come out weak, short captions come out static, and a long stream on one prompt turns repetitive" }
   - { id: "unianimate-dit", access: "open-weights", caps: [character-animation], tier: "std", best_for: "human image animation from a pose sequence, shipped as a LoRA over Wan 2.1 image-to-video" }
   # hosted
   - { id: "wan3.0-video", access: "closed-weights", caps: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, video-edit, video-extend, native-audio], tier: "flagship", best_for: "one All-in-One model covering text, first-frame, first-and-last-frame and reference modes at once, plus documents and web pages as input, plus editing and extending a clip you already have, over durations long enough to carry a whole story rather than a beat. Audio is ON by default and there is still no negative field" }
@@ -36,7 +38,7 @@ models:
   - { id: "wan2.2-kf2v", access: "closed-weights", caps: [first-last-frame], tier: "budget", best_for: "silent interpolation between a start and an end frame" }
   - { id: "wan2.2-animate-move", access: "closed-weights", caps: [character-animation], tier: "std", best_for: "driving a character image with the motion of a reference video; takes no text prompt" }
   - { id: "wan2.2-animate-mix", access: "closed-weights", caps: [character-animation], tier: "std", best_for: "replacing the character in a video with one from an image; takes no text prompt" }
-capabilities: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, video-edit, video-extend, speech-to-video, character-animation, control-to-video, motion-control, music-to-dance, multi-shot, native-audio]
+capabilities: [text-to-video, image-to-video, first-last-frame, reference-to-video, document-to-video, video-edit, video-extend, speech-to-video, character-animation, control-to-video, motion-control, music-to-dance, multi-shot, native-audio, streaming]
 prompt:
   languages: ["en", "zh", "mixed"]
   formula: "Subject + Scene + Motion + Aesthetic control + Stylization; add Sound (hosted 2.5+) and timed Shots (hosted 2.6+) as needed. Unchanged on 3.0, where a supplied document or web page carries the CONTENT and the prompt carries the TREATMENT"
@@ -85,6 +87,7 @@ Open weights (Apache 2.0, run locally):
 - Audio-driven performance: `wan2.2-s2v-14b`. You supply the audio; the prompt describes only what is seen.
 - Character animation: `wan2.2-animate-14b`. No text prompt.
 - Control adapters and the rest of the offshoot line (Fun-Control, Fun-Control-Camera, Wan-Move, Wan-Dancer): see "Offshoots and control adapters" below. They all subtract from the prompt rather than change it.
+- Realtime streaming: `krea-realtime-video` (Krea Realtime 14B) is Krea's distillation of `wan2.1-t2v-14b` that streams frames as it generates and takes prompt changes mid-stream. Same grammar; see "Krea Realtime" below.
 
 Hosted:
 
@@ -830,6 +833,31 @@ Music-to-dance. A reference image plus a music track produces long, rhythm-locke
 
 </rules>
 
+### Krea Realtime
+
+Krea Realtime 14B (`krea-realtime-video`) is not an Alibaba release: Krea distilled `wan2.1-t2v-14b` into an autoregressive model that generates a few frames at a time, so frames stream as they finish, the prompt can change while the video runs, and a live or recorded video can be restyled on the fly. It reads prompts with the Wan 2.1 text-to-video grammar, and Wan 2.1 LoRAs load on it with their own trigger words.
+
+<rules id="krea-realtime">
+
+- Write long, detailed captions with the motion stated explicitly. The owner says it performs best that way and that simpler captions produce more static output.
+- Keep camera moves simple. The owner says it struggles with complex camera motion, a cost of the distillation.
+- A long stream on one unchanged prompt falls into repetitive motion. Keep it moving by stepping through small variations of the same prompt, which is how the owner adds variety.
+- When changing the prompt mid-stream, change one thing at a time. It favors consistency over the new prompt, so a jump to an unrelated subject ("a woman" to "a bird") often does not take; reach the new subject through intermediate prompts.
+- For video-to-video, the input video carries the motion and layout, so the prompt describes the target subject and look. A lower strength setting keeps more of the input.
+- The owner's examples pass no negative prompt; with a few-step distilled model, write the positive form instead of leaning on the Wan defect bank.
+
+</rules>
+
+<example use_case="krea-realtime-motion-caption">
+
+```text
+A red vintage convertible races down a winding snowy mountain road at dusk, its rear wheels throwing up plumes of powder on every bend while pine trees whip past on both sides. Snowflakes streak through the headlight beams and the driver leans into each turn. The camera follows from behind at a steady distance, low to the road.
+```
+
+*Why: guide-built to the owner's advice: every clause carries motion (racing, throwing up powder, whipping past, leaning), and the camera is a single steady follow rather than a compound move the distilled model renders weakly*
+
+</example>
+
 ## Sound and dialogue
 
 Hosted, Wan 2.5 and above. On the open-weights line there is no sound generated from a prompt at all; the only audio path is speech-to-video, where you supply the audio file. Do not carry this section across to a local model.
@@ -937,6 +965,7 @@ Trust order: official beats provider beats community. Official wins on any confl
 - Official (Alibaba), offshoots: [VideoX-Fun, the Fun family pipeline from Alibaba Cloud PAI](https://github.com/aigc-apps/VideoX-Fun), [Wan-Move](https://github.com/ali-vilab/Wan-Move), [UniAnimate-DiT](https://github.com/ali-vilab/UniAnimate-DiT), [Wan-Dancer](https://huggingface.co/Wan-AI/Wan-Dancer-14B). The Fun prompt conventions are read from the shipped inference scripts under `examples/wan2.2_fun/`, because the model cards do not state them.
 - Official (Wan, Alibaba), hosted: [Wan 2.7 AI video creation guide](https://alidocs.dingtalk.com/i/nodes/EpGBa2Lm8aZxe5myC99MelA2WgN7R35y), [text-to-video prompt guide](https://www.alibabacloud.com/help/en/model-studio/text-to-video-prompt), [Wan video prompts recipe](https://www.alibabacloud.com/blog/model-studio-wan-video-generation-prompts-recipe_602777), [Wan 2.6 and 2.5 prompt guide](https://www.alibabacloud.com/blog/602776), [video model comparison](https://www.alibabacloud.com/help/en/model-studio/use-video-generation), [first-and-last-frame guide](https://www.alibabacloud.com/help/en/model-studio/image-to-video-first-and-last-frames-guide).
 - Official (Wan, Alibaba), Wan 3.0: [Wan3.0 video generation API reference, Chinese](https://help.aliyun.com/zh/model-studio/wan3-video-generation-api-reference), [the same reference in English](https://help.aliyun.com/en/model-studio/wan3-video-generation-api-reference), [wan3.0-video model card](https://help.aliyun.com/zh/model-studio/wan3-0-video), [wan3.0-video-prime model card](https://help.aliyun.com/zh/model-studio/wan3-0-video-prime), [Wan3.0 launch article](https://www.alibabacloud.com/blog/wan3-0-30-second-ai-video-generation-from-any-input_603452), [Wan3.0 video generation guide, Chinese](https://help.aliyun.com/zh/model-studio/wan3-video-generation-guide), [the same guide in English](https://www.alibabacloud.com/help/en/model-studio/wan3-video-generation-guide). The guide links the owner's `wan3-pe` prompt-formatting skill as a download, in a Chinese and an English edition with the same content; the structured-request rules come from it.
+- Official (Krea), Krea Realtime 14B: [model card](https://huggingface.co/krea/krea-realtime-video), [technical blog post](https://www.krea.ai/blog/krea-realtime-14b), [inference code](https://github.com/krea-ai/realtime-video).
 - Provider: [fal Wan 2.6 prompt guide (three modes)](https://fal.ai/learn/devs/wan-2-6-prompt-guide-mastering-all-three-generation-modes), [fal Wan 2.6 developer guide](https://fal.ai/learn/devs/wan-26-developer-guide-mastering-next-generation-video-generation), [WaveSpeed Wan 3.0 reference-to-video](https://wavespeed.ai/models/alibaba/wan-3.0/reference-to-video).
 
 Coverage note: the Wan 2.7 creation guide is a single-page app whose Storyboard Control, Character Control and Prompt Recipe sections did not render when scraped. Storyboard control appears to be a multi-panel image input rather than a prompt-text construct, and remains a gap to close rather than a capability to assume. A video-side thinking mode now does exist, exposed by a provider on Wan 3.0 and recommended there for prompts carrying several references; the owner still documents none, on 3.0 or anywhere else in its video docs. Wan 3.0 has left invitational testing, and its reference now documents instruction editing and clip extension beside the original three modes. The launch article said the 2.7 editing capability would carry forward; the reference has since caught up with it, so the earlier reading of that claim as marketing was premature rather than wrong. The Chinese and English references drifted apart for a few weeks and are back in step: both now carry the Prime model, editing, extension and the prompt-rewrite switch. Where they diverge again this guide follows the Chinese one. Two owner surfaces disagree on one point: the `wan3-pe` formatter keeps total length and frame shape out of the prompt as settings, while the usage guide's sample prompts write both inline. The guide teaches the formatter's explicit rule and treats the inline form as tolerated. The extension direction words follow the Chinese meaning in both languages, so English "forward" means before the clip. Unofficial Wan 3.0 prompt guides circulate with invented syntax (an `@Image1` token form, saved character profiles, a "1080P" prompt switch); none of it appears on an owner surface. Reference and asset counts, durations, resolutions, file size and page limits are provider surface and are deliberately absent.

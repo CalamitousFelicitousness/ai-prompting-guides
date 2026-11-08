@@ -10,19 +10,19 @@ models:
   # sizes, while the open checkpoints are distinguished by Raw versus Turbo instead. Raw is the base
   # model despite the name, and Turbo is its distilled derivative.
   - { id: "Krea-2-Raw", access: "open-weights", tier: "base", caps: [text-to-image], best_for: "control and LoRA training: 52 steps at CFG 3.5, so guidance is live and seeds stay varied. The owner calls it a finetuning base and not recommended for inference, which is a steer toward Turbo rather than a defect; it is still the checkpoint to reach for when you need guidance response or off-distribution range" }
-  - { id: "Krea-2-Turbo", access: "open-weights", tier: "distilled", caps: [text-to-image], best_for: "speed and polish: 8 steps at CFG 0.0. Distillation buys the step count and a clean look, and costs guidance response and seed diversity, so it is the default for finished-looking output and the wrong tool for wrestling a stubborn prompt. Target for LoRAs trained on Raw" }
+  - { id: "Krea-2-Turbo", access: "open-weights", tier: "distilled", caps: [text-to-image, text-rendering], best_for: "speed and polish: 8 steps at CFG 0.0. Distillation buys the step count and a clean look, and costs guidance response and seed diversity, so it is the default for finished-looking output and the wrong tool for wrestling a stubborn prompt. Target for LoRAs trained on Raw" }
 capabilities: [text-to-image, style-transfer, text-rendering]
 prompt:
   languages: ["en"]
   literal_text: "for in-image words (word marks), wrap the exact words in straight double quotes and bind them to a typographic treatment and print medium (for example hand-lettered sans-serif typography reading the quoted phrase); keep strings short, it is built for word marks, not paragraphs"
-  length_strategy: "scale prose to ambition: terse one-liners work for a clean concept or named-style shot, and long multi-sentence paragraphs that enumerate subject, material, lighting, palette, background, and render technique work for complex scenes; both are first-class. Pair prompt detail with the creativity control, detailed prompt with a literal setting, short prompt with a loose one"
+  length_strategy: "scale prose to ambition: terse one-liners work for a clean concept or named-style shot, and long multi-sentence paragraphs that enumerate subject, material, lighting, palette, background, and render technique work for complex scenes; both are first-class. Pair prompt detail with the creativity control, detailed prompt with a literal setting, short prompt with a loose one. On the open checkpoints there is no creativity control, and the owner says long detailed prompts give the best results there"
   negatives: "SPLIT BY CHECKPOINT. The cloud models expose no negative-prompt field, and Turbo is run at CFG 0.0 so classifier-free guidance is off and an exclusion has nothing to push against there either: on both, describe the desired state and phrase suppression as a positive instruction (for example 'no smoothing, no retouching' to force raw skin texture), and for tighter fidelity to exactly what you wrote lower the creativity control rather than reaching for a negative. Raw is run at CFG 3.5, so guidance is live and it is the only checkpoint where steering against something can work at all"
-  auto_expand_behavior: "a built-in creativity control decides how far the model invents beyond your words; at its most literal it renders only what you wrote, at its loosest it fills in style, composition, camera, and palette; turn it down for art-directed prompts, up for short open-ended ones"
+  auto_expand_behavior: "SPLIT BY ACCESS. Hosted: a built-in creativity control decides how far the model invents beyond your words; at its most literal it renders only what you wrote, at its loosest it fills in style, composition, camera, and palette; turn it down for art-directed prompts, up for short open-ended ones. Open checkpoints: no creativity control and no built-in expansion, so the prompt is rendered as written; Krea publishes an LLM system prompt for expanding short ideas into one detailed paragraph"
 sources:
-  official: ["https://docs.krea.ai/developers/krea-2/overview", "https://www.krea.ai/blog/krea-2-image-model", "https://www.krea.ai/blog/krea-2-turbo", "https://huggingface.co/krea/Krea-2-Raw", "https://huggingface.co/krea/Krea-2-Turbo"]
+  official: ["https://www.krea.ai/docs/developers/krea-2/overview", "https://www.krea.ai/docs/user-guide/features/krea-2", "https://www.krea.ai/docs/user-guide/features/krea-2-turbo", "https://www.krea.ai/blog/krea-2-image-model", "https://www.krea.ai/blog/krea-2-turbo", "https://github.com/krea-ai/krea-2/blob/main/docs/prompting.md", "https://github.com/krea-ai/krea-2/blob/main/docs/expansion.txt", "https://huggingface.co/krea/Krea-2-Raw", "https://huggingface.co/krea/Krea-2-Turbo"]
   provider: ["https://fal.ai/learn/tools/krea-2-prompting-guide", "https://fal.ai/models/krea/v2/large/text-to-image", "https://fal.ai/models/krea/v2/medium/text-to-image", "https://wavespeed.ai/models/wavespeed-ai/krea-v2-medium-turbo/text-to-image"]
   community: []
-last_verified: "2026-08-09"
+last_verified: "2026-11-08"
 ---
 
 # Krea 2: prompting and usage guide
@@ -30,12 +30,13 @@ last_verified: "2026-08-09"
 <rules id="global">
 
 - This guide covers prompt craft only. For endpoints, parameters, limits, resolution, and pricing, consult the host's docs; they differ and are out of scope here.
-- It covers the Krea 2 family, Krea's first from-scratch foundation image model: Krea 2 Medium, Krea 2 Large, and the fast Krea 2 Medium Turbo. They share one prompt scheme, so a prompt written for one transfers to the others; they differ in aesthetic character and speed, not grammar.
+- It covers the Krea 2 family, Krea's first from-scratch foundation image model: the hosted Krea 2 Medium, Krea 2 Large, and the fast Krea 2 Medium Turbo, plus the open-weights checkpoints Krea-2-Raw and Krea-2-Turbo. They share one prompt scheme, so a prompt written for one transfers to the others; they differ in aesthetic character, speed, and which controls surround the prompt, not grammar.
+- For editing an image, combining reference content, or keeping a product or character consistent, use Krea 3, which has its own guide. Krea's own docs route aesthetic exploration with style references, moodboards, and sliders to Krea 2.
 - Write natural-language prompts: lead with the subject, then stack comma-separated render clauses (material, surface, lighting, palette, background, medium, camera). Full sentences and terse one-liners both work. No JSON and no tag-soup.
 - It is aesthetic-first. Krea 2 is built to render a chosen LOOK, not just place a subject, so describe the RENDER (material, surface quality, lighting, medium, grain), not only the subject. Naming a medium, art movement, era, print process, or director lands.
-- Style is a separable axis here: a creativity control sets how literally it follows you, and style references transfer a look from one or more images. Both are covered below.
+- Style is a separable axis on the hosted models: a creativity control sets how literally it follows you, and style references transfer a look from one or more images. Both are covered below. Run locally, the open checkpoints have neither, so the prompt carries everything.
 - It is text-to-image. Reference images supply STYLE (style transfer and moodboards), not content edits, so there is no instruction-editing section; the references section covers image inputs.
-- There is no negative-prompt field; describe the desired state and phrase exclusions positively.
+- The hosted models have no negative-prompt field, and Turbo runs without guidance; describe the desired state and phrase exclusions positively.
 
 </rules>
 
@@ -51,8 +52,10 @@ last_verified: "2026-08-09"
 
 - `krea-2-medium`: the default. Heavy post-training makes it stable and consistent across seeds. Strongest on illustration, anime, painting, concept art, and expressive artistic styles. Reach for it for repeatable, art-directed work.
 - `krea-2-large`: more than twice Medium's size with a softer post-training profile, so it is rawer, more textured, and more flexible. Strongest on photorealism and raw aesthetics (motion blur, film grain, low dynamic range) and the richest surface texture. Looser and less predictable; at its best it produces results Medium cannot match.
-- `krea-2-medium-turbo`: a fast, distilled variant of Medium for quick iteration. Same prompt grammar, and it favors shorter, cleaner prompts.
-- Pick by look, not syntax: the grammar is identical across all three. Route stable illustration and anime to Medium, raw photoreal and heavy texture to Large, and fast exploration to Turbo.
+- `krea-2-medium-turbo`: a fast, distilled variant of Medium for quick iteration. Same prompt grammar, and it favors shorter, cleaner prompts. Krea's own app and docs call this hosted tier Krea 2 Turbo and pitch it at expressive illustration, graphic and typography drafts; move a direction you like to Medium or Large for the final pass.
+- `Krea-2-Turbo` (open weights): the downloadable 8-step distilled checkpoint and the owner's pick for local inference. It shares the hosted Turbo's name, but a local run has none of the hosted controls (creativity, style references, moodboards, sliders), and it runs without guidance, so seeds converge and a prompt that fights its defaults has little to push with.
+- `Krea-2-Raw` (open weights): the undistilled base. Krea positions it for LoRA training and research and recommends Turbo for inference; it is still the only Krea 2 checkpoint where guidance responds and seeds stay varied, so reach for it when a prompt needs steering the distilled model ignores. LoRAs trained on Raw are meant to run on Turbo.
+- Pick by look, not syntax: the grammar is identical across the family. Route stable illustration and anime to Medium, raw photoreal and heavy texture to Large, fast exploration to the hosted Turbo, and local generation to the open Turbo. Route edits and reference-driven content to Krea 3.
 
 ## How the model reads prompts
 
@@ -143,6 +146,36 @@ two dancers in a dramatic dip, woman in an emerald gown leaning against an art-d
 
 </example>
 
+<example use_case="macro-photo-prose">
+
+```text
+A tiny, russet-brown harvest mouse clings to a slender diagonal branch amid vibrant green lobed leaves and small round buds. The mouse has soft textured fur, glossy black eyes, a pink nose, fine whiskers, and delicate pink paws firmly gripping the wood. In this macro photograph, an extremely shallow depth of field sharply focuses on the animal's face. The deep green background dissolves into a smooth, creamy bokeh, illuminated by soft, diffused natural lighting that highlights the intricate details of the fur and foliage.
+```
+
+*Why: an owner sample for the open Turbo checkpoint written as full sentences: subject and pose first, then each feature, the medium ("macro photograph"), the focus point, background, and light, which is the detailed-paragraph shape the expansion contract produces*
+
+</example>
+
+<example use_case="graphic-collage">
+
+```text
+vintage analog collage, central irregularly shaped snowy mountain range with a section featuring distinct wavy edges, structured within a 12x16 grid of square tiles, composition fragments the subject by alternating tiles with solid azure blue background squares, thin white grid lines, grainy paper texture, retro aesthetic of mid-century print, vibrant cyan and warm neutral tones, experimental layout, tactile quality, high-contrast graphic composition
+```
+
+*Why: an owner Turbo sample in the comma-clause form: the medium leads, then the subject, a precise layout instruction, linework, paper texture, era, and palette, each as its own clause*
+
+</example>
+
+<example use_case="retro-cel-anime">
+
+```text
+1990s vintage anime style cel animation, densely packed crowd of teenagers in summer uniforms, central boy with short black hair raising a clenched right fist, squinting one eye with a determined expression, wearing a white short-sleeve shirt and solid green necktie, surrounding students looking in various directions, girls in white sailor blouses with green striped collars and neckerchiefs, light blue skirts and trousers, tightly framed medium shot, flat shading, soft muted retro.
+```
+
+*Why: an owner Turbo sample that names the era and the animation process up front, then gives the central figure his own attributes and action before the crowd, so the grouping rule keeps each subject's details attached to it*
+
+</example>
+
 ## Creativity and expansion
 
 <rules id="creativity">
@@ -152,8 +185,35 @@ two dancers in a dramatic dip, woman in an emerald gown leaning against an art-d
 - At its loosest, it takes meaningful creative liberty with style and mood. Use that for short, open-ended prompts where you want the model to surprise you.
 - Pair the control with the prompt: a detailed brief wants the literal end for fidelity; a sparse brief wants the loose end so the model supplies the missing aesthetics. A long, fully specified prompt at a loose setting will drift.
 - The literal end is your "stay on brief" tool, and it stands in for the negative prompt the model does not have.
+- The creativity control is a hosted feature. The open checkpoints render the prompt as written, with no expansion step, so on them a short prompt stays short. The owner says minimal prompts still give good images there and long detailed prompts give the best ones.
 
 </rules>
+
+### Expanding a prompt for the open checkpoints
+
+<rules id="expansion">
+
+- To turn a short idea into the detailed paragraph the open checkpoints reward, have an LLM expand it. Krea publishes a system prompt for this; its rules are the expansion contract below.
+- Keep every subject, action, color, and spatial relationship from the request. Add no new objects, props, characters, or animals the request does not imply.
+- Group each subject with its own attributes and actions, and describe poses, interactions, and layout in grounded terms.
+- Choose one style, medium, framing, and lighting and commit to it; the reasoning behind the choice stays out of the final prompt.
+- Do not invent specific clothing, colors, materials, or scene details the request does not support.
+- If the request is already detailed, polish it lightly and keep its phrasing instead of expanding it.
+- Honor a requested medium ("photo of", "illustration of", "3D render of") rather than switching to an easier one.
+- Spell out any requested text and wrap the words in double quotes.
+- Output one paragraph: no bullets, no JSON, no markdown.
+
+</rules>
+
+<example use_case="open-checkpoint-minimal">
+
+```text
+immense rocket launch exhaust as seen from extremely close up
+```
+
+*Why: the owner's own Turbo sample at its shortest, showing that a bare subject and a camera distance are enough for a usable image even without the hosted expansion step; add render clauses when the look matters*
+
+</example>
 
 ## Style transfer, references, and moodboards
 
@@ -181,7 +241,7 @@ people running. extremely exaggerated wide camera angle, exaggerated shapes. ris
 
 <rules id="text">
 
-- Put the exact in-image words in straight double quotes and bind them to a typographic treatment and print medium ("hand-lettered sans-serif typography reading ...").
+- Put the exact in-image words in straight double quotes and bind them to a typographic treatment and print medium ("hand-lettered sans-serif typography reading ..."). The owner gives the same quoting rule for the open checkpoints.
 - Name the lettering style so the type matches the art (hand-lettered, sans-serif, the print process); the word mark then renders as part of the composition, not pasted on.
 - Keep it short. Krea 2 is built for word marks and short phrases, not paragraphs; for long copy, leave space and set the type in an editor.
 
@@ -201,9 +261,10 @@ bold graphic poster illustration, stylized horse with an elongated fluid body an
 
 <rules id="negatives">
 
-- Krea 2 has no negative-prompt field. State the desired state instead of forbidding its opposite: "matte finish" rather than "not glossy", "seamless white backdrop" rather than "no clutter".
+- The hosted models have no negative-prompt field. State the desired state instead of forbidding its opposite: "matte finish" rather than "not glossy", "seamless white backdrop" rather than "no clutter".
 - Phrase suppression as a positive instruction. "No smoothing, no retouching" works because it tells the model to keep texture, not because it is a negative field.
-- For fidelity to exactly what you wrote, lower the creativity control rather than reaching for a negative; that is the model's real "stay on brief" lever.
+- For fidelity to exactly what you wrote on a hosted model, lower the creativity control rather than reaching for a negative; that is the model's real "stay on brief" lever.
+- The open Turbo checkpoint runs without guidance, so a negative prompt has nothing to push against there either; write the positive form. Raw runs with live guidance and is the one checkpoint where a negative prompt, where the local tool offers one, can steer anything.
 
 </rules>
 
@@ -216,7 +277,9 @@ bold graphic poster illustration, stylized horse with an elongated fluid body an
 - Fighting the AI look without specifying the alternative: to get raw, ask for grain, low dynamic range, and "no retouching"; the model will not add rawness you did not request.
 - Wrong variant: route stable illustration and anime to Medium, raw photoreal and heavy texture to Large, fast iteration to Turbo.
 - High creativity on a fully specified prompt: it drifts; lower the control when the brief is already complete.
-- Expecting content editing: references transfer STYLE, not content; Krea 2 is text-to-image, not an instruction editor.
+- Expecting content editing: references transfer STYLE, not content; Krea 2 is text-to-image, not an instruction editor. Use Krea 3 for edits.
+- Short prompt on an open checkpoint: there is no creativity control to fill the gaps; write the detail or expand the idea with an LLM under the expansion contract.
+- Fighting the open Turbo's defaults: it runs without guidance, so rephrase or move to Raw instead of repeating the same request louder.
 - Long in-image text: only short word marks render cleanly; quote them and keep them short.
 - Loose multi-reference blends: when stacking references, say what each contributes, or the blend muddies.
 
@@ -224,9 +287,9 @@ bold graphic poster illustration, stylized horse with an elongated fluid body an
 
 ## Sources
 
-Trust order: official beats provider beats community, and official wins on any conflict. The owner (Krea) and the providers (FAL, WaveSpeed) agree on the prompt grammar; the providers add worked examples that the guide draws on.
+Trust order: official beats provider beats community, and official wins on any conflict. The owner (Krea) and the providers (FAL, WaveSpeed) agree on the prompt grammar; the providers add worked examples that the guide draws on. The open-checkpoint rules and samples come from Krea's own repository for the open release.
 
-- Official (Krea): [Krea 2 API overview](https://docs.krea.ai/developers/krea-2/overview), [Introducing Krea 2 blog](https://www.krea.ai/blog/krea-2-image-model).
+- Official (Krea): [Krea 2 API overview](https://www.krea.ai/docs/developers/krea-2/overview), [Krea 2 user guide](https://www.krea.ai/docs/user-guide/features/krea-2), [Krea 2 Turbo user guide](https://www.krea.ai/docs/user-guide/features/krea-2-turbo), [Introducing Krea 2 blog](https://www.krea.ai/blog/krea-2-image-model), [Krea 2 Turbo blog](https://www.krea.ai/blog/krea-2-turbo), [open-release prompting guide](https://github.com/krea-ai/krea-2/blob/main/docs/prompting.md), [open-release expansion prompt](https://github.com/krea-ai/krea-2/blob/main/docs/expansion.txt), [Krea-2-Raw model card](https://huggingface.co/krea/Krea-2-Raw), [Krea-2-Turbo model card](https://huggingface.co/krea/Krea-2-Turbo).
 - Provider: [FAL Krea 2 prompting guide](https://fal.ai/learn/tools/krea-2-prompting-guide), [FAL Krea 2 Large](https://fal.ai/models/krea/v2/large/text-to-image), [FAL Krea 2 Medium](https://fal.ai/models/krea/v2/medium/text-to-image), [WaveSpeed Krea 2 Medium Turbo](https://wavespeed.ai/models/wavespeed-ai/krea-v2-medium-turbo/text-to-image).
 
-Last verified: 2026-08-09.
+Last verified: 2026-11-08.
