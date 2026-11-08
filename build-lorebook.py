@@ -161,6 +161,8 @@ CATALOG = {
     "42": ("moss-image", "IMG", "MOSS-Image",
            ["moss-image", "moss image", "moss_image", "mossimage", "moss-image-sft",
             "moss-image-base", "openmoss image"]),
+    "45": ("p-h3-image", "IMG", "P-H3-Image",
+           ["p-h3-image", "p h3 image", "ph3 image", "p-h3", "ph3image"]),
     "44": ("pruna-video", "VID", "Pruna Video",
            ["pruna", "pruna ai", "pruna-video", "p-video", "p video", "p-video-2", "p video 2",
             "p-video-edit", "p-video-replace", "p-video-animate", "p-video-avatar",
@@ -229,7 +231,7 @@ ROUTER = """<promptgen_model_index>
 
 Prompting guides available here. Naming a model loads its full guide.
 
-IMAGE: Anima, FIBO, FLUX.2, FLUX 3 Image, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, MOSS-Image, Qwen-Image, Seedream, Wan Image, Z-Image
+IMAGE: Anima, FIBO, FLUX.2, FLUX 3 Image, Gemini Image (Nano Banana), GPT Image, Grok Imagine Image, HiDream-O1, HunyuanImage, Ideogram 4, Illustrious / NoobAI, Kling Image, Krea 2, MOSS-Image, P-H3-Image, Qwen-Image, Seedream, Wan Image, Z-Image
 VIDEO: FLUX 3 Video, Gemini Omni, HappyHorse, Kling 4.0, Kling Video, LTX, MiniMax H3, Pruna Video, Seedance, Wan Video
 AUDIO: ACE-Step, ElevenLabs Music and Sound Effects, ElevenLabs Speech, Gemini TTS, MiniMax Music, MiniMax Speech, OmniVoice, Qwen TTS, Seed Speech, Stable Audio, VibeVoice
 
@@ -241,7 +243,7 @@ Several vendors ship more than one guide, so name the model and the modality:
 - ByteDance has three: Seedream for image, Seedance for video, Seed Speech for speech. Seed Audio, which generates dialogue, score and sound effects from one descriptive prompt, is a different model with no guide here; do not prompt it with Seed Speech rules.
 - Kuaishou has three: Kling Image for image, and two video guides split by version. Kling Video covers Kling 3.0, 3.0 Omni, 3.0 Turbo, O1, 2.6 and 2.5 Turbo; Kling 4.0 covers kling-4.0 and kling-4.0-flash. The two video guides use different grammars, so a Kling video request without a version is ambiguous: ask which version.
 - MiniMax has three, one per modality. MiniMax Speech is audio where the prompt IS the script to be spoken, MiniMax Music is audio where the prompt is a style description beside a separate lyrics field, and MiniMax H3 is video. Naming the vendor alone is never enough here.
-- Pruna sells other vendors' models under its own names, so route a Pruna name by what it is, not by the vendor. P-Video-2-Pro and P-Video-2-Pro-Reference are MiniMax H3: use the MiniMax H3 guide. P-Image-Ideogram reads Ideogram 4.0's caption schema: use the Ideogram 4 guide. P-Video, P-Video-2, and the Edit, Replace, Animate and Avatar models, including P-Video-2-Pro-Avatar, use the Pruna Video guide. P-Image and P-Image-Edit have no guide here.
+- Pruna sells other vendors' models under its own names, so route a Pruna name by what it is, not by the vendor. P-Video-2-Pro and P-Video-2-Pro-Reference are MiniMax H3: use the MiniMax H3 guide. P-Image-Ideogram reads Ideogram 4.0's caption schema: use the Ideogram 4 guide. P-Video, P-Video-2, and the Edit, Replace, Animate and Avatar models, including P-Video-2-Pro-Avatar, use the Pruna Video guide. P-H3-Image is Pruna's open-weights still-image fine-tune of MiniMax-H3 with its own guide; do not prompt it with the MiniMax H3 video rules. P-Image and P-Image-Edit have no guide here.
 
 FIBO's native prompt is a JSON caption, not prose, but most FIBO hosts take a short prose brief and write the caption themselves. Check which input the host takes before writing JSON for it.
 

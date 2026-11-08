@@ -2,7 +2,7 @@
 doc: "Open-weights model specs"
 kind: reference
 scope: "models with published open weights"
-last_verified: "2026-10-25"
+last_verified: "2026-11-08"
 ---
 
 # Open-weights model specs
@@ -77,6 +77,7 @@ guide.
 | MOSS-Image-SFT | text-to-image, text-rendering, layout-control, json-prompts | as MOSS-Image-Base, from the user guide the SFT card defers to; the card's example renders 1024x1024 | 50 | 3 | flow-matching Euler, shift 5, unconditional-branch layer skipping at layer 22 (zero-based) | supervised fine-tune of MOSS-Image-Base on the same architecture and pipeline. Default negative prompt empty. Text conditioning is capped at 4096 tokens. Apache 2.0 |
 | noobai-xl-1.1 | text-to-image | SDXL 1024 set | 25 to 30 | 5 to 6 | Euler a | - |
 | noobai-xl-vpred-1.0 | text-to-image | SDXL 1024 set | 28 to 35 | 4 to 5 | Euler | v-prediction checkpoint; the card warns that other samplers will not work properly |
+| P-H3-Image | text-to-image, image-edit, multi-image-reference, text-rendering | 8 MP for text-to-image: 2912x2912 (default), 3360x2496, 2496x3360, 3552x2368, 2368x3552, 3872x2176, 2176x3872; edits at 4 or 8 MP (2048x2048 class at 4 MP), generated at Picture 1's size unless set; sides in multiples of 32. 2 and 4 MP work but show more face, hand and detail artifacts | 8 | none; guidance-distilled, no guider, negative prompt or guidance scale | euler over the checkpoint's own 8-step sigma grid (ComfyUI: ManualSigmas with ModelSamplingMiniMaxH3 at 1.0 for both shifts) | fine-tune of MiniMax-H3, DMD-distilled from 50 steps; 4B distilled text encoder; bundled Qwen3.5-9B prompt upsampler on by default, greedy decoding. int8 stays close to bf16; w4a8 can change small details and composition. Also ships as a LoRA for MiniMax-H3's FL2VA transformer at strength 1.0. MiniMax H3 Community License |
 | Qwen-Image | text-to-image | Qwen 1328 set | 50 in the reference snippet, 40 in a second one | true CFG 4.0 | not published | true CFG is a distinct knob from ordinary CFG; the reference pipeline appends ", Ultra HD, 4K, cinematic composition." to the prompt |
 | Qwen-Image-2.1 | image-edit, multi-image-edit, text-rendering, text-to-image, transparency | 2048x2048 default; owner ratio set 2400x1792 (4:3), 1792x2400 (3:4), 2528x1696 (3:2), 1696x2528 (2:3), 2752x1536 (16:9), 1536x2752 (9:16) | 40 | not published | flow matching, Euler discrete with dynamic shifting | generation and editing in one checkpoint; 32-layer single-stream DiT with a 7B visual generation component, Qwen3-VL 8B text encoder, 64-channel RGBA VAE at 16x spatial compression. Qwen Research License, not Apache 2.0 |
 | Qwen-Image-2512 | text-to-image | not published; the Qwen-Image card states the Qwen 1328 set for the original release | not published | not published | not published | the previous open text-to-image foundation |
@@ -180,6 +181,8 @@ the cell that uses it.
   [MOSS-Image-Base](https://huggingface.co/OpenMOSS-Team/MOSS-Image-Base),
   [MOSS-Image-SFT](https://huggingface.co/OpenMOSS-Team/MOSS-Image-SFT),
   [MOSS-Image user guide](https://github.com/OpenMOSS/MOSS-Image/blob/main/USERGUIDE.md),
+  [P-H3-Image](https://huggingface.co/PrunaAI/P-H3-Image),
+  [P-H3-Image-Comfy](https://huggingface.co/PrunaAI/P-H3-Image-Comfy),
   [Illustrious XL v1.0](https://huggingface.co/OnomaAIResearch/Illustrious-XL-v1.0),
   [Illustrious XL v2.0](https://huggingface.co/OnomaAIResearch/Illustrious-XL-v2.0),
   [NoobAI-XL 1.1](https://huggingface.co/Laxhar/noobai-XL-1.1),
@@ -225,4 +228,4 @@ the cell that uses it.
   [VibeVoice technical report](https://arxiv.org/abs/2508.19205)
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide)
 
-Last verified: 2026-10-25.
+Last verified: 2026-11-08.
