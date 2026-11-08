@@ -2,25 +2,31 @@
 guide: "Seedream (image)"
 prompt_scheme: "seedream"
 models:
-  - { id: "seedream-5.0-pro",  access: "closed-weights", tier: "flagship", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, reasoning, grounded-edit, layer-separation], best_for: "high-density infographics and dense multi-block text, grounded editing driven by marks drawn on the input image, layer separation into editable assets, native multilingual text, and the most photoreal lighting, material, and skin rendering in the family" }
-  - { id: "seedream-5.0-lite", access: "closed-weights", tier: "budget",   caps: [text-to-image, image-edit, multi-image-reference, text-rendering, reasoning], best_for: "reasoning-aware and knowledge-driven images (diagrams, charts, multi-subject scenes it plans), plus current-events and real-world-referential content via online search" }
-  - { id: "seedream-4.5",      access: "closed-weights", tier: "std",      caps: [text-to-image, image-edit, multi-image-reference, text-rendering], best_for: "designer-grade typography and posters, dense legible text, and faithful deep editing that tracks every reference detail" }
-  - { id: "seedream-4.0",      access: "closed-weights", tier: "base",     caps: [text-to-image, image-edit, multi-image-reference, text-rendering], best_for: "fast, layout-aware generation and multi-panel series when speed matters more than ultimate polish" }
-capabilities: [text-to-image, image-edit, multi-image-reference, text-rendering, reasoning, grounded-edit, layer-separation]
+  # seedream-5.5 is PROVISIONAL: hosted by WaveSpeed, described by BytePlus Lumina preview pages, not yet documented by ByteDance or BytePlus ModelArk.
+  - { id: "seedream-5.5",       access: "closed-weights", tier: "flagship",  caps: [text-to-image, image-edit, multi-image-reference, text-rendering, layer-separation, transparency], best_for: "provisional: the announced successor to 5.0 Pro, aimed at photographic realism, cut-out subjects on transparent backgrounds, and edits that hold steady over many rounds; whether it reads marks or coordinate tags is undocumented" }
+  # BytePlus lists the 5.0 tiers as Dola Seedream 5.0 pro / flash (dola-seedream-5-0-pro-260628, dola-seedream-5-0-flash-260915); the YYMMDD suffix is part of the id there.
+  - { id: "seedream-5.0-pro",   access: "closed-weights", tier: "flagship",  caps: [text-to-image, image-edit, multi-image-reference, text-rendering, reasoning, grounded-edit, layer-separation], best_for: "high-density infographics and dense multi-block text, grounded editing driven by marks drawn on the input image or coordinate tags in the prompt, layer separation into editable assets, native multilingual text, and the most photoreal lighting, material, and skin rendering in the documented family" }
+  - { id: "seedream-5.0-flash", access: "closed-weights", tier: "distilled", caps: [text-to-image, image-edit, multi-image-reference, text-rendering, reasoning, grounded-edit, layer-separation], best_for: "the 5.0 Pro feature set (marks, coordinate tags, layer separation, multilingual text) faster and cheaper, for latency- and cost-sensitive work; the owner reserves the highest image quality for Pro" }
+  - { id: "seedream-5.0-lite",  access: "closed-weights", tier: "budget",    caps: [text-to-image, image-edit, multi-image-reference, text-rendering, reasoning], best_for: "reasoning-aware and knowledge-driven images (diagrams, charts, multi-subject scenes it plans), plus current-events and real-world-referential content via online search" }
+  - { id: "seedream-4.5",       access: "closed-weights", tier: "std",       caps: [text-to-image, image-edit, multi-image-reference, text-rendering], best_for: "designer-grade typography and posters, dense legible text, and faithful deep editing that tracks every reference detail" }
+  - { id: "seedream-4.0",       access: "closed-weights", tier: "base",      caps: [text-to-image, image-edit, multi-image-reference, text-rendering], best_for: "fast, layout-aware generation and multi-panel series when speed matters more than ultimate polish" }
+capabilities: [text-to-image, image-edit, multi-image-reference, text-rendering, reasoning, grounded-edit, layer-separation, transparency]
 prompt:
-  languages: ["en", "zh", "fr", "de", "ru", "ja", "ko", "es", "ar", "mixed"]
+  languages: ["en", "zh", "ru", "ar", "fil", "th", "tr", "ko", "ms", "es", "pt", "id", "fr", "de", "vi", "ja", "mixed"]
   formula: "Subject + Action + Environment, plus optional Style, Color, Lighting, Composition; order the description Subject, Setting, Style, Lighting, Technical"
   literal_text: "wrap the exact in-image words in double quotes, give them a surface and a described style; short display text is reliable on every tier, and 5.0 Pro is the tier that holds dense multi-block text"
   length_strategy: "on 4.5 and 5.0-lite, concise and precise beats ornate, and over-long prompts get details dropped or contradicted; 5.0 Pro inverts this for information design, absorbing long structured art direction because it plans the layout before it draws"
   auto_expand_behavior: "prompt optimization is on by default on many hosts; write the full prompt yourself when you need tight control"
   negatives: "generate first, then add exclusions only to fix an artifact you actually see; where a host exposes no negative field, fold the exclusion into the positive prompt"
   references: "name multiple inputs positionally as Image 1, Image 2, and so on (some hosts use Figure 1, Figure 2); say what to take from which; a single reference can be named descriptively"
-  annotations: "5.0 Pro reads marks drawn on the input image; address each marked region by the color of its box or lasso as a bulleted list (for example 'Red frame: ...'), write each bullet as content rather than a command, and close with an explicit line holding everything else unchanged"
+  annotations: "5.0 Pro and Flash read marks drawn on the input image; address each marked region by the color of its box or lasso as a bulleted list (for example 'Red frame: ...'), write each bullet as content rather than a command, ask for the marks to be removed, and close with an explicit line holding everything else unchanged"
+  coordinates: "5.0 Pro and Flash read <point>x y</point> and <bbox>x1 y1 x2 y2</bbox> in the prompt, on a 0-999 grid per image with 0 0 at the top-left; name the image beside each tag and the target inside each box, and never guess coordinates you have not measured"
+  transparency: "5.5 (provisional): a transparent background is a host request setting, not prompt text; in the prompt, describe the subject on its own ('isolated') and nothing behind it"
 sources:
-  official: ["https://seed.bytedance.com/en/seedream5_0_pro", "https://seed.bytedance.com/en/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro", "https://docs.byteplus.com/en/docs/ModelArk/1829186", "https://docs.byteplus.com/en/docs/ModelArk/1824121", "https://seed.bytedance.com/en/seedream5_0_lite", "https://seed.bytedance.com/en/seedream4_5"]
-  provider: ["https://fal.ai/seedream-5.0", "https://fal.ai/models/bytedance/seedream/v5/pro/edit", "https://fal.ai/learn/devs/seedream-v4-5-prompt-guide", "https://blog.fal.ai/seedream-5-0-lite-prompting-guide/", "https://fal.ai/learn/tools/how-to-use-seedream-5-lite", "https://wavespeed.ai/blog/posts/seedream-4-0-to-5-0-complete-tutorial-image-generation-editing/"]
+  official: ["https://docs.byteplus.com/en/docs/modelark/seedream-5-0-pro", "https://docs.byteplus.com/en/docs/modelark/seedream-5-0-pro-editing-guide", "https://docs.byteplus.com/en/docs/modelark/model-release-announcement", "https://seed.bytedance.com/en/seedream5_0_pro", "https://seed.bytedance.com/en/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro", "https://docs.byteplus.com/en/docs/ModelArk/1829186", "https://docs.byteplus.com/en/docs/ModelArk/1824121", "https://seed.bytedance.com/en/seedream5_0_lite", "https://seed.bytedance.com/en/seedream4_5", "https://ai.byteplus.com/lumina/en/image/what-is-seedream-5-5"]
+  provider: ["https://wavespeed.ai/models/bytedance/seedream-v5.5", "https://wavespeed.ai/models/bytedance/seedream-v5.5/edit", "https://wavespeed.ai/models/bytedance/seedream-v5.5/layer-decomposition", "https://fal.ai/seedream-5.0", "https://fal.ai/models/bytedance/seedream/v5/pro/edit", "https://fal.ai/learn/devs/seedream-v4-5-prompt-guide", "https://blog.fal.ai/seedream-5-0-lite-prompting-guide/", "https://fal.ai/learn/tools/how-to-use-seedream-5-lite", "https://wavespeed.ai/blog/posts/seedream-4-0-to-5-0-complete-tutorial-image-generation-editing/"]
   community: []
-last_verified: "2026-07-13"
+last_verified: "2026-11-08"
 ---
 
 # Seedream: prompting and usage guide
@@ -28,10 +34,10 @@ last_verified: "2026-07-13"
 <rules id="global">
 
 - This guide covers prompt craft only. For endpoints, parameters, resolution limits, image counts, and code, consult the specific provider or proxy's API docs; they differ and are out of scope here.
-- It covers the Seedream image family: seedream-5.0-pro, seedream-5.0-lite, and seedream-4.5, which share one prompt scheme (seedream-4.0 is the predecessor and prompts the same way). A prompt written for one tier transfers to the others: 5.0 Pro adds capability, not new syntax.
+- It covers the Seedream image family: seedream-5.0-pro, seedream-5.0-flash, seedream-5.0-lite, and seedream-4.5, which share one prompt scheme (seedream-4.0 is the predecessor and prompts the same way), plus provisional notes on seedream-5.5. A prompt written for one tier transfers to the others: 5.0 Pro and Flash add capability, not new syntax.
 - Seedream is an image model. For video, ByteDance's separate model is Seedance, which is out of scope here.
 - Write prompts as coherent natural language, not comma-separated tags. Seedream reads intent, and since 4.5 it gets the intended image with less description, so be concise and precise rather than ornate.
-- Three things are reachable only on 5.0 Pro, and only if you write for them: marks drawn on the input image (grounded editing), layer separation, and native prompting in languages beyond English and Chinese. On the older tiers, describe the region in words instead.
+- Three things are reachable only on 5.0 Pro and 5.0 Flash, and only if you write for them: grounded editing (marks drawn on the input image, or coordinate tags in the prompt), layer separation, and native prompting in languages beyond English and Chinese. On the older tiers, describe the region in words instead.
 
 </rules>
 
@@ -45,14 +51,18 @@ last_verified: "2026-07-13"
 
 ## Models and when to use which
 
-All four share one prompt scheme; a prompt written for one transfers to the others. Pick by the job.
+All of them share one prompt scheme; a prompt written for one transfers to the others. Pick by the job.
 
-- `seedream-5.0-pro`: the flagship. It plans the layout before it renders, which makes it the tier for high-density infographics, dense multi-block text, posters, and UI mockups. It is also the only tier that reads marks drawn on the input image, separates an image into editable layers, and prompts natively in languages beyond English and Chinese. Its lighting, material, and skin rendering are the most photoreal in the family.
+- `seedream-5.5` (provisional): the announced successor to 5.0 Pro. WaveSpeed hosts it, but ByteDance has not documented it, and BytePlus's own Lumina pages still describe it as a preview. BytePlus says prompts carry over from 5.0 Pro unchanged. Its stated aims are photographic realism, subjects cut out onto transparent backgrounds, and edits that hold steady over many rounds. Until ByteDance documents it, use 5.0 Pro or Flash for anything that relies on marks, coordinate tags, or a documented behavior (see Seedream 5.5: provisional notes).
+- `seedream-5.0-pro`: the documented flagship. It plans the layout before it renders, which makes it the tier for high-density infographics, dense multi-block text, posters, and UI mockups. With 5.0 Flash, it is one of two tiers that read marks drawn on the input image and coordinate tags in the prompt, separate an image into editable layers, and prompt natively in languages beyond English and Chinese. Its lighting, material, and skin rendering are the most photoreal in the documented family.
+- `seedream-5.0-flash`: the same feature set as 5.0 Pro (marks, coordinate tags, layer separation, multilingual text) at higher speed and lower cost. The owner reserves the highest image quality for Pro, so move to Pro for the densest information design or the most demanding photoreal finish; prompts transfer unchanged in either direction.
 - `seedream-5.0-lite`: reasons about the scene before it renders, so it plans multi-subject composition, spatial relations, and physical plausibility, and it can pull on real-world knowledge and online search. Use it for knowledge-driven and reasoning-heavy images (diagrams, charts, multi-subject scenes with per-subject attributes) and for current or real-world-referential content.
 - `seedream-4.5`: the typography and deep-editing workhorse. Strongest at legible dense text, posters, logos, and faithful editing that tracks every detail across reference images. Prefer it when visual polish and text fidelity matter most.
 - `seedream-4.0`: the predecessor, fast and layout-aware. Use it for quick multi-panel series and social assets when speed outweighs ultimate quality.
 
-Rule of thumb: for dense information design, annotation-driven editing, multilingual text, or maximum photoreal polish, reach for 5.0 Pro. For knowledge-driven or topical work where online search earns its keep, reach for 5.0-lite. 4.5 remains a strong typography and deep-editing workhorse.
+Rule of thumb: for dense information design, annotation-driven editing, multilingual text, or maximum photoreal polish, reach for 5.0 Pro, or 5.0 Flash when speed and cost matter more than the last step of quality. For knowledge-driven or topical work where online search earns its keep, reach for 5.0-lite. 4.5 remains a strong typography and deep-editing workhorse.
+
+Naming: BytePlus lists the 5.0 tiers as Dola Seedream 5.0 pro and Dola Seedream 5.0 flash, with date-suffixed IDs (`dola-seedream-5-0-pro-260628`, `dola-seedream-5-0-flash-260915`). Dola is the BytePlus product prefix; it is the same model as Seedream 5.0 Pro or Flash on any other host.
 
 ## How the model reads prompts
 
@@ -60,7 +70,7 @@ Rule of thumb: for dense information design, annotation-driven editing, multilin
 - Concise and precise beats ornate. Since 4.5 the model needs less description and no longer washes colors out, so stacking flowery vocabulary hurts more than it helps. Spend words on substance.
 - Front-load what matters. Earlier words carry more weight, so lead with the subject and the elements you care most about.
 - It rewards the right length. A few focused sentences is the sweet spot. Very long prompts scatter the model's attention and start to contradict themselves, so it drops or fumbles details.
-- 5.0 Pro is the exception to that length rule, but only for information design. It parses intent and plans the layout before it draws, so long, structured art direction that enumerates every panel of an infographic or UI holds together instead of scattering. Keep prompts tight on the older tiers; spend the words on 5.0 Pro when the image is information-dense.
+- 5.0 Pro (and Flash, which shares its feature set) is the exception to that length rule, but only for information design. It parses intent and plans the layout before it draws, so long, structured art direction that enumerates every panel of an infographic or UI holds together instead of scattering. Keep prompts tight on the older tiers; spend the words on 5.0 Pro when the image is information-dense.
 - 5.0-lite reasons before it draws. It evaluates the whole scene first, so you can assign attributes per subject and trust it to plan the layout (see the reasoning layer below).
 - It is bilingual, and language sets culture. English, Chinese, and mixed prompts all work. Writing the prompt in a scene's native language shifts the whole atmosphere (architecture, light, mood) to match that culture, not just the words.
 - Prompt optimization is on by default. A terse prompt is auto-expanded, which adds variety but takes control away. Write the full prompt when the output must match your intent.
@@ -141,7 +151,7 @@ A dark-navy tech-conference poster. The all-caps title reads "AI SUMMIT 2026" in
 
 ## Multilingual prompting and text
 
-5.0 Pro takes prompts natively in a wide set of languages, French, German, Russian, Japanese, Korean, Spanish, and Arabic alongside Chinese and English, and renders each script by its own typographic rules. Earlier tiers are effectively English and Chinese only.
+5.0 Pro and 5.0 Flash generate text natively in Russian, Arabic, Filipino, Thai, Turkish, Korean, Malay, Spanish, Portuguese, Indonesian, French, German, Vietnamese, and Japanese alongside Chinese and English, and render each script by its own typographic rules. Earlier tiers are effectively English and Chinese only.
 
 <rules id="multilingual">
 
@@ -318,20 +328,30 @@ Keep the model's pose and the shape of the dress unchanged. Change the dress mat
 
 ## Interactive precision editing
 
-Language is good at saying what to generate and bad at saying where to edit. On 5.0 Pro you stop describing the location in words and mark it on the image instead: the model reads point, box, and lasso selections, freehand doodles, and handwritten annotations, and turns them into deterministic local edits. This is the biggest prompt-craft change the Pro tier brings, and it is the one thing that does not degrade gracefully onto 4.5 or 5.0-lite.
+Language is good at saying what to generate and bad at saying where to edit. On 5.0 Pro and 5.0 Flash you stop describing the location in words and point at it instead, in one of two forms: a mark drawn on the input image (point, box, and lasso selections, freehand doodles, handwritten annotations) named in the prompt, or a coordinate tag written into the prompt itself. Both turn into deterministic local edits. This is the biggest prompt-craft change the 5.0 tiers bring, and it is the one thing that does not degrade gracefully onto 4.5 or 5.0-lite.
 
 <rules id="grounded-edit">
 
 - Mark the region on the input image, then address it by the color of its mark. Draw colored boxes or lassoes and write one bullet per region ("Red frame: ...", "Green frame: ..."). Each element stays inside its own boundary and stays independent of the others.
 - Write each bullet as the content you want there, not as a command. "Red frame: oversized blue cat head gazing at bubbles, no body" beats "put a cat in the red box". Fold any exclusion into the same bullet.
+- Ask for the marks to be removed. The owner's own sketch edit says "Remove all sketch lines"; without it, drawn lines can survive into the result.
 - Close with an explicit hold line. End the instruction with "Keep everything else the exact same". This is NAME WHAT MOVES, PIN WHAT STAYS applied to a marked-up image.
 - Point at the marks rather than transcribing them when the image already carries handwriting: "Perform precise edits based on the 6 purple boxes and handwritten annotations in the original image."
 - A rough sketch is a valid control signal. Hand the model a crude layout of blocks and lines, tell it to render the finished piece, and tell it to preserve the sketch's layout structure.
 - Trust it to find blank space. Instructions like "complete all the questions above and write out the calculation steps" work because the model locates each answer's slot on its own.
 - For color, give a hex code or point at a swatch in another image, and pair it with a material to swap surface and color in one instruction.
-- Ask for layer separation in plain text. Name the layers you expect back and ask for the background to be restored where the subject was covering it, which is what makes the layers usable as assets.
 
 </rules>
+
+<example use_case="freeform-sketch-marks">
+
+```text
+Edit the image based on the hand-drawn sketch. Add a stack of realistic magazines or art books in the marked area at the lower left, and add a ceramic cup of coffee with a saucer in the marked area on the right. Remove all sketch lines. Keep the composition unchanged. Let the newly added objects blend naturally into the original scene.
+```
+
+*Why: the owner's freeform-marking example. Each addition is welded to a marked area by its position, the sketch lines are removed explicitly, and the composition is pinned*
+
+</example>
 
 <example use_case="colored-frame-regions">
 
@@ -378,13 +398,69 @@ Using the material from Image 1 and the color swatch from Image 2, modify the so
 
 </example>
 
-<example use_case="layer-separation">
+### Coordinate tags
+
+The second form puts the location in the prompt as text. Coordinates are normalized per image on a 0-999 grid: the top-left corner is 0 0 and the bottom-right is 999 999, whatever the image's pixel size. Scale a pixel position by 1000 over the image's width (for x) or height (for y) and round.
+
+<rules id="coordinates">
+
+- `<point>x y</point>` marks a spot and lets the model decide how far the edit extends. `<bbox>x1 y1 x2 y2</bbox>` gives the top-left and bottom-right corners and fixes the size of the edit area.
+- Put the image name beside every tag ("in Image 1 <bbox>...</bbox>"). For a cross-image move, give one box in the source image and one in the target.
+- When a box covers several subjects, name the one to edit ("the person on the left", "the cat wearing a hat").
+- Box what must not change, too, and say so ("keep the area ... unchanged"). A held box is a stronger pin than a closing sentence alone.
+- Only use coordinates you have actually measured, from a user's selection in an editing UI or a vision model's detection. Never estimate them from a description; without real coordinates, describe the location in words or use a drawn mark.
+
+</rules>
+
+<example use_case="point-and-box-edits">
 
 ```text
-Separate this poster into independent editable layers: the text, the main subject, the background, and the environmental decorations. Inpaint the background where the subject was covering it, and keep each layer transparent where nothing sits
+Replace the person on the left in Image 1 <bbox>120 180 640 760</bbox> with a robot, replace the object at <point>520 460</point> in Image 1 with a crown, and keep the area Image 1 <bbox>700 120 920 360</bbox> unchanged.
 ```
 
-*Why: layers are requested in plain language, each expected layer is named, and asking for the occluded background to be restored is what turns the output into reusable assets rather than flat cutouts*
+*Why: assembled from the owner's coordinate examples. The box names its target because it may hold more than one person, the point leaves the extent to the model, and a second box pins the area that must not move*
+
+</example>
+
+<example use_case="cross-image-placement">
+
+```text
+Place the subject from Image 1 <bbox>179 283 796 986</bbox> at the position in Image 2 <bbox>118 331 933 871</bbox>.
+```
+
+*Why: the owner's cross-image example. One box selects what to take, the other says where it lands, and each tag sits beside the name of its image, ONE ROLE PER INPUT expressed as coordinates*
+
+</example>
+
+### Layer separation
+
+5.0 Pro and Flash split one image into a base image plus separate transparent layers. On the BytePlus API this is its own request mode, and the prompt in that mode is optional: without one, the model picks out the main subjects, text, background, and decorations itself. Where a host has no separate mode, the launch blog's plain-text request ("Separate this poster into independent editable layers: ...") is the tolerated form.
+
+<rules id="layers">
+
+- To control the split, name the elements to separate in plain language and say where they are when that disambiguates.
+- Alternatively, mark the elements on the input with doodles or selections, or give each region as a `<bbox>` tag.
+- Layers come back as separate images, so edit one afterwards with an ordinary edit prompt on that layer alone.
+
+</rules>
+
+<example use_case="layer-separation-named">
+
+```text
+Decompose the person, title text, and decorative icon in the lower-right corner.
+```
+
+*Why: the owner's named-element form. It lists only what to lift into layers and gives a location for the one element that might be ambiguous*
+
+</example>
+
+<example use_case="layer-separation-regions">
+
+```text
+Perform precise layer separation on the image. The text regions to separate are at <bbox>180 64 812 198</bbox>, <bbox>757 210 939 280</bbox>, and <bbox>178 714 826 810</bbox>; the parrot is at <bbox>347 305 642 997</bbox>.
+```
+
+*Why: the owner's coordinate form, shortened. Each region gets its own box and the subject is named beside its box, so the split follows the measured regions instead of the model's guess*
 
 </example>
 
@@ -504,6 +580,31 @@ Seedream reads a JSON object as the prompt: give each element its own descriptio
 
 </example>
 
+## Seedream 5.5: provisional notes
+
+Everything in this section comes from WaveSpeed's hosted model pages and BytePlus's Lumina preview pages, not from ByteDance documentation. Treat it as provisional and re-verify once ByteDance documents the model.
+
+<rules id="seedream-5-5">
+
+- Write 5.5 prompts the same way as 5.0 Pro prompts. BytePlus says the structure that works on 5.0 Pro applies directly, with no new prompt syntax.
+- For a cut-out subject on a transparent background, the transparency itself is a request setting on the host, not prompt text. In the prompt, describe the subject on its own ("isolated") and leave out any scene behind it, or a background may be painted in.
+- Edit in small rounds. 5.5 is built to keep unedited areas steady across many rounds, so refine with one change per turn instead of regenerating. Still say what changes and what stays in every edit.
+- Hosts can run layer separation as its own request; its optional prompt names the layers, objects, or grouping to split, as on 5.0 Pro.
+- BytePlus's preview pages target small text and broader language coverage, naming Thai, Japanese, and Russian. Proofread small type anyway.
+- Nothing yet documents whether 5.5 reads drawn marks or coordinate tags. Route marked and coordinate edits to 5.0 Pro or Flash until it does.
+
+</rules>
+
+<example use_case="transparent-sticker">
+
+```text
+A cute cartoon fox mascot sticker waving, thick white outline, flat vector style, isolated
+```
+
+*Why: a WaveSpeed 5.5 example for transparent output. The subject stands alone with no scene described, so nothing competes with the cut-out once the host's transparent-background setting is on*
+
+</example>
+
 ## Negative prompts and exclusions
 
 <rules id="negatives">
@@ -526,17 +627,20 @@ Seedream reads a JSON object as the prompt: give each element its own descriptio
 - Dense tiny text: split long or small text into short labeled strings; expect display-size text, not paragraphs.
 - Vague edits: name the target element and avoid pronouns; state what stays unchanged.
 - Multi-subject without positions: assign each subject a place, or the model guesses.
-- Assuming Pro behavior on the older tiers: annotation-driven editing, layer separation, and non-English prompting are 5.0 Pro capabilities. On 4.5 and 5.0-lite, describe the region in words instead of marking it.
-- Expecting pixel-perfect output from 5.0 Pro: the owner states that fine-grained text rendering and pixel-level editing consistency are still imperfect. Proofread dense small type and inspect the seams of a local edit.
+- Assuming 5.0 behavior on the older tiers: annotation-driven editing, coordinate tags, layer separation, and non-English prompting are 5.0 Pro and Flash capabilities. On 4.5 and 5.0-lite, describe the region in words instead of marking it.
+- Expecting pixel-perfect output from 5.0 Pro or Flash: the owner states that fine-grained text rendering and pixel-level editing consistency are still imperfect. Proofread dense small type and inspect the seams of a local edit.
 - Marking regions but not pinning the rest: an annotated edit without a closing "keep everything else the exact same" invites drift outside the marked areas.
+- Leaving the marks in: ask for sketch lines, boxes, and doodles to be removed, or they can survive into the result.
+- Guessed coordinates: write a `<point>` or `<bbox>` only from a measured selection; an estimated box edits the wrong region with full confidence.
+- Treating 5.5 as documented: its notes here are provider-sourced, so keep marked and coordinate edits on 5.0 Pro or Flash until ByteDance documents 5.5.
 
 </rules>
 
 ## Sources
 
-Trust order: official beats provider beats community. Official wins on any conflict. Seedream 5.0 Pro shipped on 2026-07-08, which settles the earlier owner-versus-provider question about the full 5.0: it is released, and 5.0-lite remains the separate reasoning and online-search tier. Providers disagree with each other on how many languages 5.0 Pro speaks (claims range from "over ten" to "a dozen" to "14"), so this guide names the attested languages and prints no count. WaveSpeed's 5.0 Pro page is autogenerated boilerplate that omits the Pro capabilities entirely; it is not a source of model-specific prompt craft.
+Trust order: official beats provider beats community. Official wins on any conflict. Seedream 5.0 Pro shipped on 2026-07-08 and 5.0 Flash on 2026-09-15; 5.0-lite remains the separate reasoning and online-search tier. The BytePlus 5.0 tutorial now lists the languages 5.0 Pro and Flash render natively, which settles the earlier provider disagreement over the count. That tutorial runs layer separation as its own request mode with an optional prompt, and the launch blog's plain-text request is kept as a tolerated form for hosts without that mode. Seedream 5.5 is provider-sourced: WaveSpeed hosts it, while ByteDance Seed has no page for it, the ModelArk release list does not include it, and BytePlus Lumina describes it as a preview. The 5.5 notes are provisional until ByteDance documents the model. WaveSpeed's 5.0 Pro page is autogenerated boilerplate that omits the Pro capabilities entirely; it is not a source of model-specific prompt craft.
 
-- Official (ByteDance, BytePlus): [Seedream 5.0 Pro model page](https://seed.bytedance.com/en/seedream5_0_pro), [Seedream 5.0 Pro launch blog](https://seed.bytedance.com/en/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro), [Seedream 4.0-4.5 prompt guide](https://docs.byteplus.com/en/docs/ModelArk/1829186), [Seedream 4.0-5.0 tutorial](https://docs.byteplus.com/en/docs/ModelArk/1824121), [Seedream 5.0-lite model page](https://seed.bytedance.com/en/seedream5_0_lite), [Seedream 4.5 model page](https://seed.bytedance.com/en/seedream4_5).
-- Provider: [fal Seedream 5.0 overview](https://fal.ai/seedream-5.0), [fal Seedream 5.0 Pro edit](https://fal.ai/models/bytedance/seedream/v5/pro/edit), [fal Seedream 4.5 prompt guide](https://fal.ai/learn/devs/seedream-v4-5-prompt-guide), [fal Seedream 5.0-lite prompting guide](https://blog.fal.ai/seedream-5-0-lite-prompting-guide/), [fal how to use Seedream 5.0-lite](https://fal.ai/learn/tools/how-to-use-seedream-5-lite), [WaveSpeed Seedream 4.0 to 5.0 tutorial](https://wavespeed.ai/blog/posts/seedream-4-0-to-5-0-complete-tutorial-image-generation-editing/).
+- Official (ByteDance, BytePlus): [Seedream 5.0 pro / flash tutorial](https://docs.byteplus.com/en/docs/modelark/seedream-5-0-pro), [Seedream 5.0 pro / flash interactive editing guide](https://docs.byteplus.com/en/docs/modelark/seedream-5-0-pro-editing-guide), [ModelArk model release announcements](https://docs.byteplus.com/en/docs/modelark/model-release-announcement), [Seedream 5.0 Pro model page](https://seed.bytedance.com/en/seedream5_0_pro), [Seedream 5.0 Pro launch blog](https://seed.bytedance.com/en/blog/beyond-generation-it-understands-design-introducing-seedream-5-0-pro), [Seedream 4.0-4.5 prompt guide](https://docs.byteplus.com/en/docs/ModelArk/1829186), [Seedream 4.0-5.0 tutorial](https://docs.byteplus.com/en/docs/ModelArk/1824121), [Seedream 5.0-lite model page](https://seed.bytedance.com/en/seedream5_0_lite), [Seedream 4.5 model page](https://seed.bytedance.com/en/seedream4_5), [BytePlus Lumina: what is Seedream 5.5](https://ai.byteplus.com/lumina/en/image/what-is-seedream-5-5) (preview).
+- Provider: [WaveSpeed Seedream 5.5](https://wavespeed.ai/models/bytedance/seedream-v5.5), [WaveSpeed Seedream 5.5 edit](https://wavespeed.ai/models/bytedance/seedream-v5.5/edit), [WaveSpeed Seedream 5.5 layer decomposition](https://wavespeed.ai/models/bytedance/seedream-v5.5/layer-decomposition), [fal Seedream 5.0 overview](https://fal.ai/seedream-5.0), [fal Seedream 5.0 Pro edit](https://fal.ai/models/bytedance/seedream/v5/pro/edit), [fal Seedream 4.5 prompt guide](https://fal.ai/learn/devs/seedream-v4-5-prompt-guide), [fal Seedream 5.0-lite prompting guide](https://blog.fal.ai/seedream-5-0-lite-prompting-guide/), [fal how to use Seedream 5.0-lite](https://fal.ai/learn/tools/how-to-use-seedream-5-lite), [WaveSpeed Seedream 4.0 to 5.0 tutorial](https://wavespeed.ai/blog/posts/seedream-4-0-to-5-0-complete-tutorial-image-generation-editing/).
 
-Last verified: 2026-07-13.
+Last verified: 2026-11-08.
