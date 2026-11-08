@@ -130,3 +130,59 @@ Providers. WaveSpeed's GPT Image 2.5 guide and fal's GPT Image 2.5 page agree wi
 prompting point: quote exact copy, say what must not change, one change per edit round. Their workflow
 suggestion to draft on Flare and test the settled prompt on Sunburst is compatible with the owner's
 order and is not taught separately.
+
+## 8. GPT Image 2.6 joins the family (2026-11-08)
+
+`gpt-image-2.6-sunburst` and `gpt-image-2.6-flare` shipped on 2026-11-04 and join this guide on the same
+grounds as 2.5. The owner's image prompting guide now carries a 2.6 tab ahead of the 2.5 tab, and the two
+tabs' prompting fundamentals are word for word the same apart from one sentence about the new setting's
+default. The migration workflow again keeps "the same prompt, reference images, size, quality, and output
+format" for the first comparison.
+
+Tiers. 2.6 Sunburst is `flagship` ("the base model for workflows that need more detail or precise edits")
+and 2.6 Flare is `distilled` ("the smaller model for workflows where speed matters most"), on the same
+mapping section 7 used. The 2.5 pair drops to `legacy`: it is not deprecated, but the owner's migration
+table moves each one to its 2.6 counterpart first. `gpt-image-1` leaves the model list because the
+deprecations page records its shutdown on 2026-10-23; the guide keeps one line saying so. `gpt-image-1.5`
+and `gpt-image-1-mini` stay, now with 2.6 replacements listed for their 2026-12-01 shutdown.
+
+Stale owner text. The image generation guide's "Earlier GPT Image models" block still says "For new
+integrations, use one of the GPT Image 2.5 models". The prompting guide's model table and the deprecations
+replacements both point at 2.6, and they are the newer surfaces, so the guide follows them.
+
+Markup attribution. One sentence in the image generation guide says markup edits work "with supported GPT
+Image 2.5 and 2.6 models". The 2.6 model pages, the launch post ("Image markup, already available in
+ChatGPT, comes to the API") and fal ("New on the API in 2.6") all present it as a 2.6 feature, and the 2.5
+model pages mention none of the four new features. The guide attributes markup to 2.6 and carries the cap
+on the 2.6 rows only. Re-check if the owner documents 2.5 support anywhere else.
+
+Planning setting. `complexity` is a request field and is handled the way section 5 handled quality: the
+values and the default stay out as enums, the owner's word is used once so a reader can map it, and the
+technique is kept. Three owner surfaces agree on the technique: more planning helps an open prompt and
+crowded or dense scenes, a fully specified design gains little, focused edits start low because more
+planning can introduce unwanted changes, and layout problems are tuned with planning while small-text
+legibility is tuned with quality. The owner's API default of the highest level is kept as context for the
+edit-drift rule, without naming the value. fal's sample code sends the same control as `reasoning_effort`;
+the guide notes the alias only in its coverage note.
+
+GIF prompts: owner API form governs. The prompting guide's form (describe subject, motion and loop; a
+starting pose to return to; say whether the camera moves) is canonical. The launch post prints two partner
+prompts (OpenArt) that ask for a still sprite sheet, a fixed grid of sequential frames that something
+outside the model assembles into a GIF. That is a different pipeline and a blog demonstration, so it is
+recorded as a tolerated variant: the guide shows one, labels it as a still-image technique, and tells the
+reader not to send it to a host that returns a GIF. Frame count and frame timing are request settings and
+stay out.
+
+SVG. The output format is a request setting, generation only. The owner sends the same Field & Flour prompt
+for SVG and transparent raster output, so the guide teaches the logo prompt and says the prompt does not
+change for SVG. The API's note that the SVG is traced from a reference image rendered at the requested
+quality is pipeline detail, not prompt craft, and stays out.
+
+Provider divergence: one change per turn. fal's 2.6 showcase edits pack several numbered changes into one
+instruction ("Keep everything exactly the same ... except: (1) ... (2) ..."). The owner's 2.6 fundamentals
+still say to "request one change, and repeat the details to preserve" per turn. Owner governs; the numbered
+form is recorded here and not taught. The rest of fal's examples agree with the owner: inputs referred to
+by index with one role each, and long, specific preserve lists.
+
+Kept out as launch claims or provider surface: the "50% faster" and "as little as six seconds" figures,
+pricing, size rules, frame limits, and the markup file constraints (dimensions, pixel and file-size caps).
