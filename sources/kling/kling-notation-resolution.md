@@ -295,3 +295,91 @@ surface and is not asserted.
   close-up of the map route" in CAMERA. The parenthetical is removed and the Why line says so.
 - User guide voice example: "the voice of a 15-year-old adult woman". Not used.
 - Release note: HDR and 4K listed as available in a table and "coming soon" in the body; outside prompt scope.
+
+# Kling 4.0 recheck after GA, and Kling 4.0 Flash (2026-11-08)
+
+Owner timeline: the API was preview on 2026-10-25, "fully available" 2026-10-28, and "Kling 4.0 Flash API Is
+Now Available" 2026-11-04 (API changelog). The API site now carries its own "Kling 4.0 Video User Manual"
+(`usage-guide/kling-4-0`, also titled the Kling 4.0 & Kling 4.0 Flash User Guide) and "Kling 4.0 Video Prompt
+Guide" (`usage-guide/kling-4-0-prompt-guide`). Both rank above the web-app quickstart guide under the house
+rule (the API surface governs). Scrapes: `kling-api-4-0-*-2026-11.md`, `kling-api-update-notice-2026-11.md`,
+`kling-capability-map-video-2026-11.md`. Fetched in Playwright as before; `browser_evaluate` with a
+`filename` saves a JSON-quoted string, unquoted afterwards with `jq -r .`.
+
+## Flash gets a model row
+
+`kling-4.0-flash`, tier `distilled`. Its I2V endpoint is "first-frame-to-video generation only"; its omni
+`contents` take prompt, first_frame, refer_image, feature_video, base_video and elements but no voice;
+the API manual marks First and Last Frames, Multiple Keyframes, Voice Cloning and Element-Bound Voice "Not
+supported". Caps therefore drop first-last-frame, multi-keyframe and voice-reference. The old guide line
+"publishes no API id for it" was true on 2026-10-25 and is replaced. No Flash-specific prompt guidance exists
+on any surface; the guide's "describe the voice in words" for Flash is an inference from the missing inputs.
+
+## Revisions to the October adjudications
+
+- Conflict A (id after @): unchanged. The reference text still says @image_1; the API prompt guide's own
+  examples assign Image1/Video1/Element1 and write @Image1. Both caller-assigned. Recorded in the guide.
+- Conflict D (negatives): REVISED. The API manual drops "Negative prompts can increase the likelihood of
+  errors" and "Only two types ... are truly necessary". It says "Prefer positive descriptions", requires
+  explicit "no subtitles"/"no background music" when unwanted, warns against "over-generalized negative
+  statements" and a "long register of items unrelated to the task", and every new example ends with one
+  short task-specific exclusion line. Taught: positive first, the two defaults, one short targeted line.
+- Conflict F (voice binding): EXTENDED. The API manual's jacket example sends one voice ("id": "speaker")
+  and never writes @speaker; "Uploaded voice profiles are only used to assign a voice to a speaker". Taught:
+  one voice with one speaker binds without a token; several speakers keep the "using @1" form, which the
+  current omni reference still shows.
+- Conflict G (edit switch): REVISED IN FRAMING. API manual 2.2: "Kling uses the API endpoint path and the
+  asset type declared in contents to determine how each input is used" (base_video = edit, feature_video =
+  reference). API manual 8.4 still says "explicitly write "Edit"". Owner examples sent with base_video drop
+  the prefix ("Remove the foreground person from @Video1."). Taught: write "Edit @Video1" anyway; the word is
+  no longer described as the sole mechanism.
+- Creative recreation: REVISED. The API manual sends "Replace the subject in @Video1 with @Image1. Keep
+  everything else unchanged." with the source as base_video, i.e. the edit path. The guide no longer calls it
+  the reference-mode cousin of editing.
+- Source error "map close-up": REVERSED. The October guide removed "(do not use a close-up of the map)" and
+  kept the CAMERA block's map close-up. The owner's API-manual rewrite of the same sample ends "No map
+  close-ups." The guide now uses that compact rewrite (numbered turns, two-shots) instead of the long one.
+- Source error "knife/sword": FIXED BY OWNER. The API manual's first-and-last example reads "a blacksmith
+  forging raw material into a finished piece ... Ensure the final frame matches the last frame reference."
+  The guide uses it verbatim with ids @start/@end.
+- TERM TRAP: the API manual writes "subject" where the web-app guide wrote "element" ("Replace the subject
+  with the car in @Image1"). Camera-donor example switched to "subject"; the trap note kept for web-app quotes.
+
+## New owner craft taught
+
+- Omni routes by prompt intent ("classifies the intent of the user's prompt and routes it"); T2V and keyframes
+  do not.
+- Keyframe order must match mention order (API I2V reference); token-in-header middle frames ("0-2.1s
+  @Image1"); "Hard cuts between poses; no morphing" for keyframes as shots; typed keyframes carry their role
+  (the street-escape example never names @start/@end); first frame plus motion video in the omni mode.
+- Storyboards: "state that you want finished-frame output".
+- Per-shot headers "Shot 1 (5s): Use @Image1 for composition."; named beats; "observable actions"; lateral
+  camera moves; "Hold completely still"; "Exactly N" counts.
+- Edits: the three-part template, numbered replacements with preservation first, gestures fitted to source
+  timing, one-subject restyle pinning "exact size, frame-by-frame position, movement and timing".
+- Prompt-stated duration and aspect wording updated to the current reference text.
+- Keep-original-audio host setting: then the audio block does not steer and no voice reference is allowed.
+
+## fal's Kling 4.0 prompting guide (read for the first time)
+
+Its 60 examples contain no `@` token at all ("Video 1", "the supplied images", with a space), several pool
+references without per-input roles, use "Edit Video 1" or no edit word, never write the two default
+exclusions, and read like captions of finished clips ("X or Y" hedges). Not used as grammar or as examples.
+Its tips section is taught where it agrees with the owner, attributed to fal: what a motion reference governs
+(performer, camera, both), camera move as start/path/end with no incompatible pairs, a final hold and
+"remove an event" when rushed, only the speaker's lips moving and listener behavior, removals covering the
+whole passage plus carried items and shadow, contact shadows on replacements, non-subtitle text placement
+and readable duration. Its "timestamps are creative direction, not frame-exact" caveat is a provider note,
+not taught.
+
+## Element and Voice Management pages
+
+Asset-creation API surface (three-view images, video elements of 3-8 s, voice clips of 5-30 s, tags, binding
+a voice to an element). Nothing prompt-side beyond what the guide already says: an element with a bound
+voice speaks with it, so write delivery, not timbre.
+
+## Kept out
+
+Durations (4.0 and Flash), resolutions, HDR/4K "coming soon", aspect enums, prompt character and token caps,
+reference and element counts, file sizes, request paths, content type names, billing, video extension
+"coming soon".

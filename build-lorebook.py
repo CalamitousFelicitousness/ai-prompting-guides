@@ -156,7 +156,7 @@ CATALOG = {
             "byteplus tts", "volcengine tts", "豆包语音", "豆包语音合成", "声音复刻"]),
     "41": ("kling-video-4", "VID", "Kling 4.0",
            ["kling-video-4", "kling video 4", "kling 4", "kling-4", "kling4", "kling v4",
-            "kling-v4", "kling 4.0 flash", "可灵4", "可灵 4"]),
+            "kling-v4", "kling 4.0 flash", "kling-4.0-flash", "kling 4 flash", "可灵4", "可灵 4"]),
     "42": ("moss-image", "IMG", "MOSS-Image",
            ["moss-image", "moss image", "moss_image", "mossimage", "moss-image-sft",
             "moss-image-base", "openmoss image"]),
@@ -234,7 +234,7 @@ Several vendors ship more than one guide, so name the model and the modality:
 - Google has three: Gemini Image for image, Gemini Omni for video, Gemini TTS for speech.
 - ElevenLabs has two: ElevenLabs Speech, and ElevenLabs Music and Sound Effects. A speech audio tag and a music prompt are different schemes and the tags do not cross over.
 - ByteDance has three: Seedream for image, Seedance for video, Seed Speech for speech. Seed Audio, which generates dialogue, score and sound effects from one descriptive prompt, is a different model with no guide here; do not prompt it with Seed Speech rules.
-- Kuaishou has three: Kling Image for image, and two video guides split by version. Kling Video covers Kling 3.0, 3.0 Omni, 3.0 Turbo, O1, 2.6 and 2.5 Turbo; Kling 4.0 covers kling-4.0 and its Flash mode. The two video guides use different grammars, so a Kling video request without a version is ambiguous: ask which version.
+- Kuaishou has three: Kling Image for image, and two video guides split by version. Kling Video covers Kling 3.0, 3.0 Omni, 3.0 Turbo, O1, 2.6 and 2.5 Turbo; Kling 4.0 covers kling-4.0 and kling-4.0-flash. The two video guides use different grammars, so a Kling video request without a version is ambiguous: ask which version.
 - MiniMax has three, one per modality. MiniMax Speech is audio where the prompt IS the script to be spoken, MiniMax Music is audio where the prompt is a style description beside a separate lyrics field, and MiniMax H3 is video. Naming the vendor alone is never enough here.
 
 FIBO's native prompt is a JSON caption, not prose, but most FIBO hosts take a short prose brief and write the caption themselves. Check which input the host takes before writing JSON for it.
