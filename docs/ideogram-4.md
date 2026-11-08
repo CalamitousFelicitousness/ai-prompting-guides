@@ -55,6 +55,8 @@ Write a JSON caption. The minimal valid form is a high-level summary plus a `com
 
 There is one open-weight model, Ideogram 4, shipped in nf4 and fp8 quantizations that prompt identically; pick a build for speed or memory, not for prompting. It is strongest at typography and graphic design (posters, logos, signage, packaging, multi-line and multi-font text) and at precise layout, and it is a capable photoreal and illustration model across styles. The hosted Ideogram product adds editing and character tools that are not part of this release.
 
+Pruna sells P-Image-Ideogram, "built in collaboration with Ideogram", and states it "uses the same Ideogram 4.0 structured-caption schema"; prompt it with this guide. It adds thinking levels on Pruna's side, and Pruna's advice is to match the level to the prompt: higher levels suit detailed prompts and "on vague prompts, High can add unrequested detail", while lower levels suit simple ones. Its prompt upsampling is the magic-prompt step described below; Pruna says to switch it off "when the spec is final".
+
 ## How the model reads prompts
 
 - It reads structured JSON captions natively. Training and inference share one format: each training caption exhaustively describes everything in the image, so the model expects the same exhaustive, relationship-dense input.
@@ -276,5 +278,6 @@ Trust order: official beats provider beats community. Official wins on any confl
 
 - Official (Ideogram): [prompting guide (docs/prompting.md)](https://github.com/ideogram-oss/ideogram4/blob/main/docs/prompting.md), [HF model card](https://huggingface.co/ideogram-ai/ideogram-4-fp8), [Ideogram 4.0 blog](https://ideogram.ai/blog/ideogram-4.0/), [GitHub repo](https://github.com/ideogram-oss/ideogram4).
 - Provider: [fal Ideogram V4](https://fal.ai/models/ideogram/v4).
+- Hosted under another name: Pruna's [P-Image-Ideogram](https://docs.pruna.ai/en/stable/docs_pruna_endpoints/performance_models/p-image-ideogram.html) page, which states the shared Ideogram 4.0 caption schema.
 
 Last verified: 2026-06-05.

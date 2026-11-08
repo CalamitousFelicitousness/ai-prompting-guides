@@ -58,6 +58,8 @@ H3 ships as two checkpoints covering five modes. They share one prompt grammar: 
 
 Pick by what you are holding. No media means T2VA. An image that literally is the first or last frame of the shot means a keyframe mode. Anything you are treating as a reference rather than a frame, a face to preserve, a clip to match, a track to sing along to, or footage to edit, means Ref2VA.
 
+Pruna sells H3 under its own names and states the base in its docs: P-Video-2-Pro covers text and first- and last-frame work (the keyframe checkpoint's modes), and P-Video-2-Pro-Reference covers reference work. Prompt both with this guide. Pruna documents prose prompts for them, and its prompt upsampler, on by default, plays the part of the rewrite stage described below. P-Video-2-Pro-Avatar is also built on H3 but runs a separate talking-video pipeline with its own fields; it is covered in the Pruna Video guide.
+
 ## Two ways to prompt H3
 
 This is the thing to understand before writing anything. H3 generates from a structured representation, not from your prose. A preprocessing stage sits in front of the model, reads whatever you sent, and rewrites it into that representation. So there are two places to stand.
@@ -526,6 +528,7 @@ Trust order: official beats provider beats community. Official wins on any confl
 The owner and the providers appear to disagree, and the disagreement resolves rather than needing a ruling: they describe two layers of one pipeline. The owner's guides document the structured representation the model consumes, while provider examples are free-form prose that a preprocessing stage rewrites into that representation. Both are valid inputs at different points, so this guide teaches both and keeps owner notation canonical for the structured layer. Provider label styles such as plain "Image 1" are recorded as free-form conventions, not as structured syntax. Where a provider's endpoint layout offers fewer modes than the owner documents, this guide follows the owner, since endpoint availability is a provider fact while the prompt shape is not. The full adjudication is in `sources/minimax-h3/minimax-h3-notation-resolution.md`.
 
 - Official (MiniMax): [MiniMax-H3 on GitHub](https://github.com/MiniMax-AI/MiniMax-H3), [MiniMax-H3 on HuggingFace](https://huggingface.co/MiniMaxAI/MiniMax-H3), [base prompt writing guide (T2VA, I2VA, FL2VA, L2VA)](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md), [full-reference prompt writing guide (Ref2VA)](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md).
+- Hosted under another name: Pruna's [P-Video-2-Pro](https://docs.pruna.ai/en/stable/docs_pruna_endpoints/performance_models/p-video-2-pro.html) and [P-Video-2-Pro-Reference](https://docs.pruna.ai/en/stable/docs_pruna_endpoints/performance_models/p-video-2-pro-reference.html) pages, which state "based on MiniMax H3".
 - Provider: [fal MiniMax H3 prompting guide](https://fal.ai/learn/devs/minimax-h3-prompting-guide), [fal MiniMax H3 overview](https://fal.ai/minimax-h3), [WaveSpeed MiniMax H3 guide](https://wavespeed.ai/blog/video-model-access/minimax-h3-api-guide/).
 
 Last verified: 2026-08-06.
