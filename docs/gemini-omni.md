@@ -45,21 +45,23 @@ last_verified: "2026-11-08"
 
 ## Model names and aliases
 
-Google ships every generative-media model under two names, and the nickname carries less information than the official name. Prefer the Gemini name and translate the nickname on sight. Omni has no nickname; the rest of the table is here because the image models are the ones most often confused with it.
+Google ships most generative-media models under two names: an official Gemini name and a nickname that carries less information. Prefer the official name and translate the nickname on sight. From Nano Banana 2.1 on, the nickname is the official name, so read the table rather than assuming the pattern. Omni has no nickname; the rest of the table is here because the image models are the ones most often confused with it.
 
-| Gemini name (preferred) | Gemini API model ID | Nickname | Line | Role |
+| Official name (preferred) | Gemini API model ID | Nickname | Line | Role |
 | --- | --- | --- | --- | --- |
 | Gemini Omni 1.2 Flash | `gemini-omni-1.2-flash` | none | Omni | Video output with native audio; this guide |
-| Gemini 3 Pro Image | `gemini-3-pro-image` | Nano Banana Pro | Pro | Top tier: highest world knowledge, brand consistency, precision control |
-| Gemini 3.1 Flash Image | `gemini-3.1-flash-image` | Nano Banana 2 | Flash | Generalist default; best multi-reference handling and consistency |
+| Gemini 3 Pro Image | `gemini-3-pro-image` | Nano Banana Pro | Pro | Premium tier: world knowledge, brand consistency, precision control, style references |
+| Gemini Nano Banana 2.1 | `gemini-nano-banana-2.1` | Nano Banana 2.1 | Flash | Default for new work; strongest multi-reference consistency and marked-region edits |
 | Gemini 3.1 Flash Lite Image | `gemini-3.1-flash-lite-image` | Nano Banana 2 Lite | Flash Lite | Speed and scale; not built for many references or long edit chains |
+| Gemini 3.1 Flash Image | `gemini-3.1-flash-image` | Nano Banana 2 | Flash (legacy) | Deprecated; Google recommends moving to Gemini Nano Banana 2.1 |
 | Gemini 2.5 Flash Image | `gemini-2.5-flash-image` | Nano Banana | Flash (legacy) | Superseded; Google recommends moving to Gemini 3.1 Flash Lite Image |
 
 <rules id="naming">
 
-- Translate the nickname to the Gemini name before deciding anything. The Gemini name states the generation and the tier separately; the nickname collapses them and drops one.
-- "Nano Banana 2" is not the successor to "Nano Banana Pro". The 2 counts generations on the Flash line, so Nano Banana 2 is a newer generation than Nano Banana Pro while sitting below it in tier. Pro is still the strongest model.
-- Cloud and Vertex surfaces append `-preview` to the same models (`gemini-3-pro-image-preview`, `gemini-3.1-flash-image-preview`). Same weights, different surface.
+- Translate the nickname to the official name before deciding anything. For the older models the official name states the generation and the tier separately; the nickname collapses them and drops one.
+- Gemini Nano Banana 2.1 (`gemini-nano-banana-2.1`) is the official name and ID; there is no "Gemini 3.x Flash Image" form of it. Its model card says it is built on Gemini 3.6 Flash, but no `gemini-3.6-flash-image` ID exists, so do not construct one.
+- Nano Banana 2.1 succeeds Nano Banana 2 on the Flash line. Neither is the successor to Nano Banana Pro: the numbers count generations on the Flash line, and Pro is a separate, higher tier. Google still presents Pro as its premium image model, although its own 2.1 model card scores 2.1 ahead of Pro on overall preference and editing.
+- The `-preview` IDs (`gemini-3-pro-image-preview`, `gemini-3.1-flash-image-preview`) were the pre-release forms of the same models. They are retired, and the plain IDs replaced them on both the Gemini API and Vertex.
 - Hosts invent tier labels that do not exist upstream. Names like Ultra or Multi on a hosted variant describe that host's packaging, not a Google model, and they change nothing about how the prompt is written.
 - The same model often appears twice on one host, once under its nickname and once under its Gemini ID. Same weights.
 - The image models and Gemini Omni are different prompt schemes with separate guides. Check which one you are in before applying a rule from memory.

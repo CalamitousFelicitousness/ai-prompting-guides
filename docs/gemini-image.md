@@ -1,27 +1,29 @@
 ---
 guide: "Gemini Image (Nano Banana)"
 prompt_scheme: "gemini-image"
-# Google's family name is "Gemini Image"; "Nano Banana" is the widely used product nickname.
+# Google's family name is "Gemini Image"; "Nano Banana" is the product nickname, and from 2.1 on it is also the official model name.
 models:
-  - { id: "gemini-3-pro-image",          name: "Gemini 3 Pro Image",          alias: "Nano Banana Pro",    access: "closed-weights", tier: "flagship",   caps: [text-to-image, image-edit, multi-image-fusion, text-rendering, search-grounding], best_for: "print-ready assets, long legible multilingual text and logos, factual diagrams, brand consistency; reasons by default; many references with several consistent characters" }
-  - { id: "gemini-3.1-flash-image",      name: "Gemini 3.1 Flash Image",      alias: "Nano Banana 2",      access: "closed-weights", tier: "distilled",  caps: [text-to-image, image-edit, multi-image-fusion, text-rendering, search-grounding], best_for: "the generalist default for most work and high volume; tunable reasoning; strongest multi-reference handling; adds image-search grounding and video references" }
-  - { id: "gemini-3.1-flash-lite-image", name: "Gemini 3.1 Flash Lite Image", alias: "Nano Banana 2 Lite", access: "closed-weights", tier: "budget",     caps: [text-to-image, image-edit, text-rendering], best_for: "speed and scale at the lowest cost; keeps prompt adherence, character consistency and legible text, but is not built for many references or long edit chains" }
+  - { id: "gemini-3-pro-image",          name: "Gemini 3 Pro Image",          alias: "Nano Banana Pro",    access: "closed-weights", tier: "flagship",   caps: [text-to-image, image-edit, multi-image-fusion, text-rendering, search-grounding], best_for: "the premium tier Google points to for professional assets: print-ready posters, long multilingual text, logos, factual diagrams, brand consistency; reasons by default; the only model Google lists with a dedicated style-reference role" }
+  - { id: "gemini-nano-banana-2.1",      name: "Gemini Nano Banana 2.1",      alias: "Nano Banana 2.1",    access: "closed-weights", tier: "distilled",  caps: [text-to-image, image-edit, multi-image-fusion, text-rendering, search-grounding, marked-input-editing], best_for: "the default for new work and high volume; reasons at a middle setting by default; strongest multi-character consistency and marked-region edits; clean ultra-wide and ultra-tall frames; image-search grounding and video references" }
+  - { id: "gemini-3.1-flash-lite-image", name: "Gemini 3.1 Flash Lite Image", alias: "Nano Banana 2 Lite", access: "closed-weights", tier: "budget",     caps: [text-to-image, image-edit, text-rendering], best_for: "speed and scale at the lowest cost; keeps prompt adherence, character consistency and legible text; reasons only when the level is raised, no search grounding, not built for many references or long edit chains" }
+  - { id: "gemini-3.1-flash-image",      name: "Gemini 3.1 Flash Image",      alias: "Nano Banana 2",      access: "closed-weights", tier: "legacy",     caps: [text-to-image, image-edit, multi-image-fusion, text-rendering, search-grounding], best_for: "the previous Flash default, now deprecated; Google recommends Gemini Nano Banana 2.1 for all new projects, and prompts transfer unchanged" }
   - { id: "gemini-2.5-flash-image",      name: "Gemini 2.5 Flash Image",      alias: "Nano Banana",        access: "closed-weights", tier: "legacy",     caps: [text-to-image, image-edit, multi-image-fusion, text-rendering], best_for: "the original model, now superseded; Google recommends moving to Gemini 3.1 Flash Lite Image" }
-capabilities: [text-to-image, image-edit, multi-image-fusion, text-rendering, search-grounding]
+capabilities: [text-to-image, image-edit, multi-image-fusion, text-rendering, search-grounding, marked-input-editing]
 prompt:
-  languages: ["en", "zh-CN", "ja-JP", "ko-KR", "ar", "hi-IN", "es", "fr", "de", "pt-BR", "ru", "vi-VN", "id-ID", "it-IT"]
+  languages: ["en", "zh-CN", "ja-JP", "ko-KR", "ar", "hi-IN", "es", "fr", "de", "pt-BR", "ru", "uk-UA", "vi-VN", "id-ID", "it-IT"]
   formula: "strong verb first (the operation), then Subject, Composition, Action, Location, Style; describe a scene in plain sentences, never a keyword list"
-  literal_text: "put the exact words in quotes; give each text element its own font, size, and placement; for exact copy, settle the wording in conversation first, then ask for the image"
+  literal_text: "put the exact words in quotes; give each text element its own font, size, and placement; for another language, quote the exact translated wording; for exact copy, settle the wording in conversation first, then ask for the image"
   length_strategy: "1-3 vivid sentences for a simple shot; longer with explicit layout for text-heavy posters and infographics; very long prompts make the model deprioritize some elements"
-  auto_expand_behavior: "none; the Gemini 3 image models reason over the prompt (a thinking step) before drawing but do not silently rewrite it, so state the full intent yourself"
+  auto_expand_behavior: "none; the models reason over the prompt (a thinking step) before drawing but do not silently rewrite it, so state the full intent yourself"
   negatives: "no negative field; use semantic negatives (describe the desired absence positively, e.g. 'an empty street with no traffic')"
-  references: "name each input positionally (the dress in the first image, the woman in the second) and give each one a single role; weld every borrowed element to its source"
-  grounding: "ask the model to 'use search' for real-time or factual content (weather, sports, recipes); Gemini 3.1 Flash Image can also 'use image search' for visual references but cannot search for people; Flash Lite has neither"
+  references: "name each input positionally (the dress in the first image, the woman in the second), give each one a single role, and give recurring characters a name you reuse every turn; weld every borrowed element to its source"
+  markup: "no mask field; draw a box, outline or scribble on the input image in a color absent from the scene, name the mark in the prompt, say whether it selects what changes or what stays, and ask for the mark to be removed"
+  grounding: "ask the model to 'use search' for real-time or factual content (weather, sports, recipes); Gemini Nano Banana 2.1 can also 'use image search' for visual references but cannot use images of real people; Flash Lite has neither"
 sources:
-  official: ["https://ai.google.dev/gemini-api/docs/image-generation", "https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-nano-banana", "https://blog.google/products-and-platforms/products/gemini/prompting-tips-nano-banana-pro/", "https://blog.google/technology/ai/nano-banana-pro/", "https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/", "https://deepmind.google/models/gemini-image/pro/", "https://deepmind.google/models/gemini-image/flash-lite/", "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/"]
-  provider: ["https://fal.ai/learn/tools/how-to-use-nano-banana-2", "https://wavespeed.ai/blog/posts/google-nano-banana-pro-complete-guide-2026/"]
+  official: ["https://ai.google.dev/gemini-api/docs/image-generation", "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1", "https://deepmind.google/models/gemini-image/flash/", "https://deepmind.google/models/model-cards/nano-banana-2-1/", "https://deepmind.google/models/gemini-image/prompt-guide/", "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/nano-banana-2-1", "https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-nano-banana", "https://blog.google/products-and-platforms/products/gemini/prompting-tips-nano-banana-pro/", "https://blog.google/technology/ai/nano-banana-pro/", "https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/", "https://deepmind.google/models/gemini-image/pro/", "https://deepmind.google/models/gemini-image/flash-lite/", "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-omni-flash-nano-banana-2-lite/"]
+  provider: ["https://fal.ai/nano-banana-2.1", "https://fal.ai/learn/tools/how-to-use-nano-banana-2", "https://wavespeed.ai/blog/posts/google-nano-banana-pro-complete-guide-2026/"]
   community: []
-last_verified: "2026-08-07"
+last_verified: "2026-11-08"
 ---
 
 # Gemini Image (Nano Banana): prompting and usage guide
@@ -39,21 +41,23 @@ last_verified: "2026-08-07"
 
 ## Model names and aliases
 
-Google ships every generative-media model under two names, and the nickname carries less information than the official name. Prefer the Gemini name and translate the nickname on sight.
+Google ships most generative-media models under two names: an official Gemini name and a nickname that carries less information. Prefer the official name and translate the nickname on sight. From Nano Banana 2.1 on, the nickname is the official name, so read the table rather than assuming the pattern.
 
-| Gemini name (preferred) | Gemini API model ID | Nickname | Line | Role |
+| Official name (preferred) | Gemini API model ID | Nickname | Line | Role |
 | --- | --- | --- | --- | --- |
-| Gemini 3 Pro Image | `gemini-3-pro-image` | Nano Banana Pro | Pro | Top tier: highest world knowledge, brand consistency, precision control |
-| Gemini 3.1 Flash Image | `gemini-3.1-flash-image` | Nano Banana 2 | Flash | Generalist default; best multi-reference handling and consistency |
+| Gemini 3 Pro Image | `gemini-3-pro-image` | Nano Banana Pro | Pro | Premium tier: world knowledge, brand consistency, precision control, style references |
+| Gemini Nano Banana 2.1 | `gemini-nano-banana-2.1` | Nano Banana 2.1 | Flash | Default for new work; strongest multi-reference consistency and marked-region edits |
 | Gemini 3.1 Flash Lite Image | `gemini-3.1-flash-lite-image` | Nano Banana 2 Lite | Flash Lite | Speed and scale; not built for many references or long edit chains |
+| Gemini 3.1 Flash Image | `gemini-3.1-flash-image` | Nano Banana 2 | Flash (legacy) | Deprecated; Google recommends moving to Gemini Nano Banana 2.1 |
 | Gemini 2.5 Flash Image | `gemini-2.5-flash-image` | Nano Banana | Flash (legacy) | Superseded; Google recommends moving to Gemini 3.1 Flash Lite Image |
 | Gemini Omni 1.2 Flash | `gemini-omni-1.2-flash` | none | Omni | Video output with native audio; a different prompt scheme with its own guide |
 
 <rules id="naming">
 
-- Translate the nickname to the Gemini name before deciding anything. The Gemini name states the generation and the tier separately; the nickname collapses them and drops one.
-- "Nano Banana 2" is not the successor to "Nano Banana Pro". The 2 counts generations on the Flash line, so Nano Banana 2 is a newer generation than Nano Banana Pro while sitting below it in tier. Pro is still the strongest model.
-- Cloud and Vertex surfaces append `-preview` to the same models (`gemini-3-pro-image-preview`, `gemini-3.1-flash-image-preview`). Same weights, different surface.
+- Translate the nickname to the official name before deciding anything. For the older models the official name states the generation and the tier separately; the nickname collapses them and drops one.
+- Gemini Nano Banana 2.1 (`gemini-nano-banana-2.1`) is the official name and ID; there is no "Gemini 3.x Flash Image" form of it. Its model card says it is built on Gemini 3.6 Flash, but no `gemini-3.6-flash-image` ID exists, so do not construct one.
+- Nano Banana 2.1 succeeds Nano Banana 2 on the Flash line. Neither is the successor to Nano Banana Pro: the numbers count generations on the Flash line, and Pro is a separate, higher tier. Google still presents Pro as its premium image model, although its own 2.1 model card scores 2.1 ahead of Pro on overall preference and editing.
+- The `-preview` IDs (`gemini-3-pro-image-preview`, `gemini-3.1-flash-image-preview`) were the pre-release forms of the same models. They are retired, and the plain IDs replaced them on both the Gemini API and Vertex.
 - Hosts invent tier labels that do not exist upstream. Names like Ultra or Multi on a hosted variant describe that host's packaging, not a Google model, and they change nothing about how the prompt is written.
 - The same model often appears twice on one host, once under its nickname and once under its Gemini ID. Same weights.
 - The image models and Gemini Omni are different prompt schemes with separate guides. Check which one you are in before applying a rule from memory.
@@ -71,11 +75,12 @@ Google ships every generative-media model under two names, and the nickname carr
 
 ## Models and when to use which
 
-All four share one prompt scheme; a prompt written for one transfers to the others. Pick by job.
+All five share one prompt scheme; a prompt written for one transfers to the others. Pick by job.
 
-- Gemini 3 Pro Image: the flagship for finished, print-ready assets. Best-in-class legible long-form and multilingual text, logos, and factual diagrams. Reasons by default before drawing, can use Google Search grounding, and combines many references while keeping several characters consistent. Reach for it for posters, infographics, and brand work.
-- Gemini 3.1 Flash Image: the generalist default for most work and high volume. Its reasoning effort is tunable, it handles multiple references and consistency best of the Flash line, and it uniquely accepts image-search grounding and video references (see Reasoning and grounding).
-- Gemini 3.1 Flash Lite Image: the speed and scale option, for near-real-time and high-throughput pipelines. It keeps prompt adherence, character consistency, and legible in-image text, but has no reasoning step and no image search, and it is not optimized for many reference inputs or long multi-turn edit chains. Write self-contained prompts for it and keep edit sequences short.
+- Gemini Nano Banana 2.1: the default for new work and high volume, and the model Google recommends for all new projects. It reasons at a middle setting by default and can be tuned either way, holds several characters and many objects consistent across references, confines an edit to a region drawn on the input image, renders clean ultra-wide and ultra-tall frames, and accepts image-search grounding and video references. Google's own model card scores it ahead of Gemini 3 Pro Image on overall preference, editing and infographics, so start here.
+- Gemini 3 Pro Image: the premium tier Google points to for professional asset production: print-ready posters, long legible multilingual text, logos, factual diagrams, and brand work. It reasons by default, can use Google Search grounding, and is the one model Google lists with a dedicated style-reference role. Step up to it for a brand system or when separate style references matter.
+- Gemini 3.1 Flash Lite Image: the speed and scale option, for near-real-time and high-throughput pipelines. It keeps prompt adherence, character consistency, and legible in-image text, but reasons only when the level is raised, has no search grounding of either kind, and is not optimized for many reference inputs or long multi-turn edit chains. Write self-contained prompts for it and keep edit sequences short.
+- Gemini 3.1 Flash Image: the previous Flash default, now deprecated in favor of Gemini Nano Banana 2.1. Prompts written for it transfer unchanged; the one behavioral difference is that it reasons only when the level is raised, where 2.1 reasons by default.
 - Gemini 2.5 Flash Image: the original model, now legacy. Google recommends moving to Gemini 3.1 Flash Lite Image, which is faster, cheaper, and better. Keep it only for existing pipelines pinned to it.
 
 The one asymmetry worth planning around: a prompt built on reasoning, search grounding, or a long reference stack degrades on Flash Lite rather than failing loudly. When moving work down to Lite, drop the grounding instruction and cut the reference count rather than trimming the description.
@@ -84,7 +89,7 @@ The one asymmetry worth planning around: a prompt built on reasoning, search gro
 
 It is a multimodal language model, not a keyword or CLIP matcher, so it understands creative intent holistically. Plain descriptive sentences win; tag lists, weighted token syntax, and quality-boosters do not help and sometimes hurt. It rewards detail and stated purpose: "a logo for a high-end, minimalist skincare brand" beats "a logo."
 
-On the Gemini 3 image models the model reasons before it draws, planning the composition (and on complex prompts sketching interim thought-images) rather than pattern-matching. That reasoning is on by default for Gemini 3 Pro Image and tunable on Gemini 3.1 Flash Image; Gemini 3.1 Flash Lite Image has none. Combined with broad world knowledge and optional search grounding, this lets you hand it intent and facts, not just visual nouns.
+The model reasons before it draws, planning the composition (and on complex prompts sketching interim thought-images) rather than pattern-matching. Gemini 3 Pro Image reasons by default, Gemini Nano Banana 2.1 reasons at a middle setting by default, and Gemini 3.1 Flash Image and Flash Lite reason only when the level is raised. Combined with broad world knowledge and optional search grounding, this lets you hand it intent and facts, not just visual nouns.
 
 The model is conversational by design. The most reliable workflow is to generate, then refine across turns, feeding prior outputs back in. It does not silently expand a short prompt, so write the full intent yourself.
 
@@ -96,7 +101,8 @@ The model is conversational by design. The most reliable workflow is to generate
 - Name materials and specifics, not generic nouns ("navy blue tweed", not "jacket"; "matte black ceramic mug", not "cup").
 - Use photographic and cinematic language to control the look: lens (85mm, macro, wide-angle), angle (low-angle, aerial, eye-level), depth of field (shallow, f/1.8, bokeh), lighting (golden hour, three-point softbox, chiaroscuro), and film or camera character (1970s film stock, Fujifilm color, GoPro).
 - Length: 1-3 vivid sentences for a simple shot; expand with explicit layout only for text-heavy or multi-element work. Very long prompts cause the model to deprioritize details, so spend words on what matters.
-- State aspect ratio in plain words when it matters ("vertical 9:16 poster", "cinematic 21:9", "square image").
+- State aspect ratio in plain words when it matters ("vertical 9:16 poster", "cinematic 21:9", "square image"). Gemini Nano Banana 2.1 also renders ultra-wide 4:1 and 8:1 banners and tall 1:4 and 1:8 strips; for those, lay the content out along the full length of the frame (a coastline, a skyline, a procession) rather than one centered subject.
+- To compare options, ask for several in one prompt ("three distinct variations of this label", "four different color palettes for this poster"). Treat the count as a request; the model does not always return the exact number.
 
 </rules>
 
@@ -116,6 +122,16 @@ Create a cinematic wide-angle photograph of an elderly Lisbon tram conductor lea
 
 </example>
 
+<example use_case="panoramic-banner">
+
+```text
+Create an ultra-wide 4:1 panoramic watercolor of the Amalfi Coast at golden hour. From left to right, pastel cliffside villages step down to a turquoise sea, a small white ferry crosses the bay, and the headland fades into warm haze at the far right. Loose wet-on-wet washes, visible cold-press paper texture, soft peach and teal palette. No text.
+```
+
+*Why: the ratio is stated in words, and the scene is laid out left to right so every part of the long frame carries content instead of one centered subject with filler on the flanks. The subject follows fal's panoramic launch example for 2.1.*
+
+</example>
+
 ## Text rendering
 
 <rules id="text">
@@ -123,10 +139,10 @@ Create a cinematic wide-angle photograph of an elderly Lisbon tram conductor lea
 - Put the literal words in quotes, exactly as they should appear: the text "GRAND OPENING".
 - Give each distinct text element its own quoted string plus its own font, weight, size, and placement ("the title 'BERLIN' in bold blue serif at the top-center; the date in small text in the corner").
 - Describe fonts in words (clean bold sans-serif, condensed serif, brush script); name a real typeface only as a style hint.
-- Keep to a few short text elements; large, short text renders far more reliably than dense paragraphs or tiny captions. For pixel-exact copy, generate the layout, then overlay the final text yourself.
+- Keep to a few short text elements; large, short text renders far more reliably than dense paragraphs or tiny captions, and small lettering blurs most at the smallest output size. For pixel-exact copy, generate the layout, then overlay the final text yourself.
 - For exact wording, settle the copy in conversation first, then ask for the image that contains it.
-- For non-Latin scripts, name the language ("... in Korean"). The model renders many languages and can translate text already inside an image.
-- Suppress unwanted lettering with "No other text." Gemini 3 Pro Image is the strongest for long, legible, multilingual text and logos.
+- For another language, name the target language and any regional cues, and when the wording matters, quote the exact translated text rather than asking the model to translate it (the shop sign reads "Hecho a mano" in Spanish). The model renders many languages, including non-Latin scripts, and can translate text already inside an image.
+- Suppress unwanted lettering with "No other text." Gemini Nano Banana 2.1 and Gemini 3 Pro Image are the strongest for long, legible, multilingual text and infographic layouts.
 
 </rules>
 
@@ -184,7 +200,7 @@ A kawaii die-cut sticker of a round red panda in a tiny chef's hat holding a dum
 Create a clear, accurate infographic explaining how a four-stroke engine works, laid out as four labeled panels (intake, compression, power, exhaust), each with a simple cross-section diagram and a short caption beneath it in a clean sans-serif. Flat editorial illustration style, muted primary palette. Make the mechanical details and labels technically correct.
 ```
 
-*Why: it leans on the model's world knowledge for a factual diagram, fixes the panel layout and caption font, and demands technical accuracy, which you should still verify against a real source.*
+*Why: it leans on the model's world knowledge for a factual diagram, fixes the panel layout and caption font, and demands technical accuracy. Keep reasoning on for work like this, where Google's 2.1 model card shows it buying the most accuracy, and still verify the labels against a real source.*
 
 </example>
 
@@ -193,13 +209,15 @@ Create a clear, accurate infographic explaining how a four-stroke engine works, 
 <rules id="edit">
 
 - Lead with an imperative verb. It can name the change (Add, Replace, Redraw, Restore) or the constraint (Keep), but the opening clause must instruct rather than describe. A declarative setup such as "Image 1 provides the foundation, Image 2 provides the face" states the plan instead of issuing it and pushes the real instruction back by a sentence or two.
-- Open with the operation verb and name the change. The model edits conversationally, with no masks or brushes.
+- Open with the operation verb and name the change. There is no mask field: define the region in words, or draw it on the input image (see Marked-region edits).
 - Refer to the source in words ("the provided photo", "this scene") and scope the change precisely.
 - Define a region in language to edit only that area (semantic masking): "change only the blue sofa to brown leather; keep the rest of the room, the pillows, and the lighting unchanged."
 - Always pin the invariants: state what must stay identical (face, pose, layout, colors, "everything else the same"). This is the difference between a clean edit and a full redraw.
 - Make one change per turn for complex scenes. Stacking several edits in one prompt makes the model miss some of them.
 - Edits inherit the source's lighting, perspective, and grain automatically; ask for natural integration ("match the existing window light", "follow the folds of the fabric").
 - Studio-control edits work as plain instructions: relight ("turn this scene to night"), recolor, shift focus ("focus on the flowers"), change angle, or color-grade.
+- To change a pose, say so explicitly and add a pose reference. Edits sometimes keep the input's pose and structure even when the prompt asks for a new one.
+- Anchor positions to things in the scene ("the cup nearest the window", "her raised hand") rather than bare left and right, which the model sometimes swaps.
 
 </rules>
 
@@ -243,6 +261,41 @@ Restyle the provided portrait as a 1960s screen-print poster with bold flat colo
 
 </example>
 
+## Marked-region edits
+
+Google ships mask-based editing as a headline feature of Gemini Nano Banana 2.1: you draw on the input image and the prompt refers to the drawing. There is no separate mask input; the marked image is the input. The older models accept marked images too, but Google scores them lower on this task.
+
+<rules id="markup">
+
+- Draw the mark on the image before sending it: a box, an outline, or a scribble, in a bright color that does not occur in the scene (magenta, lime). Use one mark per change.
+- Name the mark by color and shape in the prompt ("inside the magenta box", "the object inside the white outline").
+- Say which way the mark works. It can select what changes ("add a hot-air balloon inside the magenta box") or protect what stays ("keep the object inside the outline at the same size and position, and replace everything around it").
+- Ask for the mark to be removed from the finished image. Google lists ink that persists into the output as a known limitation.
+- Pin what stays outside the mark by name. The rest of the frame is regenerated rather than copied pixel for pixel, so expect a close match, not an identical one.
+- Keep each marked edit to one change. Google also lists partial instruction-following on marked edits, so split multi-part changes across turns.
+
+</rules>
+
+<example use_case="mark-selects-change">
+
+```text
+In the provided photo, add a small striped hot-air balloon drifting inside the magenta box in the sky, lit by the same low sun as the rest of the scene. Change nothing outside the box: keep the model in the yellow gown, the teal car, and their reflections on the wet salt flat exactly where they are. Remove the magenta box from the finished image.
+```
+
+*Why: the mark selects the region, the prompt names it by color and shape, everything outside it is pinned by name because the rest of the frame is regenerated, and the closing instruction removes the box. The scene follows fal's 2.1 mask-editing demonstration, whose prompt is not published.*
+
+</example>
+
+<example use_case="mark-protects-subject">
+
+```text
+Keep the dandelion seed inside the white outline exactly as it is, at the same size and position in the frame, and place it in a completely different environment: resting on a mossy log in a dim forest after rain, with soft green bokeh behind it. Remove the white outline from the finished image. Horizontal 16:9.
+```
+
+*Why: here the mark protects the subject instead of selecting the change. "Same size and position" is the clause from Google's own mask-editing demonstration ("don't change the size and position of the object itself"), and the removal instruction guards against the outline persisting.*
+
+</example>
+
 ## Multiple reference images
 
 <rules id="reference">
@@ -251,8 +304,8 @@ Restyle the provided portrait as a 1960s screen-print poster with bold flat colo
 - One role per input. Assign each reference a single job and weld every borrowed element to its source ("use the first image for the character, the second for the outfit, the third for the location"). Mixing roles across inputs is the main cause of blended, wrong-attribute results.
 - Name what moves, pin what stays. Say exactly which element comes from which image and what must stay identical (face, logo shape, garment color), or the model will under-specify and drift.
 - State how the elements combine and the final framing, and ask for the lighting and shadows to be adjusted so the composite reads as one photograph.
-- Character consistency: keep the same reference across turns, command it explicitly ("the identity, hairstyle, and outfit of all three people must stay consistent, seen from new angles"), and feed prior outputs back in. For a specific pose, add a pose reference.
-- Capacity varies by model. Gemini 3 Pro Image and Gemini 3.1 Flash Image combine many references and hold several consistent characters, so reserve the extra slots for objects and style rather than piling on conflicting references. Gemini 3.1 Flash Lite Image and the legacy Gemini 2.5 Flash Image handle only a few, so consolidate roles before sending work to either.
+- Character consistency: keep the same reference across turns, give each recurring character or object a name in the prompt and reuse it every turn ("Mara, the woman in the first image"), command consistency explicitly ("the identity, hairstyle, and outfit of all three people must stay consistent, seen from new angles"), and feed prior outputs back in. For a specific pose, add a pose reference.
+- Capacity varies by model. Gemini Nano Banana 2.1 and Gemini 3 Pro Image combine many references and hold several consistent characters, and Google's model card rates 2.1 strongest at multi-character consistency. Reserve the extra slots for objects rather than piling on conflicting references. Google lists a separate style-reference role only for Gemini 3 Pro Image. Gemini 3.1 Flash Lite Image and the legacy Gemini 2.5 Flash Image handle only a few, so consolidate roles before sending work to either.
 
 </rules>
 
@@ -273,6 +326,16 @@ Put the ceramic mug from the second image into the right hand of the woman in th
 ```
 
 *Why: each of the three inputs supplies exactly one thing (subject, object, pose); naming what moves (mug, pose) and pinning what stays (identity, clothing, glaze) stops the borrowed pose from dragging in the third person's face or outfit.*
+
+</example>
+
+<example use_case="named-cast-six-refs">
+
+```text
+Create a candid golden-hour picnic photo on a grassy hillside. Mara is the woman with auburn curls in the first image, and Biscuit is the golden retriever in the second. Park the sage-green Land Rover from the third image behind them. Mara sits on a plaid blanket wearing the straw sun hat from the fourth image, with the wicker basket from the fifth image open beside her, while Biscuit leaps after the striped kite from the sixth image. Keep Mara's face and curls, Biscuit's coat, and the car's color and shape exactly as in their references.
+```
+
+*Why: six inputs, one role each. The two characters are named once and then referred to by name, which is how Google's prompt guide suggests keeping subjects consistent; every borrowed object is welded to its image and the identities are pinned. The cast follows fal's six-reference 2.1 demonstration.*
 
 </example>
 
@@ -300,12 +363,12 @@ Put these three people and the dog into one award-winning fashion-editorial shot
 
 <rules id="grounding">
 
-- On the Gemini 3 image models the model thinks before it draws. On Gemini 3.1 Flash Image the reasoning effort is tunable (low by default); raise it for complex, multi-element, or layout-critical prompts and keep it low for simple shots. How you set that level is host-specific.
-- Gemini 3.1 Flash Lite Image has no reasoning step and no search grounding of either kind. Do not write "use search" or "use image search" instructions for it; supply the facts and the visual detail in the prompt instead.
+- The models think before they draw. Gemini Nano Banana 2.1 reasons at a middle setting by default; lower it for quick drafts and raise it for complex, multi-element, multi-reference, or layout-critical prompts. Google's 2.1 model card shows reasoning lifting infographic accuracy and editing quality most, so keep it on for diagrams. Gemini 3.1 Flash Image and Flash Lite reason only when the level is raised. How you set the level is host-specific.
+- Gemini 3.1 Flash Lite Image has no search grounding of either kind. Do not write "use search" or "use image search" instructions for it; supply the facts and the visual detail in the prompt instead.
 - For real-world or time-sensitive content, tell the model to use search: "Use search to find {current fact} and visualize it as {description}." Good for weather, sports results, recent events, prices, and recipes.
 - Pattern for data-driven images: ask it to retrieve the fact, then state the analytical task, then say how to visualize it.
-- Gemini 3.1 Flash Image can also use image search ("use image search to find accurate references of {subject}") for visual grounding, but it cannot search for people.
-- Gemini 3.1 Flash Image additionally accepts a video as a reference; describe the still you want ("a poster capturing the key themes of this video").
+- Gemini Nano Banana 2.1 (and the legacy Gemini 3.1 Flash Image) can also use image search ("use image search to find accurate references of {subject}") for visual grounding, but cannot use images of real people from search. To make the order explicit, tell it to search first and generate after.
+- Gemini Nano Banana 2.1, Gemini 3.1 Flash Image, and Flash Lite accept a video as context; describe the still you want ("a poster capturing the key themes of this video"). Gemini 3 Pro Image takes images and text only.
 - Always verify the facts, figures, and labels in a grounded diagram; reasoning lowers but does not remove the chance of confident errors.
 
 </rules>
@@ -326,7 +389,17 @@ Use search to find the five-day weather forecast for San Francisco, then visuali
 Use image search to find accurate references of a resplendent quetzal, then create a 3:2 nature wallpaper of the bird on a mossy branch with a soft top-to-bottom gradient and a minimal composition.
 ```
 
-*Why: image-search grounding pins species-accurate detail the model would otherwise approximate; it works for objects and animals but not for searching specific people.*
+*Why: image-search grounding pins species-accurate detail the model would otherwise approximate; it works for objects, animals, and places but not for specific people.*
+
+</example>
+
+<example use_case="search-then-generate">
+
+```text
+Create an image of Museum Clos Luce. In the style of a color chalk sketch, no text. Your plan is to first search for visual references, and generate after. Aspect ratio 16:9.
+```
+
+*Why: Google's own 2.1 demonstration. Stating the plan (search first, generate after) makes the grounding step explicit for a real building the model would otherwise approximate.*
 
 </example>
 
@@ -346,12 +419,16 @@ Use image search to find accurate references of a resplendent quetzal, then crea
 
 - Keyword soup: rewrite tag lists and quality-boosters ("masterpiece, 8k, trending on ArtStation") as a narrative scene; they do nothing here.
 - Negative phrasing: replace "no X" with a semantic negative that describes the desired absence positively.
-- Dense or tiny text: keep to a few short, large quoted strings; for exact copy, generate the layout and overlay the final text yourself.
+- Dense or tiny text: keep to a few short, large quoted strings, since small lettering blurs most at the smallest output size; for exact copy, generate the layout and overlay the final text yourself.
 - Stacked edits: make one change per turn rather than packing several into one prompt.
+- Leaving the mark in: end every marked-region edit by asking for the box, outline, or scribble to be removed.
+- Stuck pose: when an edit must change the pose, say so plainly and add a pose reference; otherwise the input's pose can carry through.
+- Bare left and right: anchor positions to objects in the scene; the model sometimes swaps sides.
+- Reasoning off for diagrams: keep reasoning on, or raise it, for infographics and data visuals.
 - Conflicting styles: do not combine cues that fight, such as photoreal and cartoon in one prompt.
 - Overloaded prompts: past a few hundred words the model deprioritizes elements; spend words on what matters.
 - Expecting transparency: transparent backgrounds are unsupported, so ask for a white background.
-- Naming real people: describe attributes instead of celebrities; image search cannot target people.
+- Naming real people: describe attributes instead of celebrities; image search cannot use images of people.
 - Expecting one perfect output: the exact image count is not guaranteed, so iterate conversationally and run a few variations.
 - Unverified facts: check the labels and figures in diagrams and infographics even when grounding is on.
 
@@ -359,9 +436,9 @@ Use image search to find accurate references of a resplendent quetzal, then crea
 
 ## Sources
 
-Trust order: official beats provider beats community. Official (Google) wins on any conflict; provider guides are illustrative only. Two notes from reconciling sources: Imagen and Veo are separate Google models on separate prompt schemes, not part of this family, so both are out of scope here; and Gemini Omni Flash, though a Gemini generative-media model, is a video model on its own scheme with its own guide.
+Trust order: official beats provider beats community. Official (Google) wins on any conflict; provider guides are illustrative only. Notes from reconciling sources: Imagen and Veo are separate Google models on separate prompt schemes, not part of this family, so both are out of scope here; Gemini Omni Flash, though a Gemini generative-media model, is a video model on its own scheme with its own guide; the DeepMind prompt guide is written for the Gemini app, so its advice is taught here only where it adds to the API docs without contradicting them; and the Nano Banana 2.1 model card scores 2.1 above Gemini 3 Pro Image while the API docs still present Pro as the premium tier, so the guide starts work on 2.1 and keeps Pro as the higher tier.
 
-- Official (Google): [Nano Banana image generation docs](https://ai.google.dev/gemini-api/docs/image-generation), [the ultimate Nano Banana prompting guide](https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-nano-banana), [7 tips for Nano Banana Pro](https://blog.google/products-and-platforms/products/gemini/prompting-tips-nano-banana-pro/), [Introducing Nano Banana Pro](https://blog.google/technology/ai/nano-banana-pro/), [Introducing Gemini 2.5 Flash Image](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/), [Gemini 3 Pro Image model page](https://deepmind.google/models/gemini-image/pro/).
-- Provider: [fal how to use Nano Banana 2](https://fal.ai/learn/tools/how-to-use-nano-banana-2), [WaveSpeed Nano Banana Pro guide](https://wavespeed.ai/blog/posts/google-nano-banana-pro-complete-guide-2026/).
+- Official (Google): [Nano Banana image generation docs](https://ai.google.dev/gemini-api/docs/image-generation), [Gemini Nano Banana 2.1 model page](https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1), [Nano Banana 2.1 on DeepMind](https://deepmind.google/models/gemini-image/flash/), [Nano Banana 2.1 model card](https://deepmind.google/models/model-cards/nano-banana-2-1/), [DeepMind Gemini Image prompt guide](https://deepmind.google/models/gemini-image/prompt-guide/), [Gemini Nano Banana 2.1 on Vertex](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/nano-banana-2-1), [the ultimate Nano Banana prompting guide](https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-nano-banana), [7 tips for Nano Banana Pro](https://blog.google/products-and-platforms/products/gemini/prompting-tips-nano-banana-pro/), [Introducing Nano Banana Pro](https://blog.google/technology/ai/nano-banana-pro/), [Introducing Gemini 2.5 Flash Image](https://developers.googleblog.com/en/introducing-gemini-2-5-flash-image/), [Gemini 3 Pro Image model page](https://deepmind.google/models/gemini-image/pro/).
+- Provider: [fal Nano Banana 2.1](https://fal.ai/nano-banana-2.1), [fal how to use Nano Banana 2](https://fal.ai/learn/tools/how-to-use-nano-banana-2), [WaveSpeed Nano Banana Pro guide](https://wavespeed.ai/blog/posts/google-nano-banana-pro-complete-guide-2026/).
 
-Last verified: 2026-08-07.
+Last verified: 2026-11-08.
